@@ -1,4 +1,4 @@
-import { Bell, FileText, HeartPulse, LayoutDashboard, Settings, TrendingUp } from 'lucide-react'
+import { Bell, FileText, HeartPulse, LayoutDashboard, TrendingUp } from 'lucide-react'
 
 export const NAV_ITEMS = [
   { to: '/dashboard', label: 'Overview', icon: LayoutDashboard, end: true },
@@ -6,5 +6,4 @@ export const NAV_ITEMS = [
   { to: '/analytics', label: 'Analytics', icon: TrendingUp },
   { to: '/reports', label: 'Reports', icon: FileText },
   { to: '/alerts', label: 'Alerts', icon: Bell, showCount: true },
-  { to: '/settings', label: 'Settings', icon: Settings },
 ]
