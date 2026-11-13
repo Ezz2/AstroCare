@@ -21,5 +21,11 @@ export function getWorstStatus(statuses) {
 }
 
 export function formatValue(vital, value) {
-  return value.toFixed(vital.decimals ?? 0)
+  const language =
+    typeof document === "undefined" ? "en" : document.documentElement.lang;
+  const locale = { en: "en-US", ar: "ar", de: "de-DE" }[language] ?? "en-US";
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: vital.decimals ?? 0,
+    maximumFractionDigits: vital.decimals ?? 0,
+  }).format(value)
 }

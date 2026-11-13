@@ -218,6 +218,9 @@
 }
 
 .cosmos-dashboard-link:hover { transform: translateY(-1px); border-color: #9ef3ff; background: rgba(24, 116, 145, 0.28); }
+.cosmos-header-actions { display: flex; align-items: center; justify-self: end; gap: 10px; }
+.cosmos-language-switcher { height: 37px; border-color: rgba(117, 219, 239, 0.35); border-radius: 5px; background: rgba(10, 40, 58, 0.43); padding-inline: 9px; color: #d3f7ff; }
+.cosmos-language-switcher select { max-width: 76px; font-size: 10px; }
 .cosmos-menu-toggle,
 .cosmos-mobile-nav { display: none; }
 
@@ -458,7 +461,7 @@
 @media (max-width: 900px) {
   .cosmos-header { grid-template-columns: 1fr auto; height: 70px; padding-inline: 24px; }
   .cosmos-nav { display: none; }
-  .cosmos-dashboard-link { grid-column: 2; grid-row: 1; margin-right: 48px; }
+  .cosmos-header-actions { grid-column: 2; grid-row: 1; margin-right: 48px; }
   .cosmos-menu-toggle { position: absolute; right: 24px; display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(175, 206, 231, 0.22); border-radius: 7px; background: rgba(8, 20, 36, 0.75); color: #e3f3ff; }
   .cosmos-mobile-nav { position: absolute; top: calc(100% + 1px); right: 16px; display: grid; width: min(270px, calc(100vw - 32px)); gap: 2px; border: 1px solid rgba(155, 194, 221, 0.18); padding: 9px; background: rgba(5, 12, 24, 0.97); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.42); }
   .cosmos-mobile-nav a { display: flex; align-items: center; justify-content: space-between; padding: 12px 10px; color: #c8d7e8; font-size: 11px; text-decoration: none; }
@@ -478,7 +481,10 @@
   .cosmos-header { height: 62px; padding-inline: 17px; }
   .cosmos-brand { gap: 8px; font-size: 10px; }
   .cosmos-brand-icon { width: 29px; height: 29px; }
-  .cosmos-dashboard-link { min-height: 33px; gap: 6px; margin-right: 43px; padding-inline: 9px; font-size: 9px; }
+  .cosmos-dashboard-link { min-height: 33px; gap: 6px; padding-inline: 9px; font-size: 9px; }
+  .cosmos-language-switcher { height: 33px; gap: 5px; padding-inline: 7px; }
+  .cosmos-language-switcher svg { width: 14px; height: 14px; }
+  .cosmos-language-switcher select { max-width: 62px; font-size: 9px; }
   .cosmos-menu-toggle { right: 16px; width: 33px; height: 33px; }
   .cosmos-intro { top: 19%; left: 6vw; width: 88vw; transform: none; }
   .cosmos-kicker { font-size: 8px; letter-spacing: 0.13em; }

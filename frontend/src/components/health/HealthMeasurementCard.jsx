@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { BookOpen } from 'lucide-react'
 import { INPUT_CLASS, LABEL_CLASS } from '../ui/fieldStyles'
 import MeasurementInstructionsModal from './MeasurementInstructionsModal'
+import useLanguage from '../../i18n/useLanguage'
 
 export default function HealthMeasurementCard({ icon: Icon, label, unit, value, onChange, fields = [], instructionId }) {
+  const { t } = useLanguage()
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false)
   const inputs = fields.length ? fields : [{ id: 'value', label, value, onChange }]
 
@@ -15,15 +17,15 @@ export default function HealthMeasurementCard({ icon: Icon, label, unit, value, 
           <Icon size={18} />
         </span>
         <div className="min-w-0">
-          <p className="text-sm font-medium text-ink-100">{label}</p>
-          <p className="mt-0.5 text-xs text-ink-500">{unit}</p>
+          <p className="text-sm font-medium text-ink-100">{t(label)}</p>
+          <p className="mt-0.5 text-xs text-ink-500">{t(unit)}</p>
         </div>
       </div>
 
       <div className={fields.length > 1 ? 'grid grid-cols-2 gap-2' : ''}>
         {inputs.map((input) => (
           <div key={input.id}>
-            {fields.length > 1 && <label htmlFor={`health-record-${input.id}`} className={LABEL_CLASS}>{input.label}</label>}
+            {fields.length > 1 && <label htmlFor={`health-record-${input.id}`} className={LABEL_CLASS}>{t(input.label)}</label>}
             <input
               id={`health-record-${input.id}`}
               type="number"
@@ -33,7 +35,7 @@ export default function HealthMeasurementCard({ icon: Icon, label, unit, value, 
               value={input.value}
               onChange={(event) => input.onChange(event.target.value)}
               className={`${INPUT_CLASS} ${input.value ? 'border-cyan-400/50 bg-space-950/80' : ''}`}
-              placeholder="Enter value"
+              placeholder={t("Enter value")}
             />
           </div>
         ))}
@@ -45,7 +47,7 @@ export default function HealthMeasurementCard({ icon: Icon, label, unit, value, 
             onClick={() => setIsInstructionsOpen(true)}
             className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-cyan-300 transition hover:text-cyan-200">
             <BookOpen size={14} />
-            How to Measure?
+            {t("How to Measure?")}
           </button>
           {isInstructionsOpen && (
             <MeasurementInstructionsModal

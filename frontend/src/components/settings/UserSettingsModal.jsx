@@ -3,8 +3,10 @@ import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { X, UserRound } from 'lucide-react'
 import ProfileForm from './ProfileForm'
+import useLanguage from '../../i18n/useLanguage'
 
 export default function UserSettingsModal({ onClose }) {
+  const { t } = useLanguage()
   useEffect(() => {
     function handleKeyDown(event) {
       if (event.key === 'Escape') onClose()
@@ -38,10 +40,10 @@ export default function UserSettingsModal({ onClose }) {
 
             <div>
               <h2 id="user-settings-title" className="text-lg font-semibold text-ink-100">
-                User Settings
+                {t("User Settings")}
               </h2>
               <p className="mt-1 text-xs text-ink-400">
-                Manage your personal information
+                {t("Manage your personal information")}
               </p>
             </div>
           </div>
@@ -49,7 +51,7 @@ export default function UserSettingsModal({ onClose }) {
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close user settings"
+            aria-label={t("Close user settings")}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-ink-400 transition hover:bg-space-800 hover:text-ink-100"
           >
             <X size={20} />

@@ -2,28 +2,30 @@ import { useState } from 'react'
 import { useHealthData } from '../../health/useHealthData'
 import { SECONDARY_BUTTON_CLASS } from '../ui/fieldStyles'
 import SettingsSection from './SettingsSection'
+import useLanguage from '../../i18n/useLanguage'
 
 export default function DataControls() {
+  const { t } = useLanguage()
   const { readings, removeSimulatedReadings } = useHealthData()
   const [busy, setBusy] = useState(false)
   const [feedback, setFeedback] = useState(null)
   const simulatedCount = readings.filter((r) => r.source === 'simulated').length
 
   const handleRemove = async () => {
-    if (!window.confirm(`Remove ${simulatedCount} demonstration reading${simulatedCount === 1 ? '' : 's'}? Your own entries are kept.`)) return
+    if (!window.confirm(t("Remove {count} demonstration reading{plural}? Your own entries are kept.", { count: simulatedCount, plural: simulatedCount === 1 ? "" : "s" }))) return
     setBusy(true)
     const ok = await removeSimulatedReadings()
     setBusy(false)
-    setFeedback(ok ? { type: 'success', text: 'Demonstration readings removed.' } : { type: 'error', text: 'We could not remove them. Try again.' })
+    setFeedback(ok ? { type: 'success', text: t('Demonstration readings removed.') } : { type: 'error', text: t('We could not remove them. Try again.') })
   }
 
   return (
-    <SettingsSection title="Data" description="Demonstration readings are generated for this prototype and are labeled wherever they appear.">
+    <SettingsSection title={t("Data")} description={t("Demonstration readings are generated for this prototype and are labeled wherever they appear.")}>
       <div className="flex flex-col gap-4 rounded-xl border border-space-700 bg-space-950/60 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-ink-100">Demonstration readings</p>
+          <p className="text-sm font-medium text-ink-100">{t("Demonstration readings")}</p>
           <p className="text-xs text-ink-500">
-            {simulatedCount} stored. These are simulated values, not medical records.
+            {t("{count} stored. These are simulated values, not medical records.", { count: simulatedCount })}
           </p>
         </div>
         <button
@@ -32,7 +34,7 @@ export default function DataControls() {
           disabled={busy || simulatedCount === 0}
           className={`${SECONDARY_BUTTON_CLASS} disabled:cursor-not-allowed disabled:opacity-50`}
         >
-          {busy ? 'Removing...' : 'Remove demonstration data'}
+          {busy ? t('Removing...') : t('Remove demonstration data')}
         </button>
       </div>
       {feedback && (

@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../../auth/useAuth'
 import AuthLayout from '../../components/auth/AuthLayout'
 import { INPUT_CLASS, LABEL_CLASS, PRIMARY_BUTTON_CLASS } from '../../components/ui/fieldStyles'
+import useLanguage from '../../i18n/useLanguage'
 
 const MIN_PASSWORD_LENGTH = 8
 
 export default function SignUpPage() {
   const { signUp } = useAuth()
+  const { t } = useLanguage()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -20,58 +22,58 @@ export default function SignUpPage() {
     event.preventDefault()
     setError(null)
     if (password.length < MIN_PASSWORD_LENGTH) {
-      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`)
+      setError(t("Use at least {count} characters.", { count: MIN_PASSWORD_LENGTH }))
       return
     }
     if (password !== confirmPassword) {
-      setError('The two passwords do not match.')
+      setError(t('The two passwords do not match.'))
       return
     }
     setSubmitting(true)
     const result = await signUp(email.trim(), password, fullName.trim())
     setSubmitting(false)
-    if (result.error) setError(result.error)
+    if (result.error) setError(t(result.error))
     else if (result.needsConfirmation) setPendingConfirmation(true)
   }
 
   if (pendingConfirmation) {
     return (
-      <AuthLayout title="Check your inbox" subtitle={`We created your account. Confirm ${email} to continue, then sign in.`}
-        footer={<Link to="/login" className="font-medium text-cyan-300 hover:text-cyan-200">Back to sign in</Link>}
+      <AuthLayout title={t("Check your inbox")} subtitle={t("We created your account. Confirm {email} to continue, then sign in.", { email })}
+        footer={<Link to="/login" className="font-medium text-cyan-300 hover:text-cyan-200">{t("Back to sign in")}</Link>}
       />
     )
   }
 
   return (
     <AuthLayout
-      title="Create your account"
-      subtitle="Your health history is private to you. New accounts start with simulated demonstration readings, clearly labelled."
+      title={t("Create your account")}
+      subtitle={t("Your health history is private to you. New accounts start with simulated demonstration readings, clearly labelled.")}
       footer={
         <>
-          Already have an account?{' '}
-          <Link to="/login" className="font-medium text-cyan-300 hover:text-cyan-200">Sign in</Link>
+          {t("Already have an account?")}{' '}
+          <Link to="/login" className="font-medium text-cyan-300 hover:text-cyan-200">{t("Sign in")}</Link>
         </>
       }
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
         <div>
-          <label htmlFor="fullName" className={LABEL_CLASS}>Full name</label>
+          <label htmlFor="fullName" className={LABEL_CLASS}>{t("Full name")}</label>
           <input id="fullName" type="text" autoComplete="name" required value={fullName}
             onChange={(e) => setFullName(e.target.value)} className={INPUT_CLASS} disabled={submitting} />
         </div>
         <div>
-          <label htmlFor="email" className={LABEL_CLASS}>Email</label>
+          <label htmlFor="email" className={LABEL_CLASS}>{t("Email")}</label>
           <input id="email" type="email" autoComplete="email" required value={email}
             onChange={(e) => setEmail(e.target.value)} className={INPUT_CLASS} disabled={submitting} />
         </div>
         <div>
-          <label htmlFor="password" className={LABEL_CLASS}>Password</label>
+          <label htmlFor="password" className={LABEL_CLASS}>{t("Password")}</label>
           <input id="password" type="password" autoComplete="new-password" required value={password}
             onChange={(e) => setPassword(e.target.value)} className={INPUT_CLASS} disabled={submitting}
-            placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`} />
+            placeholder={t("At least {count} characters", { count: MIN_PASSWORD_LENGTH })} />
         </div>
         <div>
-          <label htmlFor="confirmPassword" className={LABEL_CLASS}>Confirm password</label>
+          <label htmlFor="confirmPassword" className={LABEL_CLASS}>{t("Confirm password")}</label>
           <input id="confirmPassword" type="password" autoComplete="new-password" required value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)} className={INPUT_CLASS} disabled={submitting} />
         </div>
@@ -83,7 +85,7 @@ export default function SignUpPage() {
         )}
 
         <button type="submit" disabled={submitting} className={PRIMARY_BUTTON_CLASS}>
-          {submitting ? 'Creating account...' : 'Create account'}
+          {submitting ? t('Creating account...') : t('Create account')}
         </button>
       </form>
     </AuthLayout>

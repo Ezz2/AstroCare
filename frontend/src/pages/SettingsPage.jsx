@@ -6,9 +6,11 @@ import ProfileForm from "../components/settings/ProfileForm";
 import PasswordForm from "../components/settings/PasswordForm";
 import DataControls from "../components/settings/DataControls";
 import MeasurementReference from "../components/settings/MeasurementReference";
+import useLanguage from "../i18n/useLanguage";
 // import SettingsSection from "../components/settings/SettingsSection";
 
 export default function SettingsPage() {
+  const { t } = useLanguage();
   const { status, reload } = useHealthData();
 
   if (status === "loading") return <LoadingScreen />;
@@ -16,10 +18,10 @@ export default function SettingsPage() {
     return (
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-rose-400/30 bg-rose-400/5 p-6">
         <p className="text-sm text-ink-100">
-          We could not load your settings. Check your connection and try again.
+          {t("We could not load your settings. Check your connection and try again.")}
         </p>
         <button type="button" onClick={reload} className={PRIMARY_BUTTON_CLASS}>
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );

@@ -1,8 +1,10 @@
 import { STATUS_META, formatValue } from '../../lib/health'
 import Sparkline from '../ui/Sparkline'
 import StatusBadge from '../ui/StatusBadge'
+import useLanguage from '../../i18n/useLanguage'
 
 export default function VitalTile({ vital, latest, status, values, selected, onSelect }) {
+  const { t } = useLanguage()
   const stroke = status ? STATUS_META[status].glow : '#67e8f9'
 
   return (
@@ -15,7 +17,7 @@ export default function VitalTile({ vital, latest, status, values, selected, onS
       }`}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="truncate text-xs font-medium text-ink-300">{vital.label}</span>
+        <span className="truncate text-xs font-medium text-ink-300">{t(vital.label)}</span>
         <StatusBadge status={status} className="shrink-0 px-2 text-[10px]" />
       </div>
       <div className="flex items-end justify-between gap-2">
@@ -26,7 +28,7 @@ export default function VitalTile({ vital, latest, status, values, selected, onS
         <Sparkline values={values} stroke={stroke} width={80} height={28} />
       </div>
       <p className="text-[11px] text-ink-500">
-        Typical {vital.min} to {vital.max} {vital.unit}
+        {t("Typical {min} to {max} {unit}", { min: vital.min, max: vital.max, unit: vital.unit })}
       </p>
     </button>
   )

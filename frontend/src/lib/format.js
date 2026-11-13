@@ -1,7 +1,13 @@
 const DAY_MS = 86400000
 
+function currentLocale() {
+  const language =
+    typeof document === "undefined" ? "en" : document.documentElement.lang;
+  return { en: "en-US", ar: "ar", de: "de-DE" }[language] ?? "en-US";
+}
+
 export function formatDateTime(ms) {
-  return new Date(ms).toLocaleString(undefined, {
+  return new Date(ms).toLocaleString(currentLocale(), {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
@@ -10,11 +16,15 @@ export function formatDateTime(ms) {
 }
 
 export function formatDate(ms) {
-  return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+  return new Date(ms).toLocaleDateString(currentLocale(), { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 export function formatPercent(value) {
-  return `${value > 0 ? '+' : ''}${value.toFixed(0)}%`
+  return new Intl.NumberFormat(currentLocale(), {
+    style: "percent",
+    maximumFractionDigits: 0,
+    signDisplay: "exceptZero",
+  }).format(value / 100)
 }
 
 export function toLocalDateInput(ms) {

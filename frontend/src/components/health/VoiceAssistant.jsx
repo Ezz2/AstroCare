@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from 'react'
 import { Loader2, Mic } from 'lucide-react'
+import useLanguage from '../../i18n/useLanguage'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_BACKEND_URL || ''
 
@@ -38,6 +39,7 @@ export default function VoiceAssistant({
   onStopListening,
 }) {
   const [status, setStatus] = useState('idle')
+  const { t } = useLanguage()
   const mediaRecorderRef = useRef(null)
   const streamRef = useRef(null)
   const chunksRef = useRef([])
@@ -50,7 +52,7 @@ export default function VoiceAssistant({
 
   const reportError = (nextStatus, message) => {
     setStatus(nextStatus)
-    onVoiceError?.(message || STATUS_COPY[nextStatus])
+    onVoiceError?.(t(message || STATUS_COPY[nextStatus]))
   }
 
   const processRecording = async (blob) => {
@@ -160,7 +162,7 @@ export default function VoiceAssistant({
         <button
           type="button"
           onClick={toggleListening}
-          aria-label={isListening ? 'Stop listening' : 'Start listening'}
+          aria-label={t(isListening ? 'Stop listening' : 'Start listening')}
           aria-pressed={isListening}
           disabled={isProcessing}
           className={`relative mb-2 flex h-12 w-12 items-center justify-center rounded-full ${
@@ -173,11 +175,11 @@ export default function VoiceAssistant({
           {isProcessing ? <Loader2 size={21} className="animate-spin" /> : <Mic size={21} />}
         </button>
         <p className={`text-sm font-medium ${isMessage ? 'text-amber-300' : 'text-ink-100'}`}>
-          {STATUS_COPY[status]}
+          {t(STATUS_COPY[status])}
         </p>
 
         {isListening && (
-          <div className="mt-2 flex h-6 items-center gap-1" aria-label="Voice waveform">
+          <div className="mt-2 flex h-6 items-center gap-1" aria-label={t('Voice waveform')}>
             {[3, 6, 10, 16, 11, 7, 13, 5, 9].map((height, index) => (
               <span
                 key={index}

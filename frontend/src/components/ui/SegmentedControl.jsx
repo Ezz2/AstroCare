@@ -1,6 +1,9 @@
+import useLanguage from '../../i18n/useLanguage'
+
 export default function SegmentedControl({ options, value, onChange, label }) {
+  const { t } = useLanguage()
   return (
-    <div role="group" aria-label={label} className="inline-flex w-fit flex-wrap rounded-xl border border-space-700 bg-space-900/70 p-1">
+    <div role="group" aria-label={t(label)} className="inline-flex w-fit flex-wrap rounded-xl border border-space-700 bg-space-900/70 p-1">
       {options.map((option) => {
         const active = option.id === value
         return (
@@ -13,7 +16,7 @@ export default function SegmentedControl({ options, value, onChange, label }) {
               active ? 'bg-cyan-400/15 text-cyan-200' : 'text-ink-300 hover:text-ink-100'
             }`}
           >
-            {option.label}
+            {t(option.label)}
           </button>
         )
       })}

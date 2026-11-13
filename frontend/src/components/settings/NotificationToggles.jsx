@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useHealthData } from '../../health/useHealthData'
 import SettingsSection from './SettingsSection'
+import useLanguage from '../../i18n/useLanguage'
 
 const TOGGLES = [
   { key: 'notify_alerts', label: 'Alert notifications', hint: 'Show a notice when a reading falls outside its typical range.' },
@@ -8,29 +9,30 @@ const TOGGLES = [
 ]
 
 export default function NotificationToggles() {
+  const { t } = useLanguage()
   const { profile, saveProfile } = useHealthData()
   const [error, setError] = useState(null)
 
   const toggle = async (key) => {
     setError(null)
     const ok = await saveProfile({ [key]: !profile[key] })
-    if (!ok) setError('We could not update that preference. Try again.')
+    if (!ok) setError(t('We could not update that preference. Try again.'))
   }
 
   return (
-    <SettingsSection title="Notifications" description="Choose which alerts and reminders you receive.">
+    <SettingsSection title={t("Notifications")} description={t("Choose which alerts and reminders you receive.")}>
       <ul className="flex flex-col divide-y divide-space-800">
         {TOGGLES.map(({ key, label, hint }) => (
           <li key={key} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
             <div>
-              <p className="text-sm font-medium text-ink-100">{label}</p>
-              <p className="text-xs text-ink-500">{hint}</p>
+              <p className="text-sm font-medium text-ink-100">{t(label)}</p>
+              <p className="text-xs text-ink-500">{t(hint)}</p>
             </div>
             <button
               type="button"
               role="switch"
               aria-checked={Boolean(profile?.[key])}
-              aria-label={label}
+              aria-label={t(label)}
               onClick={() => toggle(key)}
               className={`relative h-6 w-11 shrink-0 rounded-full transition ${profile?.[key] ? 'bg-cyan-400' : 'bg-space-700'}`}
             >

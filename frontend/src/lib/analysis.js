@@ -85,7 +85,9 @@ export function currentStatuses(groups) {
   })
 }
 
-export function findUnusual(vital, list) {
+const identity = (text) => text;
+
+export function findUnusual(vital, list, t = identity) {
   if (list.length < MIN_HISTORY) return []
   const values = list.map((reading) => reading.value)
   const mean = values.reduce((sum, v) => sum + v, 0) / values.length
@@ -100,13 +102,22 @@ export function findUnusual(vital, list) {
       {
         reading,
         vital,
-        reason: `${vital.label} of ${formatValue(vital, reading.value)} ${vital.unit} is ${direction} than your usual average of ${formatValue(vital, mean)} ${vital.unit}.`,
+        reason: t(
+          "{measurement} of {value} {unit} is {direction} than your usual average of {average} {unit}.",
+          {
+            measurement: t(vital.label),
+            value: formatValue(vital, reading.value),
+            unit: vital.unit,
+            direction: t(direction),
+            average: formatValue(vital, mean),
+          },
+        ),
       },
     ]
   })
 }
 
-export function buildAlerts(groups, now = Date.now()) {
+export function buildAlerts(groups, now = Date.now(), t = identity) {
   const alerts = []
   for (const vital of VITALS) {
     const list = groups[vital.id]
@@ -122,13 +133,24 @@ export function buildAlerts(groups, now = Date.now()) {
         kind: 'range',
         value: latest.value,
         time: latest.time,
-        title: `${vital.label} is ${status === 'alert' ? 'outside' : 'near the edge of'} its typical range`,
-        explanation: `Latest reading of ${formatValue(vital, latest.value)} ${vital.unit}. Typical range is ${vital.min} to ${vital.max} ${vital.unit}.`,
-        action: vital.guidance,
+        title: t("{measurement} is {comparison} its typical range", {
+          measurement: t(vital.label),
+          comparison: t(status === 'alert' ? 'outside' : 'near the edge of'),
+        }),
+        explanation: t(
+          "Latest reading of {value} {unit}. Typical range is {min} to {max} {unit}.",
+          {
+            value: formatValue(vital, latest.value),
+            unit: vital.unit,
+            min: vital.min,
+            max: vital.max,
+          },
+        ),
+        action: t(vital.guidance),
       })
     }
 
-    for (const unusual of findUnusual(vital, list)) {
+    for (const unusual of findUnusual(vital, list, t)) {
       if (unusual.reading.time < now - RECENT_HOURS * HOUR_MS) continue
       
       // Avoid showing the latest reading twice as both range and unusual.
@@ -140,16 +162,18 @@ export function buildAlerts(groups, now = Date.now()) {
         kind: 'unusual',
         value: unusual.reading.value,
         time: unusual.reading.time,
-        title: `Unusual ${vital.label.toLowerCase()} reading`,
+        title: t("Unusual {measurement} reading", {
+          measurement: t(vital.label).toLowerCase(),
+        }),
         explanation: unusual.reason,
-        action: vital.guidance,
+        action: t(vital.guidance),
       })
     }
   }
   return alerts.sort((a, b) => SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity] || b.time - a.time)
 }
 
-export function buildReport(readings, days, now = Date.now(), dailyCheckIns = []) {
+export function buildReport(readings, days, now = Date.now(), dailyCheckIns = [], t = identity) {
   const groups = groupByVital(readings)
   const rows = VITALS.map((vital) => {
     const current = filterByPeriod(groups[vital.id], days, now)
@@ -160,7 +184,7 @@ export function buildReport(readings, days, now = Date.now(), dailyCheckIns = []
       stats,
       change: stats && previousStats ? percentChange(stats.mean, previousStats.mean) : null,
       status: stats ? getStatus(vital, stats.latest) : null,
-      unusual: findUnusual(vital, current),
+      unusual: findUnusual(vital, current, t),
       outOfRange: current.filter((reading) => getStatus(vital, reading.value) !== 'normal'),
     }
   })
@@ -172,17 +196,29 @@ export function buildReport(readings, days, now = Date.now(), dailyCheckIns = []
     if (change !== null && Math.abs(change) >= SIGNIFICANT_CHANGE_PERCENT) {
       const direction = change > 0 ? 'up' : 'down'
       observations.push(
-        `${vital.label} averaged ${formatValue(vital, stats.mean)} ${vital.unit}, ${direction} ${Math.abs(change).toFixed(0)}% from the previous period.`,
+        t("{measurement} averaged {value} {unit}, {direction} {percent}% from the previous period.", {
+          measurement: t(vital.label),
+          value: formatValue(vital, stats.mean),
+          unit: vital.unit,
+          direction: t(direction),
+          percent: Math.abs(change).toFixed(0),
+        }),
       )
     }
     if (outOfRange.length) {
       observations.push(
-        `${outOfRange.length} ${vital.label.toLowerCase()} reading${outOfRange.length > 1 ? 's' : ''} fell outside the typical range of ${vital.min} to ${vital.max} ${vital.unit}.`,
+        t("{count} {measurement} readings fell outside the typical range of {min} to {max} {unit}.", {
+          count: outOfRange.length,
+          measurement: t(vital.label).toLowerCase(),
+          min: vital.min,
+          max: vital.max,
+          unit: vital.unit,
+        }),
       )
     }
   }
   if (!observations.length && rows.some((row) => row.stats)) {
-    observations.push('No significant changes or out-of-range readings in this period.')
+    observations.push(t('No significant changes or out-of-range readings in this period.'))
   }
 
   const unusual = rows
@@ -193,7 +229,7 @@ export function buildReport(readings, days, now = Date.now(), dailyCheckIns = []
   const flagged = rows.filter((row) => row.status && row.status !== 'normal' || row.unusual.length)
   const recommendations = [...new Set(flagged.map((row) => row.vital.guidance))]
   if (!recommendations.length) {
-    recommendations.push('Keep your current routine and continue recording readings regularly.')
+    recommendations.push(t('Keep your current routine and continue recording readings regularly.'))
   }
 
   const periodReadings = filterByPeriod(readings, days, now)

@@ -10,13 +10,15 @@ import {
   PANEL_CLASS,
   PRIMARY_BUTTON_CLASS,
 } from "../components/ui/fieldStyles";
+import useLanguage from "../i18n/useLanguage";
 
 function todayKey() {
   return toLocalDateInput(Date.now());
 }
 
-function dateLabel(date) {
-  return new Date(`${date}T00:00:00`).toLocaleDateString(undefined, {
+function dateLabel(date, language) {
+  const locale = { en: "en-US", ar: "ar", de: "de-DE" }[language];
+  return new Date(`${date}T00:00:00`).toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -24,6 +26,7 @@ function dateLabel(date) {
 }
 
 function MoodChoices({ value, onChange }) {
+  const { t } = useLanguage();
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8">
       {MOOD_OPTIONS.map(({ id, label, icon: Icon, emoji, color }) => (
@@ -39,7 +42,7 @@ function MoodChoices({ value, onChange }) {
           }`}>
           <Icon size={18} className={color} aria-hidden="true" />
           <span>
-            {emoji} {label}
+            {emoji} {t(label)}
           </span>
         </button>
       ))}
@@ -48,6 +51,7 @@ function MoodChoices({ value, onChange }) {
 }
 
 function FactorChoices({ values, onChange }) {
+  const { t } = useLanguage();
   const toggleFactor = (id) => {
     onChange(
       values.includes(id)
@@ -69,7 +73,7 @@ function FactorChoices({ values, onChange }) {
               ? "border-cyan-400 bg-cyan-400/10 text-cyan-200"
               : "border-space-600 text-ink-300 hover:border-cyan-400/50 hover:bg-space-800"
           }`}>
-          {emoji} {label}
+          {emoji} {t(label)}
         </button>
       ))}
     </div>
@@ -77,6 +81,7 @@ function FactorChoices({ values, onChange }) {
 }
 
 export default function DailyCheckInPage() {
+  const { language, t } = useLanguage();
   const { status, dailyCheckIns, saveDailyCheckIn, reload } = useHealthData();
   const currentDate = todayKey();
   const todayCheckIn = useMemo(
@@ -108,11 +113,10 @@ export default function DailyCheckInPage() {
     return (
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-rose-400/30 bg-rose-400/5 p-6">
         <p className="text-sm text-ink-100">
-          We could not load your daily check-in. Check your connection and try
-          again.
+          {t("We could not load your daily check-in. Check your connection and try again.")}
         </p>
         <button type="button" onClick={reload} className={PRIMARY_BUTTON_CLASS}>
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -126,8 +130,8 @@ export default function DailyCheckInPage() {
     if (!Number.isFinite(sleep) || sleep <= 0 || sleep >= 24 || !mood) {
       setError(
         !mood
-          ? "Select how you are feeling today."
-          : "Enter how many hours you slept.",
+          ? t("Select how you are feeling today.")
+          : t("Enter how many hours you slept."),
       );
       return;
     }
@@ -140,13 +144,13 @@ export default function DailyCheckInPage() {
     });
     setSaving(false);
     if (!saved) {
-      setError("We could not save your daily check-in. Please try again.");
+      setError(t("We could not save your daily check-in. Please try again."));
       return;
     }
     setMessage(
       todayCheckIn
-        ? "Your daily check-in was updated."
-        : "Your daily check-in was saved.",
+        ? t("Your daily check-in was updated.")
+        : t("Your daily check-in was saved."),
     );
   };
 
@@ -159,13 +163,13 @@ export default function DailyCheckInPage() {
           </div>
           <div>
             <p className="text-xs uppercase tracking-[0.18em] text-ink-500">
-              Daily routine
+              {t("Daily routine")}
             </p>
             <h2 className="mt-1 font-display text-2xl font-semibold">
-              Daily Check-in
+              {t("Daily Check-in")}
             </h2>
             <p className="mt-1 text-sm text-ink-300">
-              Record your sleep and how you are feeling today.
+              {t("Record your sleep and how you are feeling today.")}
             </p>
           </div>
         </div>
@@ -175,10 +179,10 @@ export default function DailyCheckInPage() {
             <label
               htmlFor="check-in-sleep"
               className="mb-1.5 block text-sm font-medium text-ink-100">
-              How long did you sleep?
+              {t("How long did you sleep?")}
             </label>
             <p className="mb-2 text-xs text-ink-500">
-              Today, {dateLabel(currentDate)}. Enter hours, for example 7.5.
+              {t("Today, {date}. Enter hours, for example 7.5.", { date: dateLabel(currentDate, language) })}
             </p>
             <div className="flex max-w-xs items-center gap-2">
               <input
@@ -192,24 +196,24 @@ export default function DailyCheckInPage() {
                 onChange={(event) => setSleepDuration(event.target.value)}
                 className={INPUT_CLASS}
               />
-              <span className="text-sm text-ink-500">hours</span>
+              <span className="text-sm text-ink-500">{t("hours")}</span>
             </div>
           </div>
 
           <div>
             <p className="mb-1 text-sm font-medium text-ink-100">
-              How are you feeling today?
+              {t("How are you feeling today?")}
             </p>
-            <p className="mb-2 text-xs text-ink-500">Choose one mood.</p>
+            <p className="mb-2 text-xs text-ink-500">{t("Choose one mood.")}</p>
             <MoodChoices value={mood} onChange={setMood} />
           </div>
 
           <div>
             <p className="mb-1 text-sm font-medium text-ink-100">
-              How was your day?
+              {t("How was your day?")}
             </p>
             <p className="mb-2 text-xs text-ink-500">
-              Optional context for your check-in.
+              {t("Optional context for your check-in.")}
             </p>
             <FactorChoices values={factors} onChange={setFactors} />
           </div>
@@ -235,10 +239,10 @@ export default function DailyCheckInPage() {
               disabled={saving}
               className={PRIMARY_BUTTON_CLASS}>
               {saving
-                ? "Saving..."
+                ? t("Saving...")
                 : todayCheckIn
-                  ? "Update today's check-in"
-                  : "Save today's check-in"}
+                  ? t("Update today's check-in")
+                  : t("Save today's check-in")}
             </button>
           </div>
         </form>
@@ -246,11 +250,11 @@ export default function DailyCheckInPage() {
 
       <section className={PANEL_CLASS}>
         <h2 className="mb-3 font-display text-lg font-semibold">
-          Recent check-ins
+          {t("Recent check-ins")}
         </h2>
         {dailyCheckIns.length === 0 ? (
           <p className="text-sm text-ink-500">
-            Your completed check-ins will appear here.
+            {t("Your completed check-ins will appear here.")}
           </p>
         ) : (
           <div className="divide-y divide-space-800">
@@ -272,11 +276,11 @@ export default function DailyCheckInPage() {
                   </span>
                   <span
                     className={`text-right text-sm ${moodInfo?.color ?? "text-ink-500"}`}>
-                    {moodInfo ? `${moodInfo.label}` : "Mood skipped"} ·{" "}
-                    {checkIn.sleep_duration}h sleep
+                    {moodInfo ? t(moodInfo.label) : t("Mood skipped")} ·{" "}
+                    {checkIn.sleep_duration}h {t("sleep")}
                     {factorLabels.length > 0 && (
                       <span className="block text-xs text-ink-500">
-                        {factorLabels.join(", ")}
+                        {factorLabels.map((label) => t(label)).join(", ")}
                       </span>
                     )}
                   </span>

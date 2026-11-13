@@ -15,6 +15,7 @@ import LoadingScreen from "../components/ui/LoadingScreen";
 import { PRIMARY_BUTTON_CLASS } from "../components/ui/fieldStyles";
 import AddHealthRecordModal from "../components/health/AddHealthRecordModal";
 import HealthStatusPanel from "../components/health/HealthStatusPanel";
+import useLanguage from "../i18n/useLanguage";
 
 const TREND_DAYS = 14;
 const TILE_SPARK_POINTS = 12;
@@ -27,6 +28,7 @@ function greeting() {
 }
 
 export default function OverviewPage() {
+  const { t } = useLanguage();
   const { profile, status, reload, addReadings } = useHealthData();
   const { groups, statuses, alerts, overall, statusBySystem, assessment } =
     useHealthInsights();
@@ -41,11 +43,10 @@ export default function OverviewPage() {
     return (
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-rose-400/30 bg-rose-400/5 p-6">
         <p className="text-sm text-ink-100">
-          We could not load your health data. Check your connection and try
-          again.
+          {t("We could not load your health data. Check your connection and try again.")}
         </p>
         <button type="button" onClick={reload} className={PRIMARY_BUTTON_CLASS}>
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -61,12 +62,12 @@ export default function OverviewPage() {
     filterByPeriod(groups[selectedVitalId], TREND_DAYS),
   );
   const hasReadings = latestReading !== undefined;
-  const firstName = profile?.full_name?.split(" ")[0] || "Astronaut";
+  const firstName = profile?.full_name?.split(" ")[0] || t("Astronaut");
 
   const handleSave = async (rows) => {
     const saved = await addReadings(rows);
     if (!saved) return false;
-    setToast("Health record saved successfully!");
+    setToast(t("Health record saved successfully!"));
     window.setTimeout(() => setToast(null), 3500);
     return true;
   };
@@ -83,22 +84,22 @@ export default function OverviewPage() {
       <section className="flex flex-col gap-4 rounded-2xl border border-space-700 bg-space-900/70 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs uppercase tracking-[0.18em] text-ink-500">
-            {greeting()}
+            {t(greeting())}
           </p>
           <h2 className="mt-1 font-display text-2xl font-semibold">
-            {firstName}, your health at a glance
+            {t("{name}, your health at a glance", { name: firstName })}
           </h2>
           <p className="mt-1 text-sm text-ink-300">
             {hasReadings
-              ? "Your current readings and health patterns are summarized below."
-              : "Add your first measurement to begin."}
+              ? t("Your current readings and health patterns are summarized below.")
+              : t("Add your first measurement to begin.")}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-xs text-ink-300">
           {hasReadings && (
             <>
               <StatusBadge status={overall} className="px-3 py-1 text-xs" />
-              <span>Latest {formatDateTime(latestReading.time)}</span>
+              <span>{t("Latest {date}", { date: formatDateTime(latestReading.time) })}</span>
               {/* <SourceBadge source={latestReading.source} /> */}
             </>
           )}
@@ -106,7 +107,7 @@ export default function OverviewPage() {
             type="button"
             onClick={() => setIsAddRecordOpen(true)}
             className={PRIMARY_BUTTON_CLASS}>
-            + Add Health Record
+            + {t("Add Health Record")}
           </button>
         </div>
       </section>
@@ -145,16 +146,16 @@ export default function OverviewPage() {
           <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="font-display text-lg font-semibold">
-                {selectedVital.label} trend
+                {t("{measurement} trend", { measurement: t(selectedVital.label) })}
               </h2>
               <p className="text-xs text-ink-500">
-                Last {TREND_DAYS} days. Dashed lines mark the typical range.
+                {t("Last {days} days. Dashed lines mark the typical range.", { days: TREND_DAYS })}
               </p>
             </div>
             <Link
               to="/analytics"
               className="text-xs font-medium text-cyan-300 hover:text-cyan-200">
-              Explore in analytics
+              {t("Explore in analytics")}
             </Link>
           </div>
           {points.length > 1 ? (
@@ -165,7 +166,7 @@ export default function OverviewPage() {
             />
           ) : (
             <p className="flex h-64 items-center justify-center text-sm text-ink-500">
-              Not enough readings in this period to draw a trend.
+              {t("Not enough readings in this period to draw a trend.")}
             </p>
           )}
         </section>

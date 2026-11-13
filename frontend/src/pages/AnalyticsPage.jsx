@@ -15,8 +15,10 @@ import { formatValue } from "../lib/health";
 import VitalTrendChart from "../components/VitalTrendChart";
 import { PANEL_CLASS } from "../components/ui/fieldStyles";
 import SegmentedControl from "../components/ui/SegmentedControl";
+import useLanguage from "../i18n/useLanguage";
 
 export default function AnalyticsPage() {
+  const { t } = useLanguage();
   const { groups } = useHealthInsights();
   const [vitalId, setVitalId] = useState("heartRate");
   const [periodId, setPeriodId] = useState("14");
@@ -42,7 +44,7 @@ export default function AnalyticsPage() {
         <div
           className="flex flex-wrap gap-2"
           role="group"
-          aria-label="Measurement">
+          aria-label={t("Measurement")}>
           {VITALS.map((item) => (
             <button
               key={item.id}
@@ -54,7 +56,7 @@ export default function AnalyticsPage() {
                   ? "border-cyan-400 bg-cyan-400/15 text-cyan-200"
                   : "border-space-600 text-ink-300 hover:text-ink-100"
               }`}>
-              {item.label}
+              {t(item.label)}
             </button>
           ))}
         </div>
@@ -62,35 +64,35 @@ export default function AnalyticsPage() {
           options={PERIODS}
           value={periodId}
           onChange={setPeriodId}
-          label="Time period"
+          label={t("Time period")}
         />
       </div>
 
       <section className={PANEL_CLASS}>
         <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
           <Stat
-            label="Average"
+            label={t("Average")}
             value={
               stats ? `${formatValue(vital, stats.mean)} ${vital.unit}` : "--"
             }
           />
           <Stat
-            label="Lowest"
+            label={t("Lowest")}
             value={
               stats ? `${formatValue(vital, stats.min)} ${vital.unit}` : "--"
             }
           />
           <Stat
-            label="Highest"
+            label={t("Highest")}
             value={
               stats ? `${formatValue(vital, stats.max)} ${vital.unit}` : "--"
             }
           />
           <Stat
-            label="Vs. previous period"
+            label={t("Vs. previous period")}
             value={change !== null ? formatPercent(change) : "--"}
           />
-          <Stat label="Readings" value={stats ? String(stats.count) : "0"} />
+          <Stat label={t("Readings")} value={stats ? String(stats.count) : "0"} />
         </div>
         {current.length > 1 ? (
           <VitalTrendChart
@@ -101,21 +103,20 @@ export default function AnalyticsPage() {
           />
         ) : (
           <p className="flex h-40 items-center justify-center text-sm text-ink-500">
-            Not enough readings in this period to draw a trend.
+            {t("Not enough readings in this period to draw a trend.")}
           </p>
         )}
       </section>
 
       {/* <div className="grid gap-5 lg:grid-cols-12"> */}
       <section className={`${PANEL_CLASS} lg:col-span-5`}>
-        <h2 className="font-display text-lg font-semibold">Unusual readings</h2>
+        <h2 className="font-display text-lg font-semibold">{t("Unusual readings")}</h2>
         <p className="mb-4 mt-1 text-xs text-ink-500">
-          Readings more than two standard deviations from your average, or
-          outside the typical range.
+          {t("Readings more than two standard deviations from your average, or outside the typical range.")}
         </p>
         {unusual.length === 0 && outOfRange.length === 0 ? (
           <p className="text-sm text-ink-300">
-            Nothing unusual in this period.
+            {t("Nothing unusual in this period.")}
           </p>
         ) : (
           <ul className="flex max-h-72 flex-col gap-3 overflow-auto">
@@ -123,12 +124,12 @@ export default function AnalyticsPage() {
               ...outOfRange.map((r) => ({
                 id: r.id,
                 time: r.time,
-                text: `${formatValue(vital, r.value)} ${vital.unit}, outside the typical range`,
+                text: t("{value} {unit}, outside the typical range", { value: `${formatValue(vital, r.value)}`, unit: vital.unit }),
               })),
               ...unusual.map((u) => ({
                 id: u.reading.id,
                 time: u.reading.time,
-                text: u.reason,
+                text: t(u.reason),
               })),
             ]
               .sort((a, b) => b.time - a.time)

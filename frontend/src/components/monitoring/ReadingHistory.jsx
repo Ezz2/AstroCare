@@ -7,6 +7,7 @@ import { formatValue, getStatus } from '../../lib/health'
 import SourceBadge from '../ui/SourceBadge'
 import StatusBadge from '../ui/StatusBadge'
 import CustomSelect from '../ui/CustomSelect'
+import useLanguage from '../../i18n/useLanguage'
 
 const MAX_ROWS = 100
 
@@ -19,6 +20,7 @@ const FILTER_OPTIONS = [
 ]
 
 export default function ReadingHistory({ readings }) {
+  const { t } = useLanguage()
   const [vitalFilter, setVitalFilter] = useState('all')
   const [confirmId, setConfirmId] = useState(null)
   const [deleting, setDeleting] = useState(false)
@@ -43,7 +45,7 @@ export default function ReadingHistory({ readings }) {
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
         <p className="text-xs text-ink-500">
-          {filtered.length} record{filtered.length === 1 ? '' : 's'}
+          {t("{count} {recordsLabel}", { count: filtered.length, recordsLabel: t(filtered.length === 1 ? 'record' : 'records') })}
         </p>
 
         <div className="min-w-0 flex-1">
@@ -51,27 +53,27 @@ export default function ReadingHistory({ readings }) {
             id="reading-vital-filter"
             value={vitalFilter}
             onChange={setVitalFilter}
-            options={FILTER_OPTIONS}
-            ariaLabel="Filter by measurement"
+            ariaLabel={t("Filter by measurement")}
+            options={FILTER_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))}
           />
         </div>
       </div>
 
       {shown.length === 0 ? (
         <p className="py-10 text-center text-sm text-ink-500">
-          No readings for this measurement yet.
+          {t("No readings for this measurement yet.")}
         </p>
       ) : (
         <div className="max-h-[560px] overflow-auto rounded-xl border border-space-800">
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead className="sticky top-0 bg-space-900 text-xs uppercase tracking-wider text-ink-500">
               <tr>
-                <th className="px-4 py-3 font-medium">Recorded</th>
-                <th className="px-4 py-3 font-medium">Measurement</th>
-                <th className="px-4 py-3 font-medium">Status</th>
-                <th className="px-4 py-3 font-medium">Source</th>
+                <th className="px-4 py-3 font-medium">{t("Recorded")}</th>
+                <th className="px-4 py-3 font-medium">{t("Measurement")}</th>
+                <th className="px-4 py-3 font-medium">{t("Status")}</th>
+                <th className="px-4 py-3 font-medium">{t("Source")}</th>
                 <th className="px-4 py-3 text-right font-medium">
-                  <span className="sr-only">Actions</span>
+                  <span className="sr-only">{t("Actions")}</span>
                 </th>
               </tr>
             </thead>
@@ -94,7 +96,7 @@ export default function ReadingHistory({ readings }) {
                         {formatValue(vital, reading.value)}
                       </span>{' '}
                       <span className="text-ink-500">{vital.unit}</span>{' '}
-                      <span className="text-ink-300">{vital.label}</span>
+                      <span className="text-ink-300">{t(vital.label)}</span>
                     </td>
 
                     <td className="px-4 py-3">
@@ -114,7 +116,7 @@ export default function ReadingHistory({ readings }) {
                             onClick={() => handleDelete(reading.id)}
                             className="text-rose-400 hover:text-rose-300"
                           >
-                            Delete
+                            {t("Delete")}
                           </button>
 
                           <button
@@ -122,7 +124,7 @@ export default function ReadingHistory({ readings }) {
                             onClick={() => setConfirmId(null)}
                             className="text-ink-300 hover:text-ink-100"
                           >
-                            Cancel
+                            {t("Cancel")}
                           </button>
                         </span>
                       ) : (
@@ -131,7 +133,7 @@ export default function ReadingHistory({ readings }) {
                           onClick={() => setConfirmId(reading.id)}
                           className="text-xs text-ink-500 hover:text-rose-400"
                         >
-                          Remove
+                          {t("Remove")}
                         </button>
                       )}
                     </td>
@@ -145,7 +147,7 @@ export default function ReadingHistory({ readings }) {
 
       {filtered.length > MAX_ROWS && (
         <p className="text-xs text-ink-500">
-          Showing the latest {MAX_ROWS} records.
+          {t("Showing the latest {count} records.", { count: MAX_ROWS })}
         </p>
       )}
     </div>

@@ -15,6 +15,7 @@ import {
   SECONDARY_BUTTON_CLASS,
 } from "../ui/fieldStyles";
 import { VITALS } from "../../data/vitalCatalog";
+import useLanguage from "../../i18n/useLanguage";
 
 const INITIAL_VALUES = {
   heartRate: "",
@@ -60,6 +61,7 @@ export default function AddHealthRecordModal({
   // onStartListening,
   // onStopListening,
 }) {
+  const { t } = useLanguage();
   const [values, setValues] = useState(INITIAL_VALUES);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -97,7 +99,7 @@ export default function AddHealthRecordModal({
       value.trim(),
     );
     if (!providedValues.length) {
-      setError("Enter at least one measurement before saving.");
+      setError(t("Enter at least one measurement before saving."));
       return;
     }
     const invalid = providedValues.find(([id, value]) => {
@@ -110,7 +112,7 @@ export default function AddHealthRecordModal({
       );
     });
     if (invalid) {
-      setError("Enter valid positive measurements below 1000.");
+      setError(t("Enter valid positive measurements below 1000."));
       return;
     }
     const measuredAt = new Date().toISOString();
@@ -125,7 +127,7 @@ export default function AddHealthRecordModal({
     const saved = await onSave?.(rows);
     setSaving(false);
     if (!saved) {
-      setError("We could not save your health record. Please try again.");
+      setError(t("We could not save your health record. Please try again."));
       return;
     }
     onClose();
@@ -149,16 +151,16 @@ export default function AddHealthRecordModal({
             <h2
               id="add-health-record-title"
               className="font-display text-xl font-semibold">
-              Add Health Record
+              {t("Add Health Record")}
             </h2>
             <p className="mt-1 text-sm text-ink-300">
-              Enter your health measurements manually.
+              {t("Enter your health measurements manually.")}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close add health record modal"
+            aria-label={t("Close add health record modal")}
             className="rounded-lg p-2 text-ink-500 transition hover:bg-space-800 hover:text-ink-100">
             <X size={20} />
           </button>
@@ -177,10 +179,10 @@ export default function AddHealthRecordModal({
           <div className="mt-3">
             <div className="mb-2">
               <h3 className="font-display text-base font-semibold">
-                Your measurements
+                {t("Your measurements")}
               </h3>
               <p className="mt-1 text-xs text-ink-500">
-                Enter only the measurements you have available.
+                {t("Enter only the measurements you have available.")}
               </p>
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
@@ -234,14 +236,14 @@ export default function AddHealthRecordModal({
             type="button"
             onClick={onClose}
             className={SECONDARY_BUTTON_CLASS}>
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             type="submit"
             form="add-health-record-form"
             disabled={saving}
             className={PRIMARY_BUTTON_CLASS}>
-            {saving ? "Saving..." : "Confirm & Save"}
+            {saving ? t("Saving...") : t("Confirm & Save")}
           </button>
         </footer>
       </div>

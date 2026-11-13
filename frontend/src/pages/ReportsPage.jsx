@@ -13,6 +13,7 @@ import {
 } from "../components/ui/fieldStyles";
 import RecommendationsPanel from "../components/reports/RecommendationsPanel";
 import HealthStatusPanel from "../components/health/HealthStatusPanel";
+import useLanguage from "../i18n/useLanguage";
 
 const SOURCE_LABELS = {
   manual: "Your entries",
@@ -21,13 +22,14 @@ const SOURCE_LABELS = {
 };
 
 export default function ReportsPage() {
+  const { t } = useLanguage();
   const { readings, dailyCheckIns, status, reload } = useHealthData();
   const { assessment } = useHealthInsights();
   const [periodId, setPeriodId] = useState("7");
   const period = PERIODS.find((p) => p.id === periodId);
   const report = useMemo(
-    () => buildReport(readings, period.days, Date.now(), dailyCheckIns),
-    [readings, dailyCheckIns, period.days],
+    () => buildReport(readings, period.days, Date.now(), dailyCheckIns, t),
+    [readings, dailyCheckIns, period.days, t],
   );
 
   if (status === "loading") return <LoadingScreen />;
@@ -35,10 +37,10 @@ export default function ReportsPage() {
     return (
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-rose-400/30 bg-rose-400/5 p-6">
         <p className="text-sm text-ink-100">
-          We could not load your reports. Check your connection and try again.
+          {t("We could not load your reports. Check your connection and try again.")}
         </p>
         <button type="button" onClick={reload} className={PRIMARY_BUTTON_CLASS}>
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -53,14 +55,14 @@ export default function ReportsPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-ink-300">
           {hasData
-            ? `${report.counts.total} reading${report.counts.total === 1 ? "" : "s"} in this period.`
-            : "No readings in this period."}
+            ? t("{count} readings in this period.", { count: report.counts.total })
+            : t("No readings in this period.")}
         </p>
         <SegmentedControl
           options={PERIODS}
           value={periodId}
           onChange={setPeriodId}
-          label="Report period"
+          label={t("Report period")}
         />
       </div>
 
@@ -69,7 +71,7 @@ export default function ReportsPage() {
           <span
             key={key}
             className="rounded-full border border-space-700 px-3 py-1 text-ink-300">
-            {label}:{" "}
+            {t(label)}:{" "}
             <span className="font-semibold text-ink-100">
               {report.counts[key] ?? 0}
             </span>
@@ -78,21 +80,21 @@ export default function ReportsPage() {
       </div>
 
       <section className={`${PANEL_CLASS} overflow-x-auto`}>
-        <h2 className="mb-4 font-display text-lg font-semibold">Summary</h2>
+        <h2 className="mb-4 font-display text-lg font-semibold">{t("Summary")}</h2>
         <table className="w-full min-w-[560px] text-left text-sm">
           <thead className="text-xs uppercase tracking-wider text-ink-500">
             <tr>
-              <th className="pb-2 font-medium">Measurement</th>
-              <th className="pb-2 font-medium">Average</th>
-              <th className="pb-2 font-medium">Range</th>
-              <th className="pb-2 font-medium">Change</th>
-              <th className="pb-2 font-medium">Status</th>
+              <th className="pb-2 font-medium">{t("Measurement")}</th>
+              <th className="pb-2 font-medium">{t("Average")}</th>
+              <th className="pb-2 font-medium">{t("Range")}</th>
+              <th className="pb-2 font-medium">{t("Change")}</th>
+              <th className="pb-2 font-medium">{t("Status")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-space-800">
             {report.rows.map(({ vital, stats, change, status: rowStatus }) => (
               <tr key={vital.id}>
-                <td className="py-3 text-ink-100">{vital.label}</td>
+                <td className="py-3 text-ink-100">{t(vital.label)}</td>
                 <td className="py-3 text-ink-300">
                   {stats
                     ? `${formatValue(vital, stats.mean)} ${vital.unit}`
@@ -100,7 +102,7 @@ export default function ReportsPage() {
                 </td>
                 <td className="py-3 text-ink-300">
                   {stats
-                    ? `${formatValue(vital, stats.min)} to ${formatValue(vital, stats.max)}`
+                    ? `${formatValue(vital, stats.min)} ${t("to")} ${formatValue(vital, stats.max)}`
                     : "--"}
                 </td>
                 <td className="py-3 text-ink-300">
@@ -110,7 +112,7 @@ export default function ReportsPage() {
                   {rowStatus ? (
                     <StatusBadge status={rowStatus} />
                   ) : (
-                    <span className="text-ink-500">No data</span>
+                    <span className="text-ink-500">{t("No data")}</span>
                   )}
                 </td>
               </tr>
@@ -121,12 +123,12 @@ export default function ReportsPage() {
 
       <div className="grid gap-5 lg:grid-cols-2">
         <section className={PANEL_CLASS}>
-          <h2 className="mb-3 font-display text-lg font-semibold">Notes</h2>
+          <h2 className="mb-3 font-display text-lg font-semibold">{t("Notes")}</h2>
           <ul className="flex flex-col gap-2.5 text-sm text-ink-300">
             {report.observations.map((text) => (
               <li key={text} className="flex gap-2.5">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
-                {text}
+                {t(text)}
               </li>
             ))}
           </ul>

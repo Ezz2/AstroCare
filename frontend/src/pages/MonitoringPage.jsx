@@ -6,9 +6,11 @@ import {
 import ReadingHistory from "../components/monitoring/ReadingHistory";
 import { useHealthData } from "../health/useHealthData";
 import LoadingScreen from "../components/ui/LoadingScreen";
+import useLanguage from "../i18n/useLanguage";
 // import AddHealthRecordModal from "../components/health/AddHealthRecordModal";
 
 export default function MonitoringPage() {
+  const { t } = useLanguage();
   const { readings, status, reload } = useHealthData();
   // const [isAddRecordOpen, setIsAddRecordOpen] = useState(false);
   const [toast] = useState(null);
@@ -18,10 +20,10 @@ export default function MonitoringPage() {
     return (
       <div className={`${PANEL_CLASS} flex flex-col items-start gap-4`}>
         <p className="text-sm">
-          We could not load your readings. Check your connection and try again.
+          {t("We could not load your readings. Check your connection and try again.")}
         </p>
         <button type="button" onClick={reload} className={PRIMARY_BUTTON_CLASS}>
-          Try again
+          {t("Try again")}
         </button>
       </div>
     );
@@ -53,7 +55,7 @@ export default function MonitoringPage() {
       </section> */}
 
       <section className={PANEL_CLASS}>
-        <h2 className="mb-4 font-display text-lg font-semibold">History</h2>
+        <h2 className="mb-4 font-display text-lg font-semibold">{t("History")}</h2>
         <ReadingHistory readings={readings} />
       </section>
       {/* <AddHealthRecordModal

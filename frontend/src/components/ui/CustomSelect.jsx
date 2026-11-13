@@ -1,6 +1,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
+import useLanguage from '../../i18n/useLanguage'
 
 export default function CustomSelect({
   id,
@@ -12,6 +13,7 @@ export default function CustomSelect({
   className = '',
   disabled = false,
 }) {
+  const { t } = useLanguage()
   const generatedId = useId()
   const selectId = id || generatedId
 
@@ -140,7 +142,7 @@ export default function CustomSelect({
         id={selectId}
         type="button"
         disabled={disabled}
-        aria-label={ariaLabel}
+        aria-label={t(ariaLabel || placeholder)}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={`${selectId}-options`}
@@ -165,7 +167,7 @@ export default function CustomSelect({
             selectedOption ? 'text-ink-100' : 'text-ink-500'
           }`}
         >
-          {selectedOption?.label || placeholder}
+          {selectedOption?.label || t(placeholder)}
         </span>
 
         <ChevronDown

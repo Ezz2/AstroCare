@@ -5,6 +5,7 @@ import { useAuth } from "../../auth/useAuth";
 import { useHealthData } from "../../health/useHealthData";
 import { NAV_ITEMS } from "./navItems";
 import { missionDayFor } from "../../lib/format";
+import useLanguage from "../../i18n/useLanguage";
 
 export default function Sidebar({
   alertCount,
@@ -16,6 +17,7 @@ export default function Sidebar({
 
   const { signOut } = useAuth();
   const { profile } = useHealthData();
+  const { t } = useLanguage();
 
   const missionDay = missionDayFor(profile?.mission_start_date);
 
@@ -47,13 +49,10 @@ export default function Sidebar({
           <p className="font-display text-lg font-semibold leading-none">
             AstroCare
           </p>
-          <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-ink-500">
-            Health History
-          </p>
         </div>
       </div>
 
-      <nav className="flex flex-col gap-1" aria-label="Main navigation">
+      <nav className="flex flex-col gap-1" aria-label={t("Main navigation")}>
         {NAV_ITEMS.map(({ to, label, icon: Icon, end, showCount }) => (
           <NavLink
             key={to}
@@ -68,7 +67,7 @@ export default function Sidebar({
               }`
             }>
             <Icon size={18} className="shrink-0" />
-            <span className="flex-1">{label}</span>
+            <span className="flex-1">{t(label)}</span>
 
             {showCount && alertCount > 0 && (
               <span className="rounded-full bg-rose-400/15 px-2 py-0.5 text-[11px] font-semibold text-rose-400">
@@ -93,7 +92,7 @@ export default function Sidebar({
               }`
             }>
             <Settings size={18} className="shrink-0" />
-            <span className="flex-1">Settings</span>
+            <span className="flex-1">{t("Settings")}</span>
           </NavLink>
         </div>
 
@@ -103,11 +102,11 @@ export default function Sidebar({
             className={` absolute bottom-full left-0 mb-2 w-full origin-bottom rounded-xl border border-space-700 bg-space-850 p-2 shadow-xl transition-all duration-200 ease-out ${userMenuOpen ? "visible translate-y-0 scale-100 opacity-100" : "invisible translate-y-2 scale-[0.98] opacity-0 pointer-events-none"} `}>
             <div className="border-b border-space-700 px-3 py-2">
               <p className="truncate text-sm font-medium text-ink-100">
-                {profile?.full_name || "Astronaut"}
+                {profile?.full_name || t("Astronaut")}
               </p>
 
               <p className="text-xs text-ink-500">
-                {profile?.crew_id || "Crew ID pending"}
+                {profile?.crew_id || t("Crew ID pending")}
               </p>
             </div>
             <button
@@ -118,7 +117,7 @@ export default function Sidebar({
               }}
               className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-300 transition hover:bg-space-800 hover:text-cyan-300">
               <Settings size={16} />
-              User Settings
+              {t("User Settings")}
             </button>
 
             <button
@@ -126,7 +125,7 @@ export default function Sidebar({
               onClick={signOut}
               className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-300 transition hover:bg-space-800 hover:text-rose-400">
               <LogOut size={16} />
-              Sign out
+              {t("Sign out")}
             </button>
           </div>
 
@@ -141,17 +140,17 @@ export default function Sidebar({
 
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-ink-100">
-                {profile?.full_name || "Astronaut"}
+                {profile?.full_name || t("Astronaut")}
               </p>
 
               <div className="mt-1 flex items-center gap-1.5 whitespace-nowrap">
                 <span className="shrink-0 text-[10px] text-ink-500">
-                  {profile?.crew_id || "Crew ID pending"}
+                  {profile?.crew_id || t("Crew ID pending")}
                 </span>
 
                 {missionDay !== null && (
                   <span className="shrink-0 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-1.5 py-0.5 text-[9px] font-medium text-cyan-300">
-                    Mission Day {missionDay}
+                    {t("Mission Day")} {missionDay}
                   </span>
                 )}
               </div>

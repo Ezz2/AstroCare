@@ -16,6 +16,8 @@ const BASELINE_DAYS = 30;
 const MIN_TREND_READINGS = 2;
 
 const PRIORITY_RANK = { informational: 0, low: 1, medium: 2, high: 3 };
+const identity = (text, values = {}) =>
+  text.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? `{${key}}`);
 const factorLabels = Object.fromEntries(
   CONTRIBUTING_FACTORS.map((factor) => [factor.id, factor.label]),
 );
@@ -161,7 +163,7 @@ function buildContextPatterns(dailyCheckIns, now) {
   };
 }
 
-function stableInsight(statuses, groups, dailyCheckIns, now) {
+function stableInsight(statuses, groups, dailyCheckIns, now, t) {
   const recentReadings = VITALS.flatMap((vital) =>
     filterByPeriod(groups[vital.id], RECENT_DAYS, now),
   );
@@ -176,20 +178,22 @@ function stableInsight(statuses, groups, dailyCheckIns, now) {
   if (!allInRange) return null;
   if (statuses.filter((item) => item.improving).length >= 2) {
     return {
-      title: "Your recent health pattern is improving",
-      text: "Several recorded indicators are moving closer to their usual ranges. Keep the routines and monitoring schedule that are helping.",
+      title: t("Your recent health pattern is improving"),
+      text: t("Several recorded indicators are moving closer to their usual ranges. Keep the routines and monitoring schedule that are helping."),
     };
   }
   if (recentCheckIn?.mood === "great" || recentCheckIn?.mood === "good") {
     return {
-      title: "Your recent pattern looks steady",
-      text: `Your recorded readings are within their usual ranges${hasPositiveContext ? " and your latest check-in includes positive day context" : ""}. Keep the routines that are working for you.`,
+      title: t("Your recent pattern looks steady"),
+      text: hasPositiveContext
+        ? t("Your recorded readings are within their usual ranges and your latest check-in includes positive day context. Keep the routines that are working for you.")
+        : t("Your recorded readings are within their usual ranges. Keep the routines that are working for you."),
     };
   }
   if (recentReadings.length >= 5) {
     return {
-      title: "Your recent readings are stable",
-      text: "The readings recorded this week are within their usual ranges. Continue your normal monitoring routine and keep checking in.",
+      title: t("Your recent readings are stable"),
+      text: t("The readings recorded this week are within their usual ranges. Continue your normal monitoring routine and keep checking in."),
     };
   }
   return null;
@@ -231,7 +235,7 @@ function classifyHealth({ statuses, physiologicalGroups, contextPatterns, critic
   return "stable";
 }
 
-function buildHighPriorityWarnings(physiologicalGroups) {
+function buildHighPriorityWarnings(physiologicalGroups, t) {
   const abnormalGroups = physiologicalGroups.filter(
     (group) => group.latestStatus && group.latestStatus !== "normal",
   );
@@ -246,7 +250,7 @@ function buildHighPriorityWarnings(physiologicalGroups) {
         .filter((item) => item.latest)
         .map(
           (item) =>
-            `${item.vital.label}: ${formatValue(item.vital, item.latest.value)} ${item.vital.unit}`,
+            `${t(item.vital.label)}: ${formatValue(item.vital, item.latest.value)} ${item.vital.unit}`,
         ),
     )
     .join(" · ");
@@ -266,11 +270,17 @@ function buildHighPriorityWarnings(physiologicalGroups) {
       priority: "high",
       severity: "warning",
       kind: "multiple-indicators",
-      title: "Multiple health indicators need prompt review",
-      what: `${measurements}.`,
-      why: `Several distinct health groups are outside their expected ranges${significantCount > 0 ? `, including ${significantCount} significant result${significantCount === 1 ? "" : "s"}` : ""}. This is a high-priority warning for review, not a diagnosis or emergency classification.`,
-      action:
+      title: t("Multiple health indicators need prompt review"),
+      what: t("{measurements}.", { measurements }),
+      why: t(
+        significantCount > 0
+          ? "Several distinct health groups are outside their expected ranges, including {count} significant results. This is a high-priority warning for review, not a diagnosis or emergency classification."
+          : "Several distinct health groups are outside their expected ranges. This is a high-priority warning for review, not a diagnosis or emergency classification.",
+        { count: significantCount },
+      ),
+      action: t(
         "Repeat the measurements while rested and follow your onboard monitoring protocol. Contact the onboard medical officer promptly if the pattern persists or worsens.",
+      ),
       time,
     },
   ];
@@ -282,6 +292,7 @@ function buildRecommendations({
   healthStatus,
   latest,
   insight,
+  t,
 }) {
   const recommendations = [];
   const {
@@ -295,35 +306,49 @@ function buildRecommendations({
   if (recoveryPattern) {
     const context = factors
       .filter((id) => ["poor_sleep", "busy_schedule", "mission_tasks"].includes(id))
-      .map((id) => factorLabels[id])
+      .map((id) => t(factorLabels[id]))
       .slice(0, 2)
-      .join(" and ");
+      .join(` ${t("and")} `);
     recommendations.push(
       recommendation({
         id: "recovery-pattern",
         priority: "medium",
-        title: "Your recovery pattern needs attention",
-        what: `You logged ${shortSleep.length} nights below ${VITAL_BY_ID.sleep.min} hours${concernMoods.length > 0 ? ` and ${concernMoods.length} difficult self-reported moods` : ""}${context ? `, with ${context} selected as context` : ""}.`,
-        why: "Repeated sleep and check-in entries make recovery the clearest area to focus on. They do not establish a medical cause.",
-        action:
-          "Protect your next sleep window and discuss the pattern with the onboard medical officer if it continues.",
+        title: t("Your recovery pattern needs attention"),
+        what: t(
+          "You logged {nights} nights below {hours} hours{moodPart}{contextPart}.",
+          {
+            nights: shortSleep.length,
+            hours: VITAL_BY_ID.sleep.min,
+            moodPart:
+              concernMoods.length > 0
+                ? t(" and {count} difficult self-reported moods", {
+                    count: concernMoods.length,
+                  })
+                : "",
+            contextPart: context ? t(", with {context} selected as context", { context }) : "",
+          },
+        ),
+        why: t("Repeated sleep and check-in entries make recovery the clearest area to focus on. They do not establish a medical cause."),
+        action: t("Protect your next sleep window and discuss the pattern with the onboard medical officer if it continues."),
         time: shortSleep[0]?.check_in_date,
       }),
     );
   } else if (moodPattern) {
     const context = factors
-      .map((id) => factorLabels[id] ?? id)
+      .map((id) => t(factorLabels[id] ?? id))
       .slice(0, 2)
-      .join(" and ");
+      .join(` ${t("and")} `);
     recommendations.push(
       recommendation({
         id: "mood-context-pattern",
         priority: "low",
-        title: "Your recent check-ins need support",
-        what: `You reported a difficult mood on ${concernMoods.length} recent check-ins${context ? `, including ${context}` : ""}.`,
-        why: "Mood remains self-reported in AstroCare. Repeated entries are useful context for choosing support, but they do not explain why you feel this way.",
-        action:
-          "Choose one support action today, such as a short reset or crew connection, and speak with the medical officer if you want help.",
+        title: t("Your recent check-ins need support"),
+        what: t("You reported a difficult mood on {count} recent check-ins{contextPart}.", {
+          count: concernMoods.length,
+          contextPart: context ? t(", including {context}", { context }) : "",
+        }),
+        why: t("Mood remains self-reported in AstroCare. Repeated entries are useful context for choosing support, but they do not explain why you feel this way."),
+        action: t("Choose one support action today, such as a short reset or crew connection, and speak with the medical officer if you want help."),
         time: latest?.check_in_date,
       }),
     );
@@ -337,7 +362,7 @@ function buildRecommendations({
   );
 
   if (abnormalGroups.length >= 2) {
-    const labels = abnormalGroups.map((group) => group.label).join(", ");
+    const labels = abnormalGroups.map((group) => t(group.label)).join(", ");
     const significantCount = abnormalGroups.filter(
       (group) => group.latestStatus === "alert",
     ).length;
@@ -345,14 +370,19 @@ function buildRecommendations({
       recommendation({
         id: "combined-indicator-pattern",
         priority: significantCount >= 2 ? "high" : "medium",
-        title:
+        title: t(
           healthStatus === "concerning"
             ? "Several health indicators need prompt review"
             : "Several health indicators need attention",
-        what: `${labels} are currently outside their expected ranges${significantCount > 0 ? `, including ${significantCount} significant result${significantCount === 1 ? "" : "s"}` : ""}.`,
-        why: "AstroCare is grouping these findings for review; it is not assuming they share a cause. The combined pattern deserves more attention than any one reading alone.",
-        action:
-          "Repeat the measurements while rested, review the trend in Reports, and follow your onboard monitoring protocol.",
+        ),
+        what: t(
+          significantCount > 0
+            ? "{labels} are currently outside their expected ranges, including {count} significant results."
+            : "{labels} are currently outside their expected ranges.",
+          { labels, count: significantCount },
+        ),
+        why: t("AstroCare is grouping these findings for review; it is not assuming they share a cause. The combined pattern deserves more attention than any one reading alone."),
+        action: t("Repeat the measurements while rested, review the trend in Reports, and follow your onboard monitoring protocol."),
         time: abnormalGroups
           .flatMap((group) => group.items)
           .map((item) => item.latest?.time)
@@ -368,11 +398,14 @@ function buildRecommendations({
       recommendation({
         id: "persistent-indicator-pattern",
         priority: "medium",
-        title: `Review a repeated ${group.label.toLowerCase()} pattern`,
-        what: `${group.label} has been outside its expected range on repeated recent readings.`,
-        why: "A repeated pattern is more useful than a single result, but it does not establish a cause or diagnosis.",
-        action:
-          "Repeat the measurement while rested and review the trend in Reports. Follow your onboard monitoring protocol if it continues.",
+        title: t("Review a repeated {measurement} pattern", {
+          measurement: t(group.label).toLowerCase(),
+        }),
+        what: t("{measurement} has been outside its expected range on repeated recent readings.", {
+          measurement: t(group.label),
+        }),
+        why: t("A repeated pattern is more useful than a single result, but it does not establish a cause or diagnosis."),
+        action: t("Repeat the measurement while rested and review the trend in Reports. Follow your onboard monitoring protocol if it continues."),
         time: item?.latest?.time,
       }),
     );
@@ -385,9 +418,8 @@ function buildRecommendations({
         priority: "informational",
         title: insight.title,
         what: insight.text,
-        why: "This summary is based on the readings and self-reported check-ins currently stored in AstroCare.",
-        action:
-          "Continue your regular measurements and daily check-in so changes can be noticed early.",
+        why: t("This summary is based on the readings and self-reported check-ins currently stored in AstroCare."),
+        action: t("Continue your regular measurements and daily check-in so changes can be noticed early."),
         time: latest?.check_in_date,
       }),
     );
@@ -400,32 +432,33 @@ function buildRecommendations({
   );
 }
 
-function healthStatusSummary(status, { physiologicalGroups, contextPatterns }) {
+function healthStatusSummary(status, { physiologicalGroups, contextPatterns }, t) {
   if (status === "insufficient") {
-    return "There is not enough stored health data to assess your overall condition yet.";
+    return t("There is not enough stored health data to assess your overall condition yet.");
   }
   if (status === "concerning") {
-    return "Several health indicators are outside their expected ranges. Your condition needs prompt review.";
+    return t("Several health indicators are outside their expected ranges. Your condition needs prompt review.");
   }
   if (status === "needs_attention") {
     if (contextPatterns.recoveryPattern) {
-      return "Your health indicators are mostly stable, but your recent recovery pattern needs attention.";
+      return t("Your health indicators are mostly stable, but your recent recovery pattern needs attention.");
     }
     if (physiologicalGroups.some((group) => group.latestStatus !== "normal")) {
-      return "One or more health indicators need monitoring and follow-up.";
+      return t("One or more health indicators need monitoring and follow-up.");
     }
-    return "Your health is generally stable, but your recent check-ins need attention.";
+    return t("Your health is generally stable, but your recent check-ins need attention.");
   }
   if (status === "critical") {
-    return "Your recent health readings meet validated criteria requiring immediate attention.";
+    return t("Your recent health readings meet validated criteria requiring immediate attention.");
   }
-  return "Your health indicators are currently within their expected ranges.";
+  return t("Your health indicators are currently within their expected ranges.");
 }
 
 export function assessHealth({
   readings = [],
   dailyCheckIns = [],
   now = Date.now(),
+  t = identity,
 } = {}) {
   const groups = groupByVital(mergeDailyCheckInSleep(readings, dailyCheckIns));
   const statuses = VITALS.map((vital) =>
@@ -435,7 +468,7 @@ export function assessHealth({
   const contextPatterns = buildContextPatterns(dailyCheckIns, now);
   // No emergency criteria are configured until validated medical protocols are supplied.
   const criticalAlerts = [];
-  const urgentWarnings = buildHighPriorityWarnings(physiologicalGroups);
+  const urgentWarnings = buildHighPriorityWarnings(physiologicalGroups, t);
   const healthStatus = classifyHealth({
     statuses,
     physiologicalGroups,
@@ -451,7 +484,7 @@ export function assessHealth({
       .filter(Boolean)
       .sort((a, b) => b.time - a.time)[0] ?? null;
   const latest = latestCheckIn(dailyCheckIns);
-  const insight = stableInsight(statuses, groups, dailyCheckIns, now);
+  const insight = stableInsight(statuses, groups, dailyCheckIns, now, t);
   const recommendations = buildRecommendations({
     statuses,
     physiologicalGroups,
@@ -459,6 +492,7 @@ export function assessHealth({
     healthStatus,
     latest,
     insight,
+    t,
   });
 
   return {
@@ -470,10 +504,11 @@ export function assessHealth({
       .split("_")
       .map((word) => word[0].toUpperCase() + word.slice(1))
       .join(" "),
-    healthStatusSummary: healthStatusSummary(healthStatus, {
-      physiologicalGroups,
-      contextPatterns,
-    }),
+    healthStatusSummary: healthStatusSummary(
+      healthStatus,
+      { physiologicalGroups, contextPatterns },
+      t,
+    ),
     physiologicalGroups,
     contextPatterns,
     latestReading,

@@ -24,6 +24,8 @@ import { missionDayFor, toLocalDateInput } from "../../lib/format";
 import { moodMeta } from "../../data/moods";
 import { useHealthInsights } from "../../health/useHealthInsights";
 import UrgentHealthAlertModal from "../health/UrgentHealthAlertModal";
+import LanguageSwitcher from "../LanguageSwitcher";
+import useLanguage from "../../i18n/useLanguage";
 
 export default function AppShell() {
   const [navOpen, setNavOpen] = useState(false);
@@ -36,6 +38,7 @@ export default function AppShell() {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const { profile, readings, dailyCheckIns, status } = useHealthData();
   const { user, signOut } = useAuth();
@@ -44,7 +47,7 @@ export default function AppShell() {
   const [dismissedReminderDate, setDismissedReminderDate] = useState(null);
   const [acknowledgedCriticalId, setAcknowledgedCriticalId] = useState(null);
 
-  const alerts = buildAlerts(groupByVital(readings));
+  const alerts = buildAlerts(groupByVital(readings), Date.now(), t);
   const alertCount = alerts.length;
 
   const missionDay = missionDayFor(profile?.mission_start_date);
@@ -59,8 +62,8 @@ export default function AppShell() {
       : location.pathname.startsWith(item.to),
   );
 
-  const fullName = profile?.full_name || "Astronaut";
-  const crewId = profile?.crew_id || "Crew ID pending";
+  const fullName = profile?.full_name || t("Astronaut");
+  const crewId = profile?.crew_id || t("Crew ID pending");
   const latestCheckIn = dailyCheckIns[0];
   const latestMood = latestCheckIn?.mood ? moodMeta(latestCheckIn.mood) : null;
   const LatestMoodIcon = latestMood?.icon;
@@ -202,24 +205,25 @@ export default function AppShell() {
           <button
             type="button"
             onClick={() => setNavOpen(true)}
-            aria-label="Open navigation"
+            aria-label={t("Open navigation")}
             className="rounded-lg border border-space-700 p-2 text-ink-300 transition hover:text-cyan-300 lg:hidden">
             <Menu size={18} />
           </button>
 
           <h1 className="font-display text-lg font-semibold">
-            {current?.label ?? "AstroCare"}
+            {current ? t(current.label) : "AstroCare"}
           </h1>
 
           {/* Navbar Actions */}
           <div className="ml-auto flex items-center gap-3">
+            <LanguageSwitcher />
             <button
               type="button"
               onClick={() => navigate("/daily-check-in")}
               title={
                 latestMood
-                  ? `Latest mood: ${latestMood.label}`
-                  : "Complete your daily check-in"
+                  ? t("Latest mood: {mood}", { mood: t(latestMood.label) })
+                  : t("Complete your daily check-in")
               }
               className="hidden items-center gap-1.5 rounded-xl border border-space-700 bg-space-850 px-2.5 py-2 text-xs text-ink-300 transition hover:border-cyan-400/40 hover:text-cyan-300 sm:flex">
               {LatestMoodIcon ? (
@@ -237,8 +241,8 @@ export default function AppShell() {
               )}
               <span>
                 {todayCheckIn
-                  ? (latestMood?.label ?? "Mood recorded")
-                  : "Check-in pending"}
+                  ? t(latestMood?.label ?? "Mood recorded")
+                  : t("Check-in pending")}
               </span>
             </button>
 
@@ -247,7 +251,7 @@ export default function AppShell() {
               <button
                 type="button"
                 onClick={toggleAlerts}
-                aria-label="Open notifications"
+                aria-label={t("Open notifications")}
                 aria-expanded={alertsOpen}
                 className="relative rounded-xl border border-space-700 bg-space-850 p-2.5 text-ink-300 transition hover:border-cyan-400/30 hover:text-cyan-300">
                 <Bell size={19} />
@@ -264,10 +268,10 @@ export default function AppShell() {
                 <div className="flex items-center justify-between border-b border-space-700 px-4 py-3">
                   <div>
                     <p className="text-sm font-semibold text-ink-100">
-                      Notifications
+                      {t("Notifications")}
                     </p>
                     <p className="mt-0.5 text-xs text-ink-500">
-                      {alertCount} current alerts
+                      {t("{count} current alerts", { count: alertCount })}
                     </p>
                   </div>
 
@@ -292,12 +296,12 @@ export default function AppShell() {
 
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-medium text-ink-100">
-                              {alert.title ?? alert.message ?? "Health alert"}
+                              {t(alert.title ?? alert.message ?? "Health alert")}
                             </p>
 
                             {alert.message && alert.title && (
                               <p className="mt-1 text-xs text-ink-400">
-                                {alert.message}
+                                {t(alert.message)}
                               </p>
                             )}
                           </div>
@@ -311,11 +315,11 @@ export default function AppShell() {
                       </div>
 
                       <p className="text-sm font-medium text-ink-100">
-                        All clear
+                        {t("All clear")}
                       </p>
 
                       <p className="mt-1 text-xs text-ink-500">
-                        No current alerts detected.
+                        {t("No current alerts detected.")}
                       </p>
                     </div>
                   )}
@@ -326,7 +330,7 @@ export default function AppShell() {
                     type="button"
                     onClick={openAllAlerts}
                     className="flex w-full items-center justify-between rounded-lg bg-cyan-400/10 px-3 py-2.5 text-sm font-medium text-cyan-300 transition hover:bg-cyan-400/15">
-                    See All Alerts
+                    {t("See All Alerts")}
                     <ChevronRight size={15} />
                   </button>
                 </div>
@@ -339,7 +343,7 @@ export default function AppShell() {
                 type="button"
                 onClick={toggleAccount}
                 aria-expanded={accountOpen}
-                aria-label="Open account menu"
+                aria-label={t("Open account menu")}
                 className="flex items-center gap-2 rounded-xl border border-space-700 bg-space-850 py-1.5 pl-1.5 pr-2.5 transition hover:border-cyan-400/30 hover:bg-space-800">
                 {/* Avatar */}
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400/20 to-blue-500/20 text-xs font-bold text-cyan-300">
@@ -374,7 +378,7 @@ export default function AppShell() {
                         {fullName}
                       </p>
                       <p className="mt-0.5 text-xs text-ink-500">
-                        Astronaut Account
+                        {t("Astronaut Account")}
                       </p>
                     </div>
                   </div>
@@ -383,18 +387,18 @@ export default function AppShell() {
                 {/* Account Information */}
                 <div className="space-y-3 p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-xs text-ink-500">Crew ID</span>
+                    <span className="text-xs text-ink-500">{t("Crew ID")}</span>
                     <span className="text-xs font-medium text-ink-200">
                       {crewId}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-xs text-ink-500">Mission Day</span>
+                    <span className="text-xs text-ink-500">{t("Mission Day")}</span>
                     <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[10px] font-medium text-cyan-300">
                       {missionDay !== null
-                        ? `Mission Day ${missionDay}`
-                        : "Not set"}
+                        ? `${t("Mission Day")} ${missionDay}`
+                        : t("Not set")}
                     </span>
                   </div>
                 </div>
@@ -410,7 +414,7 @@ export default function AppShell() {
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-ink-300 transition hover:bg-space-800 hover:text-cyan-300">
                     <Settings size={16} />
                     <span className="flex-1 text-left">
-                      View / Edit Profile
+                      {t("View / Edit Profile")}
                     </span>
                     <ChevronRight size={15} />
                   </button>
@@ -420,7 +424,7 @@ export default function AppShell() {
                     onClick={handleSignOut}
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-ink-300 transition hover:bg-space-800 hover:text-rose-400">
                     <LogOut size={16} />
-                    Sign out
+                    {t("Sign out")}
                   </button>
                 </div>
               </div>
@@ -435,22 +439,21 @@ export default function AppShell() {
               role="alert"
               className="mb-5 flex items-start gap-3 rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-sm text-ink-100">
               <div className="min-w-0 flex-1">
-                <p className="font-semibold">Daily Check-in Reminder</p>
+                <p className="font-semibold">{t("Daily Check-in Reminder")}</p>
                 <p className="mt-1 text-ink-300">
-                  Take a moment to update your daily health check-in. It only
-                  takes a minute!
+                  {t("Take a moment to update your daily health check-in. It only takes a minute!")}
                 </p>
                 <button
                   type="button"
                   onClick={() => navigate("/daily-check-in")}
                   className="mt-2 font-semibold text-cyan-300 hover:text-cyan-200">
-                  Complete Check-in
+                  {t("Complete Check-in")}
                 </button>
               </div>
               <button
                 type="button"
                 onClick={dismissReminder}
-                aria-label="Dismiss daily check-in reminder"
+                aria-label={t("Dismiss daily check-in reminder")}
                 className="rounded-lg p-1 text-ink-500 transition hover:bg-space-800 hover:text-ink-100">
                 <X size={17} aria-hidden="true" />
               </button>
