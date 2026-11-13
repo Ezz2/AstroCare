@@ -6,7 +6,7 @@ import ProfileForm from "../components/settings/ProfileForm";
 import PasswordForm from "../components/settings/PasswordForm";
 import DataControls from "../components/settings/DataControls";
 import MeasurementReference from "../components/settings/MeasurementReference";
-import SettingsSection from "../components/settings/SettingsSection";
+// import SettingsSection from "../components/settings/SettingsSection";
 
 export default function SettingsPage() {
   const { status, reload } = useHealthData();
