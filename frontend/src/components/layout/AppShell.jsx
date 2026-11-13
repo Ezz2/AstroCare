@@ -3,14 +3,15 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   Bell,
-  AlertTriangle,
-  AlertCircle,
   Settings,
   ChevronRight,
   UserRound,
   ChevronDown,
   LogOut,
   X,
+  CalendarCheck,
+  TriangleAlert,
+  CircleAlert,
 } from "lucide-react";
 
 import UserSettingsModal from "../settings/UserSettingsModal";

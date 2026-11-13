@@ -3,8 +3,9 @@ import {
   FileText,
   HeartPulse,
   LayoutDashboard,
-  Settings,
   TrendingUp,
+  Settings,
+  CalendarCheck,
 } from "lucide-react";
 
 export const NAV_ITEMS = [
@@ -19,4 +20,5 @@ export const NAV_ITEMS = [
   { to: "/analytics", label: "Analytics", icon: TrendingUp },
   { to: "/reports", label: "Reports", icon: FileText },
   { to: "/alerts", label: "Alerts", icon: Bell, showCount: true },
+  { to: "/settings", label: "Settings", icon: Settings },
 ];
