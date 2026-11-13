@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-space-950: #050b18;
+  --color-space-900: #08111f;
+  --color-space-850: #0b1628;
+  --color-space-800: #0f1d33;
+  --color-space-700: #17294a;
+  --color-space-600: #22385f;
+  --color-space-500: #34507f;
+
+  --color-ink-100: #e6f1ff;
+  --color-ink-300: #a9bcd6;
+  --color-ink-500: #7d93b3;
+
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-blue-500: #3b82f6;
+  --color-violet-400: #a78bfa;
+  --color-teal-400: #2dd4bf;
+  --color-amber-400: #fbbf24;
+  --color-rose-400: #fb7185;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  --animate-fade-up: fade-up 0.5s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply m-0 min-h-screen bg-space-950 font-sans text-ink-100 antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34, 211, 238, 0.12), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(59, 130, 246, 0.1), transparent 70%);
+    background-attachment: fixed;
+  }
+}

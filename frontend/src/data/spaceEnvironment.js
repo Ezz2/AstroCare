@@ -1,0 +1,35 @@
+export const SPACE_FACTORS = [
+  {
+    id: 'missionDay',
+    label: 'Mission day',
+    value: '142',
+    unit: 'days in orbit',
+    note: 'Time spent in microgravity. Effects on bone and fluid balance build up over months.',
+    affects: [],
+  },
+  {
+    id: 'radiation',
+    label: 'Radiation dose',
+    value: '0.54',
+    unit: 'mSv per day',
+    note: 'Average daily dose from cosmic radiation. About 77 mSv accumulated so far.',
+    affects: ['brain', 'heart'],
+  },
+  {
+    id: 'circadian',
+    label: 'Light cycles',
+    value: '16',
+    unit: 'sunrises per day',
+    note: 'Frequent sunrises and sunsets disrupt the body clock and sleep timing.',
+    affects: ['brain'],
+  },
+  {
+    id: 'exercise',
+    label: 'Resistance training',
+    value: '4 of 6',
+    unit: 'sessions this week',
+    progress: 4 / 6,
+    note: 'Regular training is the main countermeasure against bone and muscle loss.',
+    affects: ['musculoskeletal'],
+  },
+]
