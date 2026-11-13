@@ -4,8 +4,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   Menu,
   Bell,
-  AlertTriangle,
-  AlertCircle,
+  CircleAlert,
+  TriangleAlert,
   Settings,
   ChevronRight,
   UserRound,
@@ -201,13 +201,13 @@ export default function AppShell() {
                         {alerts.slice(0, 5).map((alert, index) => (
                           <div
                             key={alert.id ?? `${alert.title ?? 'alert'}-${index}`}
-                            className="flex gap-3 rounded-xl border border-space-700 bg-space-850 p-3"
+                            className={`flex gap-3 rounded-xl border p-3 ${ alert.severity === 'alert' ? 'border-rose-400/30 bg-rose-400/5' : 'border-amber-400/20 bg-amber-400/5' }`}
                           >
-                            <div className="mt-0.5 text-amber-400">
-                              {alert.severity === 'critical' ? (
-                                <AlertCircle size={17} />
+                            <div className={`mt-0.5 ${alert.severity === 'alert' ? 'text-rose-400' : 'text-amber-400'}`}>
+                              {alert.severity === 'alert' ? (
+                                <CircleAlert size={20} strokeWidth={2.2} />
                               ) : (
-                                <AlertTriangle size={17} />
+                                <TriangleAlert size={20} strokeWidth={2.2} />
                               )}
                             </div>
 

@@ -31,8 +31,22 @@ export function toLocalTimeInput(ms) {
 
 export function missionDayFor(startDate) {
   if (!startDate) return null
-  const start = Date.parse(`${startDate}T00:00:00`)
-  return Math.max(0, Math.floor((Date.now() - start) / DAY_MS))
+  const [year, month, day] = startDate.split('-').map(Number)
+
+  if (!year || !month || !day) return null
+
+  const start = Date.UTC(year, month - 1, day)
+
+  const today = new Date()
+  const todayUTC = Date.UTC(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  )
+
+  const elapsedDays = Math.floor((todayUTC - start) / DAY_MS)
+
+  return Math.max(0, elapsedDays + 1)
 }
 
 export function daysAgo(ms) {
