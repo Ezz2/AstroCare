@@ -268,7 +268,7 @@ export default function AppShell() {
             </div>
 
             {/* Account Menu */}
-            <div ref={accountMenuRef} className="relative">
+            <div ref={accountMenuRef} className="relative lg:hidden">
               <button
                 type="button"
                 onClick={toggleAccount}
