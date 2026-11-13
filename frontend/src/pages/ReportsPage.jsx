@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { PERIODS, buildReport } from "../lib/analysis";
-import { formatDateTime, formatPercent } from "../lib/format";
+import { formatPercent } from "../lib/format";
 import { formatValue } from "../lib/health";
 import { useHealthData } from "../health/useHealthData";
 import StatusBadge from "../components/ui/StatusBadge";
@@ -141,7 +141,7 @@ export default function ReportsPage() {
         </section>
       </div>
 
-      <section className={PANEL_CLASS}>
+      {/* <section className={PANEL_CLASS}>
         <h2 className="mb-1 font-display text-lg font-semibold">
           Unusual readings
         </h2>
@@ -167,7 +167,7 @@ export default function ReportsPage() {
             ))}
           </ul>
         )}
-      </section>
+      </section> */}
     </div>
   );
 }
