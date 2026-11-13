@@ -3,6 +3,7 @@ import { PERIODS, buildReport } from "../lib/analysis";
 import { formatPercent } from "../lib/format";
 import { formatValue } from "../lib/health";
 import { useHealthData } from "../health/useHealthData";
+import { useHealthInsights } from "../health/useHealthInsights";
 import StatusBadge from "../components/ui/StatusBadge";
 import SegmentedControl from "../components/ui/SegmentedControl";
 import LoadingScreen from "../components/ui/LoadingScreen";
@@ -10,6 +11,8 @@ import {
   PANEL_CLASS,
   PRIMARY_BUTTON_CLASS,
 } from "../components/ui/fieldStyles";
+import RecommendationsPanel from "../components/reports/RecommendationsPanel";
+import HealthStatusPanel from "../components/health/HealthStatusPanel";
 
 const SOURCE_LABELS = {
   manual: "Your entries",
@@ -19,6 +22,7 @@ const SOURCE_LABELS = {
 
 export default function ReportsPage() {
   const { readings, dailyCheckIns, status, reload } = useHealthData();
+  const { assessment } = useHealthInsights();
   const [periodId, setPeriodId] = useState("7");
   const period = PERIODS.find((p) => p.id === periodId);
   const report = useMemo(
@@ -44,6 +48,8 @@ export default function ReportsPage() {
 
   return (
     <div className="flex flex-col gap-5">
+      <HealthStatusPanel assessment={assessment} detailed />
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-ink-300">
           {hasData
@@ -126,19 +132,7 @@ export default function ReportsPage() {
           </ul>
         </section>
 
-        <section className={PANEL_CLASS}>
-          <h2 className="mb-3 font-display text-lg font-semibold">
-            Recommendations
-          </h2>
-          <ul className="flex flex-col gap-2.5 text-sm text-ink-300">
-            {report.recommendations.map((text) => (
-              <li key={text} className="flex gap-2.5">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400" />
-                {text}
-              </li>
-            ))}
-          </ul>
-        </section>
+        <RecommendationsPanel assessment={assessment} />
       </div>
 
       {/* <section className={PANEL_CLASS}>

@@ -24,6 +24,30 @@ export function groupByVital(readings) {
   return groups
 }
 
+export function mergeDailyCheckInSleep(readings, dailyCheckIns) {
+  const sleepCheckIns = dailyCheckIns
+    .filter((checkIn) => {
+      const sleep = Number(checkIn.sleep_duration)
+      return checkIn.check_in_date && Number.isFinite(sleep) && sleep > 0
+    })
+    .map((checkIn) => ({
+      id: `daily-check-in-sleep-${checkIn.id ?? checkIn.check_in_date}`,
+      vitalId: 'sleep',
+      value: Number(checkIn.sleep_duration),
+      time: Date.parse(`${checkIn.check_in_date}T12:00:00`),
+      source: 'daily-check-in',
+    }))
+
+  const checkInDates = new Set(sleepCheckIns.map((reading) => toLocalDateInput(reading.time)))
+  const existingReadings = readings.filter(
+    (reading) =>
+      reading.vitalId !== 'sleep' ||
+      !checkInDates.has(toLocalDateInput(reading.time)),
+  )
+
+  return [...existingReadings, ...sleepCheckIns]
+}
+
 export function filterByPeriod(list, days, now = Date.now()) {
   if (!days) return list
   const since = now - days * DAY_MS

@@ -22,6 +22,8 @@ import { useAuth } from "../../auth/useAuth";
 import { buildAlerts, groupByVital } from "../../lib/analysis";
 import { missionDayFor, toLocalDateInput } from "../../lib/format";
 import { moodMeta } from "../../data/moods";
+import { useHealthInsights } from "../../health/useHealthInsights";
+import UrgentHealthAlertModal from "../health/UrgentHealthAlertModal";
 
 export default function AppShell() {
   const [navOpen, setNavOpen] = useState(false);
@@ -37,8 +39,10 @@ export default function AppShell() {
 
   const { profile, readings, dailyCheckIns, status } = useHealthData();
   const { user, signOut } = useAuth();
+  const { assessment } = useHealthInsights();
   const [clock, setClock] = useState(() => Date.now());
   const [dismissedReminderDate, setDismissedReminderDate] = useState(null);
+  const [acknowledgedCriticalId, setAcknowledgedCriticalId] = useState(null);
 
   const alerts = buildAlerts(groupByVital(readings));
   const alertCount = alerts.length;
@@ -65,6 +69,11 @@ export default function AppShell() {
   );
   const reminderVisible =
     status === "ready" && !todayCheckIn && dismissedReminderDate !== today;
+  const urgentAlert =
+    assessment.urgentWarnings[0] ?? assessment.criticalAlerts[0] ?? null;
+  const urgentStorageKey = user && urgentAlert
+    ? `astrocare.urgent-alert.acknowledged:${user.id}:${urgentAlert.id}`
+    : null;
 
   const initials = fullName
     .split(" ")
@@ -87,6 +96,14 @@ export default function AppShell() {
     }
     setDismissedReminderDate(window.localStorage.getItem(reminderStorageKey));
   }, [reminderStorageKey]);
+
+  useEffect(() => {
+    if (!urgentStorageKey) {
+      setAcknowledgedCriticalId(null);
+      return;
+    }
+    setAcknowledgedCriticalId(window.localStorage.getItem(urgentStorageKey));
+  }, [urgentStorageKey]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -118,6 +135,12 @@ export default function AppShell() {
     if (!reminderStorageKey) return;
     window.localStorage.setItem(reminderStorageKey, today);
     setDismissedReminderDate(today);
+  };
+
+  const acknowledgeCriticalAlert = () => {
+    if (!urgentAlert || !urgentStorageKey) return;
+    window.localStorage.setItem(urgentStorageKey, urgentAlert.id);
+    setAcknowledgedCriticalId(urgentAlert.id);
   };
 
   const toggleAlerts = () => {
@@ -439,6 +462,16 @@ export default function AppShell() {
 
       {userSettingsOpen && (
         <UserSettingsModal onClose={() => setUserSettingsOpen(false)} />
+      )}
+      {urgentAlert && acknowledgedCriticalId !== urgentAlert.id && (
+        <UrgentHealthAlertModal
+          alert={urgentAlert}
+          onAcknowledge={acknowledgeCriticalAlert}
+          onViewDetails={() => {
+            acknowledgeCriticalAlert();
+            navigate("/alerts");
+          }}
+        />
       )}
     </div>
   );
