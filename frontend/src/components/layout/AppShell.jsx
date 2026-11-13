@@ -13,6 +13,7 @@ import {
   LogOut,
 } from 'lucide-react'
 
+import UserSettingsModal from '../settings/UserSettingsModal'
 import Sidebar from './Sidebar'
 import { NAV_ITEMS } from './navItems'
 import { useHealthData } from '../../health/useHealthData'
@@ -24,6 +25,7 @@ export default function AppShell() {
   const [navOpen, setNavOpen] = useState(false)
   const [alertsOpen, setAlertsOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const [userSettingsOpen, setUserSettingsOpen] = useState(false)
 
   const alertsMenuRef = useRef(null)
   const accountMenuRef = useRef(null)
@@ -98,11 +100,6 @@ export default function AppShell() {
     navigate('/alerts')
   }
 
-  const openProfileSettings = () => {
-    setAccountOpen(false)
-    navigate('/settings')
-  }
-
   const handleSignOut = () => {
     setAccountOpen(false)
     signOut()
@@ -113,7 +110,10 @@ export default function AppShell() {
       {/* Desktop Sidebar */}
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-space-800 lg:flex">
         <div className="w-full">
-          <Sidebar alertCount={alertCount} />
+          <Sidebar
+            alertCount={alertCount}
+            onOpenUserSettings={() => setUserSettingsOpen(true)}
+          />
         </div>
       </aside>
 
@@ -134,6 +134,7 @@ export default function AppShell() {
         <Sidebar
           alertCount={alertCount}
           onNavigate={() => setNavOpen(false)}
+          onOpenUserSettings={() => setUserSettingsOpen(true)}
         />
       </aside>
 
@@ -325,7 +326,10 @@ export default function AppShell() {
                   <div className="border-t border-space-700 p-2">
                     <button
                       type="button"
-                      onClick={openProfileSettings}
+                      onClick={() => {
+                        setAccountOpen(false)
+                        setUserSettingsOpen(true)
+                      }}
                       className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-ink-300 transition hover:bg-space-800 hover:text-cyan-300"
                     >
                       <Settings size={16} />
@@ -354,6 +358,13 @@ export default function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      {userSettingsOpen && (
+        <UserSettingsModal
+          onClose={() => setUserSettingsOpen(false)}
+        />
+      )}
+
     </div>
   )
 }

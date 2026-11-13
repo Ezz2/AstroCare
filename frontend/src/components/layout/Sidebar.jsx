@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
@@ -13,7 +12,7 @@ import { useHealthData } from '../../health/useHealthData'
 import { NAV_ITEMS } from './navItems'
 import { missionDayFor } from '../../lib/format'
 
-export default function Sidebar({ alertCount, onNavigate }) {
+export default function Sidebar({ alertCount, onNavigate, onOpenUserSettings }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef(null)
 
@@ -123,14 +122,14 @@ export default function Sidebar({ alertCount, onNavigate }) {
               type="button"
               onClick={() => {
                 setUserMenuOpen(false)
-                onNavigate?.()
+                onOpenUserSettings?.()
               }}
               className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-300 transition hover:bg-space-800 hover:text-cyan-300"
             >
               <Settings size={16} />
               User Settings
             </button>
-            
+
             <button
               type="button"
               onClick={signOut}
@@ -178,7 +177,6 @@ export default function Sidebar({ alertCount, onNavigate }) {
           </button>
         </div>
       </div>
-
     </div>
   )
 }
