@@ -93,11 +93,6 @@ export default function AppShell() {
     setAlertsOpen(false)
   }
 
-  const openAlertSettings = () => {
-    setAlertsOpen(false)
-    navigate('/settings')
-  }
-
   const openAllAlerts = () => {
     setAlertsOpen(false)
     navigate('/alerts')
@@ -243,17 +238,7 @@ export default function AppShell() {
                   </div>
 
                   <div className="flex flex-col gap-1 border-t border-space-700 p-3">
-                    <button
-                      type="button"
-                      onClick={openAlertSettings}
-                      className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm text-ink-300 transition hover:bg-space-800 hover:text-cyan-300"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Settings size={16} />
-                        Manage Alerts
-                      </span>
-                      <ChevronRight size={15} />
-                    </button>
+                    
 
                     <button
                       type="button"

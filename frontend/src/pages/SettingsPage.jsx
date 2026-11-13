@@ -2,7 +2,6 @@ import { useHealthData } from '../health/useHealthData'
 import LoadingScreen from '../components/ui/LoadingScreen'
 import { PRIMARY_BUTTON_CLASS } from '../components/ui/fieldStyles'
 import ProfileForm from '../components/settings/ProfileForm'
-import NotificationToggles from '../components/settings/NotificationToggles'
 import PasswordForm from '../components/settings/PasswordForm'
 import DataControls from '../components/settings/DataControls'
 import MeasurementReference from '../components/settings/MeasurementReference'
@@ -24,7 +23,6 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-col gap-5">
       <ProfileForm />
-      <NotificationToggles />
       <PasswordForm />
       <MeasurementReference />
       <DataControls />
