@@ -106,6 +106,9 @@ export function buildAlerts(groups, now = Date.now()) {
 
     for (const unusual of findUnusual(vital, list)) {
       if (unusual.reading.time < now - RECENT_HOURS * HOUR_MS) continue
+      
+      // Avoid showing the latest reading twice as both range and unusual.
+      if (unusual.reading.id === latest.id && status !== 'normal') continue
       alerts.push({
         id: `unusual-${unusual.reading.id}`,
         vital,

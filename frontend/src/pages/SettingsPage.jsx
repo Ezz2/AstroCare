@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useHealthData } from "../health/useHealthData";
 import LoadingScreen from "../components/ui/LoadingScreen";
 import { PRIMARY_BUTTON_CLASS } from "../components/ui/fieldStyles";
@@ -7,6 +8,16 @@ import PasswordForm from "../components/settings/PasswordForm";
 import DataControls from "../components/settings/DataControls";
 import MeasurementReference from "../components/settings/MeasurementReference";
 import SettingsSection from "../components/settings/SettingsSection";
+=======
+import { useHealthData } from '../health/useHealthData'
+import LoadingScreen from '../components/ui/LoadingScreen'
+import { PRIMARY_BUTTON_CLASS } from '../components/ui/fieldStyles'
+import ProfileForm from '../components/settings/ProfileForm'
+import PasswordForm from '../components/settings/PasswordForm'
+import DataControls from '../components/settings/DataControls'
+import MeasurementReference from '../components/settings/MeasurementReference'
+import SettingsSection from '../components/settings/SettingsSection'
+>>>>>>> c989c409ab5cfef637c0c8a03ea7302bb3598848
 
 export default function SettingsPage() {
   const { status, reload } = useHealthData();
@@ -28,7 +39,10 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-col gap-5">
       <ProfileForm />
+<<<<<<< HEAD
       {/* <NotificationToggles /> */}
+=======
+>>>>>>> c989c409ab5cfef637c0c8a03ea7302bb3598848
       <PasswordForm />
       <MeasurementReference />
       <DataControls />

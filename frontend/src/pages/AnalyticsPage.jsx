@@ -117,6 +117,7 @@ export default function AnalyticsPage() {
           <p className="text-sm text-ink-300">
             Nothing unusual in this period.
           </p>
+<<<<<<< HEAD
         ) : (
           <ul className="flex max-h-72 flex-col gap-3 overflow-auto">
             {[
@@ -145,6 +146,25 @@ export default function AnalyticsPage() {
           </ul>
         )}
       </section>
+=======
+          {unusual.length === 0 && outOfRange.length === 0 ? (
+            <p className="text-sm text-ink-300">Nothing unusual in this period.</p>
+          ) : (
+            <ul className="flex max-h-72 flex-col gap-3 overflow-auto">
+               {[...outOfRange.map((r) => ({ id: r.id,time: r.time, text: `${formatValue(vital, r.value)} ${vital.unit}, outside the typical range`, })),
+                ...unusual .filter((u) => !outOfRange.some((r) => r.id === u.reading.id)) .map((u) => ({ id: u.reading.id, time: u.reading.time, text: u.reason, })), ]
+                .sort((a, b) => b.time - a.time)
+                .map((item) => (
+                  <li key={item.id} className="rounded-xl border border-space-700 p-3 text-sm">
+                    <p className="text-xs text-ink-500">{formatDateTime(item.time)}</p>
+                    <p className="mt-1 text-ink-100">{item.text}</p> 
+                  </li>
+                ))}
+            </ul>
+          )}
+        </section>
+      </div>
+>>>>>>> c989c409ab5cfef637c0c8a03ea7302bb3598848
     </div>
     // </div>
   );
