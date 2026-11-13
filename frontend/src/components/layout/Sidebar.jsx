@@ -44,7 +44,7 @@ export default function Sidebar({ alertCount, onNavigate }) {
             AstroCare
           </p>
           <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-ink-500">
-            Health Monitoring
+            Health History
           </p>
         </div>
       </div>
