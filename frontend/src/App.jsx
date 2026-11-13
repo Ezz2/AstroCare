@@ -17,6 +17,7 @@ const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'))
 const ReportsPage = lazy(() => import('./pages/ReportsPage'))
 const AlertsPage = lazy(() => import('./pages/AlertsPage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
+const DailyCheckInPage = lazy(() => import('./pages/DailyCheckInPage'))
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="reports" element={<ReportsPage />} />
             <Route path="alerts" element={<AlertsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="daily-check-in" element={<DailyCheckInPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

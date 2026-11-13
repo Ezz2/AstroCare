@@ -6,11 +6,13 @@ import {
   Bell,
   AlertTriangle,
   AlertCircle,
+  CalendarCheck,
   Settings,
   ChevronRight,
   UserRound,
   ChevronDown,
   LogOut,
+  X,
 } from 'lucide-react'
 
 import Sidebar from './Sidebar'
@@ -18,7 +20,8 @@ import { NAV_ITEMS } from './navItems'
 import { useHealthData } from '../../health/useHealthData'
 import { useAuth } from '../../auth/useAuth'
 import { buildAlerts, groupByVital } from '../../lib/analysis'
-import { missionDayFor } from '../../lib/format'
+import { missionDayFor, toLocalDateInput } from '../../lib/format'
+import { moodMeta } from '../../data/moods'
 
 export default function AppShell() {
   const [navOpen, setNavOpen] = useState(false)
@@ -31,13 +34,19 @@ export default function AppShell() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const { profile, readings } = useHealthData()
-  const { signOut } = useAuth()
+  const { profile, readings, dailyCheckIns, status } = useHealthData()
+  const { user, signOut } = useAuth()
+  const [clock, setClock] = useState(() => Date.now())
+  const [dismissedReminderDate, setDismissedReminderDate] = useState(null)
 
   const alerts = buildAlerts(groupByVital(readings))
   const alertCount = alerts.length
 
   const missionDay = missionDayFor(profile?.mission_start_date)
+  const today = toLocalDateInput(clock)
+  const reminderStorageKey = user
+    ? `astrocare.daily-checkin.dismissed:${user.id}:${today}`
+    : null
 
   const current = NAV_ITEMS.find((item) =>
     item.end
@@ -47,6 +56,11 @@ export default function AppShell() {
 
   const fullName = profile?.full_name || 'Astronaut'
   const crewId = profile?.crew_id || 'Crew ID pending'
+  const latestCheckIn = dailyCheckIns[0]
+  const latestMood = latestCheckIn?.mood ? moodMeta(latestCheckIn.mood) : null
+  const LatestMoodIcon = latestMood?.icon
+  const todayCheckIn = dailyCheckIns.find((checkIn) => checkIn.check_in_date === today)
+  const reminderVisible = status === 'ready' && !todayCheckIn && dismissedReminderDate !== today
 
   const initials = fullName
     .split(' ')
@@ -57,6 +71,19 @@ export default function AppShell() {
     .toUpperCase()
 
   // Close dropdowns when clicking outside
+  useEffect(() => {
+    const timer = window.setInterval(() => setClock(Date.now()), 60000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    if (!reminderStorageKey) {
+      setDismissedReminderDate(null)
+      return
+    }
+    setDismissedReminderDate(window.localStorage.getItem(reminderStorageKey))
+  }, [reminderStorageKey])
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -82,6 +109,12 @@ export default function AppShell() {
       document.removeEventListener('touchstart', handleClickOutside)
     }
   }, [])
+
+  const dismissReminder = () => {
+    if (!reminderStorageKey) return
+    window.localStorage.setItem(reminderStorageKey, today)
+    setDismissedReminderDate(today)
+  }
 
   const toggleAlerts = () => {
     setAlertsOpen((open) => !open)
@@ -162,6 +195,19 @@ export default function AppShell() {
 
           {/* Navbar Actions */}
           <div className="ml-auto flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate('/daily-check-in')}
+              title={latestMood ? `Latest mood: ${latestMood.label}` : 'Complete your daily check-in'}
+              className="hidden items-center gap-1.5 rounded-xl border border-space-700 bg-space-850 px-2.5 py-2 text-xs text-ink-300 transition hover:border-cyan-400/40 hover:text-cyan-300 sm:flex"
+            >
+              {LatestMoodIcon ? (
+                <LatestMoodIcon size={16} className={latestMood.color} aria-hidden="true" />
+              ) : (
+                <CalendarCheck size={16} className="text-cyan-300" aria-hidden="true" />
+              )}
+              <span>{todayCheckIn ? latestMood?.label ?? 'Mood recorded' : 'Check-in pending'}</span>
+            </button>
 
             {/* Alerts Menu */}
             <div ref={alertsMenuRef} className="relative">
@@ -366,6 +412,32 @@ export default function AppShell() {
 
         {/* Page Content */}
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+          {reminderVisible && (
+            <div
+              role="alert"
+              className="mb-5 flex items-start gap-3 rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-sm text-ink-100"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold">Daily Check-in Reminder</p>
+                <p className="mt-1 text-ink-300">Take a moment to update your daily health check-in. It only takes a minute!</p>
+                <button
+                  type="button"
+                  onClick={() => navigate('/daily-check-in')}
+                  className="mt-2 font-semibold text-cyan-300 hover:text-cyan-200"
+                >
+                  Complete Check-in
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={dismissReminder}
+                aria-label="Dismiss daily check-in reminder"
+                className="rounded-lg p-1 text-ink-500 transition hover:bg-space-800 hover:text-ink-100"
+              >
+                <X size={17} aria-hidden="true" />
+              </button>
+            </div>
+          )}
           <Outlet />
         </main>
       </div>

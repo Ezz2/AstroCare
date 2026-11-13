@@ -1,6 +1,6 @@
 import { VITALS } from '../data/vitalCatalog'
 import { formatValue, getStatus } from './health'
-import { formatDateTime } from './format'
+import { formatDateTime, toLocalDateInput } from './format'
 
 const DAY_MS = 86400000
 const HOUR_MS = 3600000
@@ -122,7 +122,7 @@ export function buildAlerts(groups, now = Date.now()) {
   return alerts.sort((a, b) => SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity] || b.time - a.time)
 }
 
-export function buildReport(readings, days, now = Date.now()) {
+export function buildReport(readings, days, now = Date.now(), dailyCheckIns = []) {
   const groups = groupByVital(readings)
   const rows = VITALS.map((vital) => {
     const current = filterByPeriod(groups[vital.id], days, now)
@@ -173,7 +173,23 @@ export function buildReport(readings, days, now = Date.now()) {
   const counts = { total: periodReadings.length, manual: 0, simulated: 0, research: 0 }
   for (const reading of periodReadings) counts[reading.source] = (counts[reading.source] ?? 0) + 1
 
-  return { rows, observations, unusual, recommendations, counts }
+  const moodSince = days ? toLocalDateInput(now - days * DAY_MS) : null
+  const moodHistory = dailyCheckIns
+    .filter((checkIn) => !moodSince || checkIn.check_in_date >= moodSince)
+    .sort((a, b) => b.check_in_date.localeCompare(a.check_in_date))
+  const moodCounts = {}
+  for (const checkIn of moodHistory) {
+    if (checkIn.mood) moodCounts[checkIn.mood] = (moodCounts[checkIn.mood] ?? 0) + 1
+  }
+
+  return {
+    rows,
+    observations,
+    unusual,
+    recommendations,
+    counts,
+    mood: { history: moodHistory, counts: moodCounts },
+  }
 }
 
 function dayKey(time) {

@@ -2,6 +2,7 @@ import { supabase } from './supabase'
 
 const READING_COLUMNS = 'id, vital_id, value, measured_at, source, note'
 const PROFILE_COLUMNS = 'full_name, crew_id, mission_name, mission_start_date, notify_alerts, notify_reminders'
+const CHECK_IN_COLUMNS = 'id, user_id, check_in_date, sleep_duration, mood, contributing_factors, created_at, updated_at'
 const MAX_READINGS = 5000
 
 function toReading(row) {
@@ -59,4 +60,27 @@ export async function deleteReading(id) {
 export async function deleteSimulatedReadings() {
   const { error } = await supabase.from('health_readings').delete().eq('source', 'simulated')
   if (error) throw error
+}
+
+export async function fetchDailyCheckIns() {
+  const { data, error } = await supabase
+    .from('daily_checkins')
+    .select(CHECK_IN_COLUMNS)
+    .order('check_in_date', { ascending: false })
+    .limit(366)
+  if (error) throw error
+  return data
+}
+
+export async function upsertDailyCheckIn(userId, checkIn) {
+  const { data, error } = await supabase
+    .from('daily_checkins')
+    .upsert(
+      { ...checkIn, user_id: userId },
+      { onConflict: 'user_id,check_in_date' },
+    )
+    .select(CHECK_IN_COLUMNS)
+    .single()
+  if (error) throw error
+  return data
 }

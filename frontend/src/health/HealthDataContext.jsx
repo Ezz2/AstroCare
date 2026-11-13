@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../auth/useAuth'
 import * as api from '../lib/healthApi'
@@ -9,6 +10,7 @@ export function HealthDataProvider({ children }) {
   const userId = user.id
   const [profile, setProfile] = useState(null)
   const [readings, setReadings] = useState([])
+  const [dailyCheckIns, setDailyCheckIns] = useState([])
   const [status, setStatus] = useState('loading')
   const [version, setVersion] = useState(0)
 
@@ -17,13 +19,15 @@ export function HealthDataProvider({ children }) {
 
     const load = async () => {
       try {
-        const [nextProfile, nextReadings] = await Promise.all([
+        const [nextProfile, nextReadings, nextDailyCheckIns] = await Promise.all([
           api.fetchProfile(userId),
           api.fetchReadings(),
+          api.fetchDailyCheckIns(),
         ])
         if (!active) return
         setProfile(nextProfile)
         setReadings(nextReadings)
+        setDailyCheckIns(nextDailyCheckIns)
         setStatus('ready')
       } catch {
         if (active) setStatus('error')
@@ -78,18 +82,33 @@ export function HealthDataProvider({ children }) {
     }
   }, [userId])
 
+  const saveDailyCheckIn = useCallback(async (checkIn) => {
+    try {
+      const saved = await api.upsertDailyCheckIn(userId, checkIn)
+      setDailyCheckIns((current) => [
+        saved,
+        ...current.filter((item) => item.check_in_date !== saved.check_in_date),
+      ])
+      return saved
+    } catch {
+      return null
+    }
+  }, [userId])
+
   const value = useMemo(
     () => ({
       profile,
       readings,
+      dailyCheckIns,
       status,
       reload,
       addReadings,
       removeReading,
       removeSimulatedReadings,
       saveProfile,
+      saveDailyCheckIn,
     }),
-    [profile, readings, status, reload, addReadings, removeReading, removeSimulatedReadings, saveProfile],
+    [profile, readings, dailyCheckIns, status, reload, addReadings, removeReading, removeSimulatedReadings, saveProfile, saveDailyCheckIn],
   )
 
   return <HealthDataContext.Provider value={value}>{children}</HealthDataContext.Provider>

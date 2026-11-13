@@ -10,10 +10,11 @@ import RecentAlerts from "../components/overview/RecentAlerts";
 import VitalTile from "../components/overview/VitalTile";
 import VitalTrendChart from "../components/VitalTrendChart";
 import StatusBadge from "../components/ui/StatusBadge";
-import SourceBadge from "../components/ui/SourceBadge";
 import LoadingScreen from "../components/ui/LoadingScreen";
 import { PRIMARY_BUTTON_CLASS } from "../components/ui/fieldStyles";
 import AddHealthRecordModal from "../components/health/AddHealthRecordModal";
+// import { moodMeta } from "../data/moods";
+// import { toLocalDateInput } from "../lib/format";
 
 const TREND_DAYS = 14;
 const TILE_SPARK_POINTS = 12;
@@ -73,6 +74,11 @@ export default function OverviewPage() {
   const attentionCount = statuses.filter(
     (item) => item.status && item.status !== "normal",
   ).length;
+  // const todayCheckIn = dailyCheckIns.find(
+  //   (checkIn) => checkIn.check_in_date === toLocalDateInput(Date.now()),
+  // );
+  // const todayMood = todayCheckIn?.mood ? moodMeta(todayCheckIn.mood) : null;
+  // const TodayMoodIcon = todayMood?.icon;
 
   const handleSave = async (rows) => {
     const saved = await addReadings(rows);
@@ -97,9 +103,9 @@ export default function OverviewPage() {
             {greeting()}
           </p>
           <h2 className="mt-1 font-display text-2xl font-semibold">
-            {firstName}, your health at a glance
+            {firstName}, here’s your health overview.
           </h2>
-          <p className="mt-1 text-sm text-ink-300">
+          <p className="mt-1 text-md text-ink-300">
             {hasReadings
               ? summaryFor(overall, attentionCount)
               : "No readings yet. Add your first measurement to begin."}
@@ -121,6 +127,27 @@ export default function OverviewPage() {
           </button>
         </div>
       </section>
+
+      {/* <section className="rounded-2xl border border-space-700 bg-space-900/70 p-5 lg:col-span-12">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] text-ink-500">Daily check-in</p>
+            <h2 className="mt-1 font-display text-lg font-semibold">Today&apos;s Mood</h2>
+            {todayMood ? (
+              <p className={`mt-2 flex items-center gap-2 text-2xl font-semibold ${todayMood.color}`}>
+                <TodayMoodIcon size={25} aria-hidden="true" /> {todayMood.label}
+              </p>
+            ) : (
+              <p className="mt-2 text-sm text-ink-300">
+                Your daily check-in is waiting. Complete it to record your sleep and mood.
+              </p>
+            )}
+          </div>
+          <Link to="/daily-check-in" className={PRIMARY_BUTTON_CLASS}>
+            {todayMood ? "Edit today's check-in" : 'Complete Check-in'}
+          </Link>
+        </div>
+      </section> */}
 
       <div className="grid gap-5 lg:grid-cols-12">
         <div className="lg:col-span-5">

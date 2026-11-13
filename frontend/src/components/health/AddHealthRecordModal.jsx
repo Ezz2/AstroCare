@@ -4,7 +4,6 @@ import {
   Activity,
   Droplets,
   HeartPulse,
-  Moon,
   Thermometer,
   Wind,
   X,
@@ -24,7 +23,6 @@ const INITIAL_VALUES = {
   diastolic: "",
   temperature: "",
   glucose: "",
-  sleep: "",
 };
 
 const MEASUREMENTS = [
@@ -53,7 +51,6 @@ const MEASUREMENTS = [
     icon: Thermometer,
   },
   { id: "glucose", label: "Blood glucose", unit: "mg/dL", icon: Droplets },
-  { id: "sleep", label: "Sleep duration", unit: "Hours", icon: Moon },
 ];
 
 export default function AddHealthRecordModal({
