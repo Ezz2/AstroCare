@@ -63,9 +63,6 @@ export default function RecommendationsPanel({ assessment }) {
   return (
     <section className={PANEL_CLASS}>
       <h2 className="font-display text-lg font-semibold">{t("Recommendations")}</h2>
-      <p className="mt-1 text-xs text-ink-500">
-        {t("Short, actionable guidance based on your stored readings and check-ins.")}
-      </p>
 
       {criticalAlerts.length > 0 && (
         <div className="mt-4 rounded-xl border border-rose-400/40 bg-rose-400/10 p-4">

@@ -82,7 +82,7 @@ export default function AlertsPage() {
 }
 
 function AlertList({ alerts }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   return (
     <div className="flex flex-col gap-5">
       <p className="text-sm text-ink-300">
@@ -93,7 +93,7 @@ function AlertList({ alerts }) {
           <li key={alert.id} className={`${PANEL_CLASS} flex flex-col gap-3`}>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <StatusBadge status={alert.severity} />
-              <span className="text-xs text-ink-500">{formatDateTime(alert.time)}</span>
+              <span className="text-xs text-ink-500">{formatDateTime(alert.time, language)}</span>
             </div>
             <div>
               <h2 className="font-display text-base font-semibold leading-snug">{t(alert.title)}</h2>

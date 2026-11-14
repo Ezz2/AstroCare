@@ -102,6 +102,8 @@ const translations = {
     "Urgent Health Warning": "تحذير صحي عاجل",
     "Critical Health Alert": "تنبيه صحي حرج",
     "Multiple indicators need prompt review": "تتطلب عدة مؤشرات مراجعة سريعة",
+    "Multiple health indicators need prompt review": "تتطلب عدة مؤشرات صحية مراجعة سريعة",
+    "Several health indicators need prompt review": "تحتاج عدة مؤشرات صحية إلى مراجعة سريعة",
     "What you should do": "ما الذي ينبغي فعله",
     Acknowledge: "إقرار",
     "View Health Details": "عرض التفاصيل الصحية",
@@ -117,10 +119,7 @@ const translations = {
     "Main areas to review": "المجالات الرئيسية للمراجعة",
     "Add Health Record": "إضافة سجل صحي",
     "Health record saved successfully!": "تم حفظ السجل الصحي بنجاح!",
-    "Enter your health measurements manually.": "أدخل قياساتك الصحية يدويًا.",
     "Your measurements": "قياساتك",
-    "Enter only the measurements you have available.":
-      "أدخل القياسات المتاحة لديك فقط.",
     "Enter value": "أدخل القيمة",
     "Measurement guide": "دليل القياس",
     "How to measure: {title}": "كيفية قياس: {title}",
@@ -452,6 +451,12 @@ const translations = {
       "يجمع أستروكير هذه النتائج لمراجعتها، دون افتراض أن لها سببًا مشتركًا. ويستحق النمط المجمع اهتمامًا أكبر من أي قراءة منفردة.",
     "Repeat the measurements while rested, review the trend in Reports, and follow your onboard monitoring protocol.":
       "أعد القياسات بعد الراحة، وراجع الاتجاه في التقارير، واتبع بروتوكول المتابعة المعتمد على متن المركبة.",
+    "Repeat the measurements while rested and follow your onboard monitoring protocol. Contact the onboard medical officer promptly if the pattern persists or worsens.":
+      "أعد القياسات أثناء الراحة، واتبِع بروتوكول المراقبة الطبي على متن المركبة. تواصل مع المسؤول الطبي على متن المركبة فورًا إذا استمر النمط أو تدهور.",
+    "Repeat each measurement while rested, check that the sensors are positioned correctly, and compare the results with the recent trend in Reports. Contact the onboard medical officer promptly if any result remains outside its range or worsens.":
+      "أعد كل قياس أثناء الراحة، وتأكد من وضع المستشعرات بشكل صحيح، وقارن النتائج مع الاتجاه الأخير في التقارير. تواصل مع المسؤول الطبي على متن المركبة فورًا إذا بقي أي قياس خارج نطاقه أو تدهور.",
+    "Repeat the measurement while rested, record the result and any relevant context such as recent activity, then contact the onboard medical officer if it remains outside range or continues across days.":
+      "أعد القياس أثناء الراحة، وسجّل النتيجة وأي سياق ذي صلة مثل النشاط الأخير، ثم تواصل مع المسؤول الطبي على متن المركبة إذا ظل خارج النطاق أو استمر على مدار أيام.",
     "Review a repeated {measurement} pattern": "راجع نمط {measurement} المتكرر",
     "{measurement} has been outside its expected range on repeated recent readings.":
       "خرج {measurement} عن نطاقه المتوقع في عدة قراءات حديثة.",
@@ -799,6 +804,10 @@ const translations = {
     "Critical Health Alert": "Kritische Gesundheitswarnung",
     "Multiple indicators need prompt review":
       "Mehrere Indikatoren müssen zeitnah überprüft werden",
+    "Multiple health indicators need prompt review":
+      "Mehrere Gesundheitsindikatoren benötigen eine zeitnahe Überprüfung",
+    "Several health indicators need prompt review":
+      "Mehrere Gesundheitsindikatoren benötigen eine zeitnahe Überprüfung",
     "What you should do": "Was du tun solltest",
     Acknowledge: "Bestätigen",
     "View Health Details": "Gesundheitsdetails anzeigen",
@@ -820,8 +829,6 @@ const translations = {
     "Enter your health measurements manually.":
       "Gib deine Gesundheitsmesswerte manuell ein.",
     "Your measurements": "Deine Messwerte",
-    "Enter only the measurements you have available.":
-      "Gib nur die Messwerte ein, die dir vorliegen.",
     "Enter value": "Wert eingeben",
     "How to Measure?": "Wie wird gemessen?",
     "Measurement guide": "Messanleitung",
@@ -1168,6 +1175,12 @@ const translations = {
       "AstroCare gruppiert diese Befunde zur Überprüfung, ohne eine gemeinsame Ursache anzunehmen. Das Gesamtmuster verdient mehr Aufmerksamkeit als ein einzelner Messwert.",
     "Repeat the measurements while rested, review the trend in Reports, and follow your onboard monitoring protocol.":
       "Wiederhole die Messungen im ausgeruhten Zustand, prüfe den Verlauf in den Berichten und befolge das Überwachungsprotokoll an Bord.",
+    "Repeat the measurements while rested and follow your onboard monitoring protocol. Contact the onboard medical officer promptly if the pattern persists or worsens.":
+      "Wiederhole die Messungen im ausgeruhten Zustand und befolge das medizinische Überwachungsprotokoll an Bord. Wende dich unverzüglich an den medizinischen Offizier an Bord, wenn das Muster weiterbesteht oder sich verschlechtert.",
+    "Repeat each measurement while rested, check that the sensors are positioned correctly, and compare the results with the recent trend in Reports. Contact the onboard medical officer promptly if any result remains outside its range or worsens.":
+      "Wiederhole jede Messung im ausgeruhten Zustand, prüfe, ob die Sensoren korrekt positioniert sind, und vergleiche die Ergebnisse mit dem aktuellen Trend in den Berichten. Wende dich unverzüglich an den medizinischen Offizier an Bord, wenn ein Wert weiterhin außerhalb seines Bereichs liegt oder sich verschlechtert.",
+    "Repeat the measurement while rested, record the result and any relevant context such as recent activity, then contact the onboard medical officer if it remains outside range or continues across days.":
+      "Wiederhole die Messung im ausgeruhten Zustand, dokumentiere das Ergebnis und alle relevanten Hinweise wie kürzliche Aktivität. Wende dich an den medizinischen Offizier an Bord, wenn der Wert weiterhin außerhalb des Bereichs liegt oder über mehrere Tage anhält.",
     "Review a repeated {measurement} pattern":
       "Wiederholtes Muster bei {measurement} überprüfen",
     "{measurement} has been outside its expected range on repeated recent readings.":

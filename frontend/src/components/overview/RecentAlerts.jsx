@@ -5,7 +5,7 @@ import { formatDateTime } from '../../lib/format'
 import useLanguage from '../../i18n/useLanguage'
 
 export default function RecentAlerts({ alerts }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   return (
     <section className="flex flex-col rounded-2xl border border-space-700 bg-space-900/70 p-5">
       <div className="mb-4 flex items-center justify-between">
@@ -28,7 +28,7 @@ export default function RecentAlerts({ alerts }) {
                 <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${STATUS_META[alert.severity].dot}`} />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium leading-snug">{t(alert.title)}</p>
-                  <p className="mt-0.5 text-xs text-ink-500">{formatDateTime(alert.time)}</p>
+                  <p className="mt-0.5 text-xs text-ink-500">{formatDateTime(alert.time, language)}</p>
                 </div>
               </div>
             </li>

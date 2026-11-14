@@ -5,7 +5,7 @@ import { INPUT_CLASS, LABEL_CLASS, PRIMARY_BUTTON_CLASS } from '../ui/fieldStyle
 import SettingsSection from './SettingsSection'
 import useLanguage from '../../i18n/useLanguage'
 
-export default function ProfileForm() {
+export default function ProfileForm({ onClose }) {
   const { t } = useLanguage()
   const { user } = useAuth()
   const { profile, saveProfile } = useHealthData()
@@ -32,11 +32,16 @@ export default function ProfileForm() {
       mission_start_date: form.mission_start_date || null,
     })
     setSaving(false)
-    setFeedback(ok ? { type: 'success', text: t('Profile saved.') } : { type: 'error', text: t('We could not save your profile. Try again.') })
-  }
+
+    if (ok) {
+      onClose?.()
+    } else {
+      setFeedback({ type: 'error', text: 'We could not save your profile. Try again.' })
+    }
+}
 
   return (
-    <SettingsSection title={t("Account")} description={t("Your name, mission details, and sign-in email.")}>
+    <SettingsSection >
       <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor="settings-email" className={LABEL_CLASS}>{t("Email")}</label>

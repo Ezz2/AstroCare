@@ -6,18 +6,21 @@ import { useHealthData } from "../../health/useHealthData";
 import { NAV_ITEMS } from "./navItems";
 import { missionDayFor } from "../../lib/format";
 import useLanguage from "../../i18n/useLanguage";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 export default function Sidebar({
   alertCount,
   onNavigate,
   onOpenUserSettings,
+  showLanguageSwitcher = false,
 }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
 
   const { signOut } = useAuth();
   const { profile } = useHealthData();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const isArabic = language === "ar";
 
   const missionDay = missionDayFor(profile?.mission_start_date);
 
@@ -52,7 +55,7 @@ export default function Sidebar({
         </div>
       </div>
 
-      <nav className="flex flex-col gap-1" aria-label={t("Main navigation")}>
+        <nav className={`flex flex-col gap-1 ${isArabic ? "text-right" : "text-left"}`} dir={isArabic ? "rtl" : "ltr"} aria-label={t("Main navigation")}>
         {NAV_ITEMS.map(({ to, label, icon: Icon, end, showCount }) => (
           <NavLink
             key={to}
@@ -62,7 +65,7 @@ export default function Sidebar({
             className={({ isActive }) =>
               `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
                 isActive
-                  ? "bg-cyan-400/10 font-medium text-cyan-300 shadow-[inset_2px_0_0_#22d3ee]"
+                  ? `bg-cyan-400/10 font-medium text-cyan-300 ${isArabic ? "shadow-[inset_-2px_0_0_#22d3ee]" : "shadow-[inset_2px_0_0_#22d3ee]"}`
                   : "text-ink-300 hover:bg-space-800 hover:text-ink-100"
               }`
             }>
@@ -79,6 +82,13 @@ export default function Sidebar({
       </nav>
 
       <div className="mt-auto flex flex-col gap-3">
+        {/* Language Switcher - Mobile Only */}
+        {showLanguageSwitcher && (
+          <div className="border-t border-space-800 pt-3">
+            <LanguageSwitcher className="w-full" />
+          </div>
+        )}
+
         {/* Settings Navigation */}
         <div className="border-t border-space-800 pt-3">
           <NavLink

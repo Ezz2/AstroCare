@@ -20,7 +20,7 @@ const FILTER_OPTIONS = [
 ]
 
 export default function ReadingHistory({ readings }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [vitalFilter, setVitalFilter] = useState('all')
   const [confirmId, setConfirmId] = useState(null)
   const [deleting, setDeleting] = useState(false)
@@ -88,7 +88,7 @@ export default function ReadingHistory({ readings }) {
                     className="transition hover:bg-space-850/60"
                   >
                     <td className="px-4 py-3 text-ink-300">
-                      {formatDateTime(reading.time)}
+                      {formatDateTime(reading.time, language)}
                     </td>
 
                     <td className="px-4 py-3">

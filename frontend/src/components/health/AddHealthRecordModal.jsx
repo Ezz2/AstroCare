@@ -153,9 +153,6 @@ export default function AddHealthRecordModal({
               className="font-display text-xl font-semibold">
               {t("Add Health Record")}
             </h2>
-            <p className="mt-1 text-sm text-ink-300">
-              {t("Enter your health measurements manually.")}
-            </p>
           </div>
           <button
             type="button"
@@ -177,14 +174,6 @@ export default function AddHealthRecordModal({
             onStopListening={onStopListening}
           /> */}
           <div className="mt-3">
-            <div className="mb-2">
-              <h3 className="font-display text-base font-semibold">
-                {t("Your measurements")}
-              </h3>
-              <p className="mt-1 text-xs text-ink-500">
-                {t("Enter only the measurements you have available.")}
-              </p>
-            </div>
             <div className="grid gap-2 sm:grid-cols-2">
               {MEASUREMENTS.map((measurement) => (
                 <HealthMeasurementCard

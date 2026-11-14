@@ -435,9 +435,9 @@ export function describeCorrelation(r) {
   return `${strength} ${direction} relationship across shared days. Correlation does not prove cause.`
 }
 
-export function trendPoints(list) {
+export function trendPoints(list, language) {
   return list.map((reading) => ({
-    label: formatDateTime(reading.time),
+    label: formatDateTime(reading.time, language),
     value: reading.value,
   }))
 }
