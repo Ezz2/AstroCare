@@ -58,7 +58,7 @@ export default function UserSettingsModal({ onClose }) {
           </button>
         </div>
 
-        <ProfileForm />
+        <ProfileForm onClose={onClose} />
       </div>
     </div>,
     document.body
