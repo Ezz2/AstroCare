@@ -88,6 +88,13 @@ function buildVitalStatus(vital, readings, now) {
   const current = filterByPeriod(readings, RECENT_DAYS, now);
   const previous = previousPeriod(readings, RECENT_DAYS, now);
   const latest = readings.at(-1) ?? null;
+  const baseline = statsFor(
+    readings.filter(
+      (reading) =>
+        reading !== latest &&
+        reading.time >= now - BASELINE_DAYS * DAY_MS,
+    ),
+  );
   const recentOutOfRange = current.filter(
     (reading) => getStatus(vital, reading.value) !== "normal",
   );
@@ -99,6 +106,8 @@ function buildVitalStatus(vital, readings, now) {
     trend: trendFor(vital, current, previous),
     improving: isImproving(vital, current, previous),
     repeatedOutOfRange: recentOutOfRange.length >= 2,
+    recentOutOfRange,
+    baseline,
     current,
   };
 }
@@ -287,6 +296,7 @@ function buildHighPriorityWarnings(physiologicalGroups, t) {
 }
 
 function buildRecommendations({
+  statuses,
   physiologicalGroups,
   contextPatterns,
   healthStatus,
@@ -303,7 +313,42 @@ function buildRecommendations({
     moodPattern,
   } = contextPatterns;
 
-  if (recoveryPattern) {
+  const abnormalGroups = physiologicalGroups.filter(
+    (group) => group.latestStatus && group.latestStatus !== "normal",
+  );
+  const repeatedGroups = abnormalGroups.filter((group) =>
+    group.items.some((item) => item.repeatedOutOfRange),
+  );
+  const sleepStatus = statuses.find((item) => item.vital.id === "sleep");
+  const sleepImproving =
+    sleepStatus?.improving &&
+    sleepStatus.latest &&
+    sleepStatus.status === "normal";
+
+  if (healthStatus === "insufficient" && abnormalGroups.length === 0) {
+    const missing = statuses
+      .filter((item) => !item.latest)
+      .map((item) => t(item.vital.label))
+      .slice(0, 3)
+      .join(", ");
+    recommendations.push(
+      recommendation({
+        id: "insufficient-health-data",
+        priority: "low",
+        title: t("More health data is needed"),
+        what: missing
+          ? t("AstroCare has too little recent data to assess {measurements}.", {
+              measurements: missing,
+            })
+          : t("AstroCare does not have enough recent health readings to assess a pattern."),
+        why: t("A missing measurement is not the same as a normal result, so a reliable trend or comparison cannot be made yet."),
+        action: t("Record the missing measurements and complete your next daily check-in. Until then, treat this assessment as incomplete rather than as an all-clear."),
+        time: latest?.check_in_date,
+      }),
+    );
+  }
+
+  if (recoveryPattern && !sleepImproving) {
     const context = factors
       .filter((id) => ["poor_sleep", "busy_schedule", "mission_tasks"].includes(id))
       .map((id) => t(factorLabels[id]))
@@ -328,12 +373,12 @@ function buildRecommendations({
             contextPart: context ? t(", with {context} selected as context", { context }) : "",
           },
         ),
-        why: t("Repeated sleep and check-in entries make recovery the clearest area to focus on. They do not establish a medical cause."),
-        action: t("Protect your next sleep window and discuss the pattern with the onboard medical officer if it continues."),
+        why: t("The short-sleep entries and self-reported check-ins identify a repeated recovery concern, but they do not establish that one caused the other."),
+        action: t("Protect your next sleep window, reduce avoidable light or task interruptions before bed, and record the next sleep duration. Contact the onboard medical officer if the pattern continues or you feel unable to carry out mission tasks safely."),
         time: shortSleep[0]?.check_in_date,
       }),
     );
-  } else if (moodPattern) {
+  } else if (moodPattern && !sleepImproving) {
     const context = factors
       .map((id) => t(factorLabels[id] ?? id))
       .slice(0, 2)
@@ -354,13 +399,6 @@ function buildRecommendations({
     );
   }
 
-  const abnormalGroups = physiologicalGroups.filter(
-    (group) => group.latestStatus && group.latestStatus !== "normal",
-  );
-  const repeatedGroups = abnormalGroups.filter((group) =>
-    group.items.some((item) => item.repeatedOutOfRange),
-  );
-
   if (abnormalGroups.length >= 2) {
     const labels = abnormalGroups.map((group) => t(group.label)).join(", ");
     const significantCount = abnormalGroups.filter(
@@ -375,14 +413,25 @@ function buildRecommendations({
             ? "Several health indicators need prompt review"
             : "Several health indicators need attention",
         ),
-        what: t(
+        what: t("{measurements}.", {
+          measurements: abnormalGroups
+            .flatMap((group) =>
+              group.items
+                .filter((item) => item.latest)
+                .map(
+                  (item) =>
+                    `${t(item.vital.label)} is ${formatValue(item.vital, item.latest.value)} ${item.vital.unit}`,
+                ),
+            )
+            .join(" · "),
+        }),
+        why: t(
           significantCount > 0
-            ? "{labels} are currently outside their expected ranges, including {count} significant results."
-            : "{labels} are currently outside their expected ranges.",
+            ? "{labels} are outside their expected ranges, including {count} significant results. AstroCare is grouping these findings for review; it is not assuming they share a cause."
+            : "{labels} are outside their expected ranges. Seeing more than one indicator change at the same time deserves more attention than an isolated result, but it does not establish a diagnosis.",
           { labels, count: significantCount },
         ),
-        why: t("AstroCare is grouping these findings for review; it is not assuming they share a cause. The combined pattern deserves more attention than any one reading alone."),
-        action: t("Repeat the measurements while rested, review the trend in Reports, and follow your onboard monitoring protocol."),
+        action: t("Repeat each measurement while rested, check that the sensors are positioned correctly, and compare the results with the recent trend in Reports. Contact the onboard medical officer promptly if any result remains outside its range or worsens."),
         time: abnormalGroups
           .flatMap((group) => group.items)
           .map((item) => item.latest?.time)
@@ -391,7 +440,7 @@ function buildRecommendations({
           .at(-1),
       }),
     );
-  } else if (repeatedGroups.length === 1) {
+  } else if (repeatedGroups.length === 1 && !recoveryPattern) {
     const group = repeatedGroups[0];
     const item = group.items.find((entry) => entry.repeatedOutOfRange);
     recommendations.push(
@@ -401,12 +450,75 @@ function buildRecommendations({
         title: t("Review a repeated {measurement} pattern", {
           measurement: t(group.label).toLowerCase(),
         }),
-        what: t("{measurement} has been outside its expected range on repeated recent readings.", {
-          measurement: t(group.label),
-        }),
-        why: t("A repeated pattern is more useful than a single result, but it does not establish a cause or diagnosis."),
-        action: t("Repeat the measurement while rested and review the trend in Reports. Follow your onboard monitoring protocol if it continues."),
+        what: t(
+          "{measurement} was outside its expected range on {count} recent readings; the latest was {value} {unit}.",
+          {
+            measurement: t(group.label),
+            count: item?.recentOutOfRange.length ?? 2,
+            value: item?.latest ? formatValue(item.vital, item.latest.value) : "--",
+            unit: item?.vital.unit ?? "",
+          },
+        ),
+        why: item?.baseline
+          ? t("This repeated pattern differs from your recent personal average of {average} {unit}. It is more informative than a single result, but it does not establish a cause or diagnosis.", {
+              average: formatValue(item.vital, item.baseline.mean),
+              unit: item.vital.unit,
+            })
+          : t("A repeated pattern is more informative than a single result, but it does not establish a cause or diagnosis."),
+        action: t("Repeat the measurement while rested, record the result and any relevant context such as recent activity, then contact the onboard medical officer if it remains outside range or continues across days."),
         time: item?.latest?.time,
+      }),
+    );
+  } else if (abnormalGroups.length === 1 && repeatedGroups.length === 0) {
+    const group = abnormalGroups[0];
+    const item = group.items.find((entry) => entry.latest);
+    if (item?.latest) {
+      recommendations.push(
+        recommendation({
+          id: "isolated-indicator-reading",
+          priority: item.status === "alert" ? "medium" : "low",
+          title: t("Verify an unusual {measurement} reading", {
+            measurement: t(group.label).toLowerCase(),
+          }),
+          what: t("Your latest {measurement} was {value} {unit}, outside the expected range of {min} to {max} {unit}.", {
+            measurement: t(item.vital.label).toLowerCase(),
+            value: formatValue(item.vital, item.latest.value),
+            unit: item.vital.unit,
+            min: formatValue(item.vital, item.vital.min),
+            max: formatValue(item.vital, item.vital.max),
+          }),
+          why: item.baseline
+            ? t("This is one unusual result, and it differs from your recent personal average of {average} {unit}. One reading alone cannot show whether a lasting change is present.", {
+                average: formatValue(item.vital, item.baseline.mean),
+                unit: item.vital.unit,
+              })
+            : t("This is one unusual result. One reading alone cannot show whether a lasting change is present."),
+          action: t(item.vital.guidance),
+          time: item.latest.time,
+        }),
+      );
+    }
+  }
+
+  const improving = statuses.filter(
+    (item) => item.improving && item.latest && item.status === "normal",
+  );
+  if (improving.length > 0 && abnormalGroups.length === 0) {
+    const labels = improving
+      .slice(0, 3)
+      .map((item) => t(item.vital.label))
+      .join(", ");
+    recommendations.push(
+      recommendation({
+        id: "improving-health-pattern",
+        priority: "informational",
+        title: t("Your recent health pattern is improving"),
+        what: t("Recent readings for {measurements} are moving closer to their expected ranges compared with the previous period.", {
+          measurements: labels,
+        }),
+        why: t("The recent averages are closer to the expected ranges than the preceding period. This is a positive change, not proof of a medical cause."),
+        action: t("Keep the routines and monitoring schedule that were in place during the improvement, and continue recording readings so the pattern can be confirmed."),
+        time: latest?.check_in_date,
       }),
     );
   }
@@ -419,7 +531,7 @@ function buildRecommendations({
         title: insight.title,
         what: insight.text,
         why: t("This summary is based on the readings and self-reported check-ins currently stored in AstroCare."),
-        action: t("Continue your regular measurements and daily check-in so changes can be noticed early."),
+        action: t("Continue your regular measurements and daily check-in. If a reading changes or a new symptom appears, record it with the time and context and contact the onboard medical officer when appropriate."),
         time: latest?.check_in_date,
       }),
     );

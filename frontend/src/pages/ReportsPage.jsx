@@ -37,7 +37,9 @@ export default function ReportsPage() {
     return (
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-rose-400/30 bg-rose-400/5 p-6">
         <p className="text-sm text-ink-100">
-          {t("We could not load your reports. Check your connection and try again.")}
+          {t(
+            "We could not load your reports. Check your connection and try again.",
+          )}
         </p>
         <button type="button" onClick={reload} className={PRIMARY_BUTTON_CLASS}>
           {t("Try again")}
@@ -55,7 +57,9 @@ export default function ReportsPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-ink-300">
           {hasData
-            ? t("{count} readings in this period.", { count: report.counts.total })
+            ? t("{count} readings in this period.", {
+                count: report.counts.total,
+              })
             : t("No readings in this period.")}
         </p>
         <SegmentedControl
@@ -80,7 +84,9 @@ export default function ReportsPage() {
       </div>
 
       <section className={`${PANEL_CLASS} overflow-x-auto`}>
-        <h2 className="mb-4 font-display text-lg font-semibold">{t("Summary")}</h2>
+        <h2 className="mb-4 font-display text-lg font-semibold">
+          {t("Summary")}
+        </h2>
         <table className="w-full min-w-[560px] text-left text-sm">
           <thead className="text-xs uppercase tracking-wider text-ink-500">
             <tr>
@@ -121,49 +127,7 @@ export default function ReportsPage() {
         </table>
       </section>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <section className={PANEL_CLASS}>
-          <h2 className="mb-3 font-display text-lg font-semibold">{t("Notes")}</h2>
-          <ul className="flex flex-col gap-2.5 text-sm text-ink-300">
-            {report.observations.map((text) => (
-              <li key={text} className="flex gap-2.5">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
-                {t(text)}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <RecommendationsPanel assessment={assessment} />
-      </div>
-
-      {/* <section className={PANEL_CLASS}>
-        <h2 className="mb-1 font-display text-lg font-semibold">
-          Unusual readings
-        </h2>
-        <p className="mb-4 text-xs text-ink-500">
-          The ten most recent readings that differ noticeably from your average
-          in this period.
-        </p>
-        {report.unusual.length === 0 ? (
-          <p className="text-sm text-ink-300">
-            No unusual readings in this period.
-          </p>
-        ) : (
-          <ul className="flex flex-col divide-y divide-space-800">
-            {report.unusual.map((item) => (
-              <li
-                key={item.reading.id}
-                className="flex flex-col gap-1 py-3 first:pt-0 last:pb-0">
-                <p className="text-xs text-ink-500">
-                  {formatDateTime(item.reading.time)}
-                </p>
-                <p className="text-sm text-ink-100">{item.reason}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section> */}
+      <RecommendationsPanel assessment={assessment} />
     </div>
   );
 }
