@@ -2,7 +2,7 @@ import { supabase } from './supabase'
 
 const READING_COLUMNS = 'id, vital_id, value, measured_at, source, note'
 const PROFILE_COLUMNS = 'full_name, crew_id, mission_name, mission_start_date, notify_alerts, notify_reminders'
-const CHECK_IN_COLUMNS = 'id, user_id, check_in_date, sleep_duration, mood, contributing_factors, created_at, updated_at'
+const CHECK_IN_COLUMNS = 'id, user_id, check_in_date, sleep_duration, mood, contributing_factors, submitted_at, created_at, updated_at'
 const MAX_READINGS = 5000
 
 function toReading(row) {
@@ -72,13 +72,10 @@ export async function fetchDailyCheckIns() {
   return data
 }
 
-export async function upsertDailyCheckIn(userId, checkIn) {
+export async function insertDailyCheckIn(userId, checkIn) {
   const { data, error } = await supabase
     .from('daily_checkins')
-    .upsert(
-      { ...checkIn, user_id: userId },
-      { onConflict: 'user_id,check_in_date' },
-    )
+    .insert({ ...checkIn, user_id: userId })
     .select(CHECK_IN_COLUMNS)
     .single()
   if (error) throw error

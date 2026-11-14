@@ -1,5 +1,5 @@
 import { VITALS } from '../data/vitalCatalog'
-import { formatValue, getStatus } from './health'
+import { formatValue, getMeasurementValidity, getStatus } from './health'
 import { formatDateTime, toLocalDateInput } from './format'
 
 const DAY_MS = 86400000
@@ -80,7 +80,9 @@ export function percentChange(current, previous) {
 
 export function currentStatuses(groups) {
   return VITALS.map((vital) => {
-    const latest = groups[vital.id].at(-1) ?? null
+    const latest = groups[vital.id]
+      .filter((reading) => getMeasurementValidity(vital, reading.value) === 'valid')
+      .at(-1) ?? null
     return { vital, latest, status: latest ? getStatus(vital, latest.value) : null }
   })
 }
@@ -88,13 +90,16 @@ export function currentStatuses(groups) {
 const identity = (text) => text;
 
 export function findUnusual(vital, list, t = identity) {
-  if (list.length < MIN_HISTORY) return []
-  const values = list.map((reading) => reading.value)
+  const validList = list.filter(
+    (reading) => getMeasurementValidity(vital, reading.value) === 'valid',
+  )
+  if (validList.length < MIN_HISTORY) return []
+  const values = validList.map((reading) => reading.value)
   const mean = values.reduce((sum, v) => sum + v, 0) / values.length
   const sd = Math.sqrt(values.reduce((sum, v) => sum + (v - mean) ** 2, 0) / values.length)
   if (sd === 0) return []
 
-  return list.flatMap((reading) => {
+  return validList.flatMap((reading) => {
     const z = (reading.value - mean) / sd
     if (Math.abs(z) < UNUSUAL_Z) return []
     const direction = z > 0 ? 'higher' : 'lower'
@@ -120,10 +125,39 @@ export function findUnusual(vital, list, t = identity) {
 export function buildAlerts(groups, now = Date.now(), t = identity) {
   const alerts = []
   for (const vital of VITALS) {
+    if (vital.id === 'systolic' || vital.id === 'diastolic') continue
     const list = groups[vital.id]
     const latest = list.at(-1)
     if (!latest) continue
 
+    if (getMeasurementValidity(vital, latest.value) === 'invalid') {
+      alerts.push({
+        id: `invalid-${vital.id}-${latest.id}`,
+        vital,
+        severity: 'watch',
+        kind: 'invalid',
+        value: latest.value,
+        time: latest.time,
+        title: t("Invalid {measurement} measurement", {
+          measurement: t(vital.label).toLowerCase(),
+        }),
+        explanation: t(
+          "{measurement} was recorded as {value} {unit}. This value cannot be interpreted reliably as a health measurement.",
+          {
+            measurement: t(vital.label),
+            value: formatValue(vital, latest.value),
+            unit: vital.unit,
+          },
+        ),
+        meaning: t("This is most likely a sensor, unit, technique, or entry problem—not a health finding."),
+        why: t(vital.education?.measuredBy ?? "Check how this measurement was taken."),
+        action: t("Check the sensor, measurement method, unit, and entered value. Take a new valid measurement before using this result for health decisions."),
+        education: vital.education,
+      })
+      continue
+    }
+
+    const personalBaseline = statsFor(list.slice(0, -1))
     const status = getStatus(vital, latest.value)
     if (status !== 'normal') {
       alerts.push({
@@ -138,15 +172,24 @@ export function buildAlerts(groups, now = Date.now(), t = identity) {
           comparison: t(status === 'alert' ? 'outside' : 'near the edge of'),
         }),
         explanation: t(
-          "Latest reading of {value} {unit}. Typical range is {min} to {max} {unit}.",
+          "Latest reading: {value} {unit}. Typical range: {min} to {max} {unit}{baseline}.",
           {
             value: formatValue(vital, latest.value),
             unit: vital.unit,
             min: vital.min,
             max: vital.max,
+            baseline: personalBaseline
+              ? t("; your recent average was {average} {unit}", {
+                  average: formatValue(vital, personalBaseline.mean),
+                  unit: vital.unit,
+                })
+              : "",
           },
         ),
+        meaning: t(vital.education?.unusual),
+        why: t(vital.education?.importance),
         action: t(vital.guidance),
+        education: vital.education,
       })
     }
 
@@ -166,19 +209,104 @@ export function buildAlerts(groups, now = Date.now(), t = identity) {
           measurement: t(vital.label).toLowerCase(),
         }),
         explanation: unusual.reason,
+        meaning: t(vital.education?.unusual),
+        why: t(vital.education?.importance),
         action: t(vital.guidance),
+        education: vital.education,
       })
     }
   }
+
+  const systolic = groups.systolic.at(-1)
+  const diastolic = groups.diastolic.at(-1)
+  if (systolic || diastolic) {
+    if (!systolic || !diastolic) {
+      const available = systolic ?? diastolic
+      alerts.push({
+        id: `incomplete-blood-pressure-${available.id}`,
+        vital: { id: 'bloodPressure', label: 'Blood pressure', unit: 'mmHg' },
+        severity: 'watch',
+        kind: 'invalid',
+        value: available.value,
+        time: available.time,
+        title: t("Incomplete blood pressure measurement"),
+        explanation: t("Only one blood-pressure number was recorded. A blood-pressure result needs both systolic and diastolic values from the same reading."),
+        meaning: t("The top and bottom numbers describe different parts of the same pressure measurement and should be interpreted together."),
+        why: t("Without both numbers, AstroCare cannot assess the blood-pressure result reliably."),
+        action: t("Check the cuff and measurement technique, then record a new systolic and diastolic pair from the same reading."),
+        education: VITALS.find((vital) => vital.id === 'systolic')?.education,
+      })
+    } else {
+      const systolicVital = VITALS.find((vital) => vital.id === 'systolic')
+      const diastolicVital = VITALS.find((vital) => vital.id === 'diastolic')
+      const invalid = [
+        [systolicVital, systolic],
+        [diastolicVital, diastolic],
+      ].find(([vital, reading]) => getMeasurementValidity(vital, reading.value) === 'invalid')
+
+      if (invalid) {
+        alerts.push({
+          id: `invalid-blood-pressure-${systolic.id}-${diastolic.id}`,
+          vital: { id: 'bloodPressure', label: 'Blood pressure', unit: 'mmHg' },
+          severity: 'watch',
+          kind: 'invalid',
+          value: `${systolic.value}/${diastolic.value}`,
+          time: Math.max(systolic.time, diastolic.time),
+          title: t("Invalid blood pressure measurement"),
+          explanation: t("Blood pressure needs both numbers from the same reading. One or both recorded values cannot be interpreted reliably."),
+          meaning: t("Systolic is the top number and diastolic is the bottom number. Check both values before using this result."),
+          why: t("A cuff, posture, movement, or entry error can affect either number."),
+          action: t("Check the cuff and measurement technique, then record a new systolic and diastolic pair from the same reading."),
+          education: systolicVital.education,
+        })
+      } else {
+        const systolicStatus = getStatus(systolicVital, systolic.value)
+        const diastolicStatus = getStatus(diastolicVital, diastolic.value)
+        const severity =
+          systolicStatus === 'alert' || diastolicStatus === 'alert'
+            ? 'alert'
+            : systolicStatus === 'watch' || diastolicStatus === 'watch'
+              ? 'watch'
+              : 'normal'
+        if (severity !== 'normal') {
+          alerts.push({
+            id: `range-blood-pressure-${systolic.id}-${diastolic.id}`,
+            vital: { id: 'bloodPressure', label: 'Blood pressure', unit: 'mmHg' },
+            severity,
+            kind: 'range',
+            value: `${systolic.value}/${diastolic.value}`,
+            time: Math.max(systolic.time, diastolic.time),
+            title: t("Blood pressure is outside its typical range"),
+            explanation: t("Latest pair: {systolic}/{diastolic} mmHg. Typical systolic range: {systolicMin} to {systolicMax}; typical diastolic range: {diastolicMin} to {diastolicMax}.", {
+              systolic: formatValue(systolicVital, systolic.value),
+              diastolic: formatValue(diastolicVital, diastolic.value),
+              systolicMin: systolicVital.min,
+              systolicMax: systolicVital.max,
+              diastolicMin: diastolicVital.min,
+              diastolicMax: diastolicVital.max,
+            }),
+            meaning: t("The top number shows pressure when the heart pumps; the bottom number shows pressure between beats. This result is outside one or both expected ranges."),
+            why: t("Blood pressure describes pressure in your blood vessels. One result can be affected by posture, movement, stress, caffeine, or cuff fit."),
+            action: t("Rest quietly, check the cuff and posture, and record a new pair from the same reading. Contact the onboard medical officer if the pattern persists or you feel unwell."),
+            education: systolicVital.education,
+          })
+        }
+      }
+    }
+  }
+
   return alerts.sort((a, b) => SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity] || b.time - a.time)
 }
 
 export function buildReport(readings, days, now = Date.now(), dailyCheckIns = [], t = identity) {
   const groups = groupByVital(readings)
   const rows = VITALS.map((vital) => {
-    const current = filterByPeriod(groups[vital.id], days, now)
+    const validReadings = groups[vital.id].filter(
+      (reading) => getMeasurementValidity(vital, reading.value) === 'valid',
+    )
+    const current = filterByPeriod(validReadings, days, now)
     const stats = statsFor(current)
-    const previousStats = statsFor(previousPeriod(groups[vital.id], days, now))
+    const previousStats = statsFor(previousPeriod(validReadings, days, now))
     return {
       vital,
       stats,

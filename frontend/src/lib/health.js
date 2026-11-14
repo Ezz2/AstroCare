@@ -6,6 +6,32 @@ export const STATUS_META = {
   alert: { label: 'Outside range', text: 'text-rose-400', dot: 'bg-rose-400', glow: '#fb7185' },
 }
 
+const INVALID_READING_MESSAGE = 'This value cannot be interpreted reliably as a health measurement.'
+
+// These are input-integrity guards, not clinical thresholds. SpO2 is a
+// percentage, sleep is a daily duration, and temperature uses a conservative
+// human body-measurement range so obvious sensor or entry errors are not
+// interpreted as medical findings.
+
+export function getMeasurementValidity(vital, value) {
+  if (!Number.isFinite(value)) return 'invalid'
+
+  const valid =
+    vital.id === 'spo2'
+      ? value >= 0 && value <= 100
+      : vital.id === 'sleep'
+        ? value >= 0 && value <= 24
+        : vital.id === 'temperature'
+          ? value >= 25 && value <= 45
+          : ['heartRate', 'systolic', 'diastolic', 'glucose'].includes(vital.id)
+            ? value > 0
+            : true
+
+  return valid ? 'valid' : 'invalid'
+}
+
+export { INVALID_READING_MESSAGE }
+
 export function getStatus(vital, value) {
   if (value >= vital.min && value <= vital.max) return 'normal'
   const span = vital.max - vital.min

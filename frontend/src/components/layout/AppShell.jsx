@@ -8,7 +8,6 @@ import {
   UserRound,
   ChevronDown,
   LogOut,
-  X,
   CalendarCheck,
   TriangleAlert,
   CircleAlert,
@@ -24,6 +23,7 @@ import { missionDayFor, toLocalDateInput } from "../../lib/format";
 import { moodMeta } from "../../data/moods";
 import { useHealthInsights } from "../../health/useHealthInsights";
 import UrgentHealthAlertModal from "../health/UrgentHealthAlertModal";
+import DailyCheckInReminderModal from "./DailyCheckInReminderModal";
 import LanguageSwitcher from "../LanguageSwitcher";
 import useLanguage from "../../i18n/useLanguage";
 
@@ -67,11 +67,14 @@ export default function AppShell() {
   const latestCheckIn = dailyCheckIns[0];
   const latestMood = latestCheckIn?.mood ? moodMeta(latestCheckIn.mood) : null;
   const LatestMoodIcon = latestMood?.icon;
-  const todayCheckIn = dailyCheckIns.find(
-    (checkIn) => checkIn.check_in_date === today,
-  );
+  const latestSubmissionTime = latestCheckIn
+    ? Date.parse(latestCheckIn.submitted_at ?? latestCheckIn.created_at ?? "")
+    : Number.NaN;
+  const hasRecentCheckIn =
+    Number.isFinite(latestSubmissionTime) &&
+    Date.now() - latestSubmissionTime < 24 * 60 * 60 * 1000;
   const reminderVisible =
-    status === "ready" && !todayCheckIn && dismissedReminderDate !== today;
+    status === "ready" && !hasRecentCheckIn && dismissedReminderDate !== today;
   const urgentAlert =
     assessment.urgentWarnings[0] ?? assessment.criticalAlerts[0] ?? null;
   const urgentStorageKey = user && urgentAlert
@@ -240,7 +243,7 @@ export default function AppShell() {
                 />
               )}
               <span>
-                {todayCheckIn
+                {hasRecentCheckIn
                   ? t(latestMood?.label ?? "Mood recorded")
                   : t("Check-in pending")}
               </span>
@@ -434,37 +437,21 @@ export default function AppShell() {
 
         {/* Page Content */}
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-          {reminderVisible && (
-            <div
-              role="alert"
-              className="mb-5 flex items-start gap-3 rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-sm text-ink-100">
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold">{t("Daily Check-in Reminder")}</p>
-                <p className="mt-1 text-ink-300">
-                  {t("Take a moment to update your daily health check-in. It only takes a minute!")}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => navigate("/daily-check-in")}
-                  className="mt-2 font-semibold text-cyan-300 hover:text-cyan-200">
-                  {t("Complete Check-in")}
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={dismissReminder}
-                aria-label={t("Dismiss daily check-in reminder")}
-                className="rounded-lg p-1 text-ink-500 transition hover:bg-space-800 hover:text-ink-100">
-                <X size={17} aria-hidden="true" />
-              </button>
-            </div>
-          )}
           <Outlet />
         </main>
       </div>
 
       {userSettingsOpen && (
         <UserSettingsModal onClose={() => setUserSettingsOpen(false)} />
+      )}
+      {reminderVisible && (
+        <DailyCheckInReminderModal
+          onClose={dismissReminder}
+          onComplete={() => {
+            dismissReminder();
+            navigate("/daily-check-in");
+          }}
+        />
       )}
       {urgentAlert && acknowledgedCriticalId !== urgentAlert.id && (
         <UrgentHealthAlertModal

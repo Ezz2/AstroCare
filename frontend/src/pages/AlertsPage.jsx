@@ -7,7 +7,11 @@ import StatusBadge from '../components/ui/StatusBadge'
 import { PANEL_CLASS } from '../components/ui/fieldStyles'
 import useLanguage from '../i18n/useLanguage'
 
-const KIND_LABELS = { range: 'Outside typical range', unusual: 'Unusual change' }
+const KIND_LABELS = {
+  range: 'Outside typical range',
+  unusual: 'Unusual change',
+  invalid: 'Cannot interpret this result',
+}
 
 export default function AlertsPage() {
   const { t } = useLanguage()
@@ -27,6 +31,7 @@ export default function AlertsPage() {
         {urgentWarnings.map((warning) => (
           <li key={warning.id} className="rounded-xl border border-rose-300/30 p-3 text-sm text-rose-100">
             <p className="font-medium">{t(warning.what)}</p>
+            <p className="mt-1">{t(warning.why)}</p>
             <p className="mt-1">{t(warning.action)}</p>
           </li>
         ))}
@@ -95,10 +100,34 @@ function AlertList({ alerts }) {
               <p className="mt-1 text-xs uppercase tracking-wider text-ink-500">{t(KIND_LABELS[alert.kind])}</p>
             </div>
             <p className="text-sm text-ink-300">{t(alert.explanation)}</p>
+            {alert.meaning && (
+              <p className="text-sm text-ink-300">
+                <span className="font-medium text-ink-100">{t("What it means")}: </span>
+                {t(alert.meaning)}
+              </p>
+            )}
+            {alert.why && (
+              <p className="text-sm text-ink-300">
+                <span className="font-medium text-ink-100">{t("Why it matters")}: </span>
+                {t(alert.why)}
+              </p>
+            )}
             <div className="rounded-xl border border-space-700 bg-space-950/60 p-3 text-sm text-ink-100">
               <span className={`mr-2 inline-block h-2 w-2 rounded-full ${STATUS_META[alert.severity].dot}`} />
+              <span className="font-medium">{t("What to do")}: </span>
               {t(alert.action)}
             </div>
+            {alert.education && (
+              <details className="text-xs text-ink-400">
+                <summary className="cursor-pointer text-ink-300">{t("Learn about this measurement")}</summary>
+                <div className="mt-2 space-y-1 leading-relaxed">
+                  <p>{t(alert.education.what)}</p>
+                  <p>{t(alert.education.unit)}</p>
+                  <p>{t(alert.education.measuredBy)}</p>
+                  <p>{t(alert.education.factors)}</p>
+                </div>
+              </details>
+            )}
           </li>
         ))}
       </ul>

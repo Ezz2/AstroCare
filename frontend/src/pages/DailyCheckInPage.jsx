@@ -84,11 +84,15 @@ export default function DailyCheckInPage() {
   const { language, t } = useLanguage();
   const { status, dailyCheckIns, saveDailyCheckIn, reload } = useHealthData();
   const currentDate = todayKey();
-  const todayCheckIn = useMemo(
+  const latestCheckIn = useMemo(
     () =>
-      dailyCheckIns.find((item) => item.check_in_date === currentDate) ?? null,
-    [dailyCheckIns, currentDate],
+      dailyCheckIns
+        .map((item) => Date.parse(item.submitted_at ?? item.created_at ?? ""))
+        .filter(Number.isFinite)
+        .sort((a, b) => b - a)[0] ?? null,
+    [dailyCheckIns],
   );
+  const [clock, setClock] = useState(Date.now());
   const [sleepDuration, setSleepDuration] = useState("");
   const [mood, setMood] = useState("");
   const [factors, setFactors] = useState([]);
@@ -97,16 +101,22 @@ export default function DailyCheckInPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setSleepDuration(todayCheckIn ? String(todayCheckIn.sleep_duration) : "");
-    setMood(todayCheckIn?.mood ?? "");
-    setFactors(
-      Array.isArray(todayCheckIn?.contributing_factors)
-        ? todayCheckIn.contributing_factors
-        : [],
-    );
-    setMessage(null);
-    setError(null);
-  }, [todayCheckIn]);
+    const timer = window.setInterval(() => setClock(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const remainingMs = latestCheckIn
+    ? Math.max(0, latestCheckIn + 24 * 60 * 60 * 1000 - clock)
+    : 0;
+  const isLocked = remainingMs > 0;
+  const remainingHours = Math.floor(remainingMs / (60 * 60 * 1000));
+  const remainingMinutes = Math.floor(
+    (remainingMs % (60 * 60 * 1000)) / (60 * 1000),
+  );
+  const remainingSeconds = Math.floor((remainingMs % (60 * 1000)) / 1000);
+  const remainingLabel = `${String(remainingHours).padStart(2, "0")}:${String(
+    remainingMinutes,
+  ).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
 
   if (status === "loading") return <LoadingScreen />;
   if (status === "error") {
@@ -124,6 +134,10 @@ export default function DailyCheckInPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (isLocked) {
+      setError(t("Your next daily check-in will be available after the countdown."));
+      return;
+    }
     setError(null);
     setMessage(null);
     const sleep = Number(sleepDuration);
@@ -144,14 +158,14 @@ export default function DailyCheckInPage() {
     });
     setSaving(false);
     if (!saved) {
-      setError(t("We could not save your daily check-in. Please try again."));
+      setError(
+        isLocked
+          ? t("Your next daily check-in will be available after the countdown.")
+          : t("We could not save your daily check-in. Please try again."),
+      );
       return;
     }
-    setMessage(
-      todayCheckIn
-        ? t("Your daily check-in was updated.")
-        : t("Your daily check-in was saved."),
-    );
+    setMessage(t("Your daily check-in was saved."));
   };
 
   return (
@@ -174,7 +188,20 @@ export default function DailyCheckInPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-5">
+        {isLocked ? (
+          <div className="mt-6 rounded-xl border border-teal-400/30 bg-teal-400/10 p-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-teal-200">
+              <Check size={16} aria-hidden="true" />
+              {t("Today's check-in is complete.")}
+            </p>
+            <p className="mt-2 text-sm text-ink-300">
+              {t("Your next Daily Check-in will be available in {time}.", {
+                time: remainingLabel,
+              })}
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-5">
           <div>
             <label
               htmlFor="check-in-sleep"
@@ -233,19 +260,16 @@ export default function DailyCheckInPage() {
             </p>
           )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={saving}
-              className={PRIMARY_BUTTON_CLASS}>
-              {saving
-                ? t("Saving...")
-                : todayCheckIn
-                  ? t("Update today's check-in")
-                  : t("Save today's check-in")}
-            </button>
-          </div>
-        </form>
+            <div>
+              <button
+                type="submit"
+                disabled={saving}
+                className={PRIMARY_BUTTON_CLASS}>
+                {saving ? t("Saving...") : t("Save today's check-in")}
+              </button>
+            </div>
+          </form>
+        )}
       </section>
 
       <section className={PANEL_CLASS}>

@@ -4,6 +4,7 @@ import { useAuth } from '../auth/useAuth'
 import * as api from '../lib/healthApi'
 
 export const HealthDataContext = createContext(null)
+const DAY_MS = 86400000
 
 export function HealthDataProvider({ children }) {
   const { user } = useAuth()
@@ -84,16 +85,23 @@ export function HealthDataProvider({ children }) {
 
   const saveDailyCheckIn = useCallback(async (checkIn) => {
     try {
-      const saved = await api.upsertDailyCheckIn(userId, checkIn)
+      const latestSubmission = dailyCheckIns
+        .map((item) => Date.parse(item.submitted_at ?? item.created_at ?? ''))
+        .filter(Number.isFinite)
+        .sort((a, b) => b - a)[0]
+      if (latestSubmission && Date.now() - latestSubmission < DAY_MS) {
+        return null
+      }
+      const saved = await api.insertDailyCheckIn(userId, checkIn)
       setDailyCheckIns((current) => [
         saved,
-        ...current.filter((item) => item.check_in_date !== saved.check_in_date),
+        ...current,
       ])
       return saved
     } catch {
       return null
     }
-  }, [userId])
+  }, [dailyCheckIns, userId])
 
   const value = useMemo(
     () => ({

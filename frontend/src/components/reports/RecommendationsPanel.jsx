@@ -42,6 +42,14 @@ function RecommendationItem({ item }) {
       <details className="mt-3 text-xs text-ink-400">
         <summary className="cursor-pointer text-ink-300">{t("Why this is recommended")}</summary>
         <p className="mt-2 leading-relaxed">{t(item.why)}</p>
+        {item.education && (
+          <div className="mt-3 border-t border-space-800 pt-3 leading-relaxed">
+            <p className="font-medium text-ink-300">{t("Measurement guide")}</p>
+            <p className="mt-1">{t(item.education.what)}</p>
+            <p className="mt-1">{t(item.education.unit)}</p>
+            <p className="mt-1">{t(item.education.factors)}</p>
+          </div>
+        )}
       </details>
     </li>
   );

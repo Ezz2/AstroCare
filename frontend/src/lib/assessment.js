@@ -6,7 +6,12 @@ import {
   previousPeriod,
   statsFor,
 } from "./analysis";
-import { formatValue, getStatus, getWorstStatus } from "./health";
+import {
+  formatValue,
+  getMeasurementValidity,
+  getStatus,
+  getWorstStatus,
+} from "./health";
 import { toLocalDateInput } from "./format";
 import { VITALS, VITAL_BY_ID } from "../data/vitalCatalog";
 
@@ -36,8 +41,8 @@ function recentCheckIns(dailyCheckIns, now) {
   return dailyCheckIns.filter((checkIn) => checkIn.check_in_date >= since);
 }
 
-function recommendation({ id, priority, title, what, why, action, time }) {
-  return { id, priority, title, what, why, action, time };
+function recommendation({ id, priority, title, what, why, action, time, education }) {
+  return { id, priority, title, what, why, action, time, education };
 }
 
 function trendFor(vital, current, previous) {
@@ -87,28 +92,41 @@ function isImproving(vital, current, previous) {
 function buildVitalStatus(vital, readings, now) {
   const current = filterByPeriod(readings, RECENT_DAYS, now);
   const previous = previousPeriod(readings, RECENT_DAYS, now);
-  const latest = readings.at(-1) ?? null;
+  const invalidLatest = readings.at(-1);
+  const validReadings = readings.filter(
+    (reading) => getMeasurementValidity(vital, reading.value) === "valid",
+  );
+  const latest = validReadings.at(-1) ?? null;
   const baseline = statsFor(
-    readings.filter(
+    validReadings.filter(
       (reading) =>
         reading !== latest &&
         reading.time >= now - BASELINE_DAYS * DAY_MS,
     ),
   );
-  const recentOutOfRange = current.filter(
-    (reading) => getStatus(vital, reading.value) !== "normal",
+  const validCurrent = current.filter(
+    (reading) => getMeasurementValidity(vital, reading.value) === "valid",
   );
+  const validPrevious = previous.filter(
+    (reading) => getMeasurementValidity(vital, reading.value) === "valid",
+  );
+  const recentOutOfRange = validCurrent.filter((reading) => getStatus(vital, reading.value) !== "normal");
 
   return {
     vital,
     latest,
+    invalidLatest:
+      invalidLatest &&
+      getMeasurementValidity(vital, invalidLatest.value) === "invalid"
+        ? invalidLatest
+        : null,
     status: latest ? getStatus(vital, latest.value) : null,
-    trend: trendFor(vital, current, previous),
-    improving: isImproving(vital, current, previous),
+    trend: trendFor(vital, validCurrent, validPrevious),
+    improving: isImproving(vital, validCurrent, validPrevious),
     repeatedOutOfRange: recentOutOfRange.length >= 2,
     recentOutOfRange,
     baseline,
-    current,
+    current: validCurrent,
   };
 }
 
@@ -325,7 +343,39 @@ function buildRecommendations({
     sleepStatus.latest &&
     sleepStatus.status === "normal";
 
-  if (healthStatus === "insufficient" && abnormalGroups.length === 0) {
+  for (const item of statuses.filter((entry) => entry.invalidLatest)) {
+    recommendations.push(
+      recommendation({
+        id: `invalid-measurement-${item.vital.id}`,
+        priority: "medium",
+        title: t("Check an invalid {measurement} result", {
+          measurement: t(item.vital.label).toLowerCase(),
+        }),
+        what: t(
+          "The latest {measurement} entry was {value} {unit}, which cannot be interpreted reliably.",
+          {
+            measurement: t(item.vital.label).toLowerCase(),
+            value: formatValue(item.vital, item.invalidLatest.value),
+            unit: item.vital.unit,
+          },
+        ),
+        why: t(
+          "This looks like a sensor, unit, technique, or entry problem—not a health finding. AstroCare will not use it to judge your health pattern.",
+        ),
+        action: t(
+          "Check the sensor, measurement method, unit, and entered value. Take a new valid measurement before using this result for health decisions.",
+        ),
+        time: item.invalidLatest.time,
+        education: item.vital.education,
+      }),
+    );
+  }
+
+  if (
+    healthStatus === "insufficient" &&
+    abnormalGroups.length === 0 &&
+    !statuses.some((item) => item.invalidLatest)
+  ) {
     const missing = statuses
       .filter((item) => !item.latest)
       .map((item) => t(item.vital.label))
@@ -376,6 +426,7 @@ function buildRecommendations({
         why: t("The short-sleep entries and self-reported check-ins identify a repeated recovery concern, but they do not establish that one caused the other."),
         action: t("Protect your next sleep window, reduce avoidable light or task interruptions before bed, and record the next sleep duration. Contact the onboard medical officer if the pattern continues or you feel unable to carry out mission tasks safely."),
         time: shortSleep[0]?.check_in_date,
+        education: VITAL_BY_ID.sleep.education,
       }),
     );
   } else if (moodPattern && !sleepImproving) {
@@ -467,13 +518,43 @@ function buildRecommendations({
           : t("A repeated pattern is more informative than a single result, but it does not establish a cause or diagnosis."),
         action: t("Repeat the measurement while rested, record the result and any relevant context such as recent activity, then contact the onboard medical officer if it remains outside range or continues across days."),
         time: item?.latest?.time,
+        education: item?.vital.education,
       }),
     );
   } else if (abnormalGroups.length === 1 && repeatedGroups.length === 0) {
     const group = abnormalGroups[0];
-    const item = group.items.find((entry) => entry.latest);
-    if (item?.latest) {
+    if (group.id === "bloodPressure") {
+      const systolic = group.items.find((item) => item.vital.id === "systolic");
+      const diastolic = group.items.find((item) => item.vital.id === "diastolic");
       recommendations.push(
+        recommendation({
+          id: "isolated-blood-pressure-pair",
+          priority: group.latestStatus === "alert" ? "medium" : "low",
+          title: t("Verify an unusual blood pressure reading"),
+          what: t(
+            "Your latest blood pressure pair was {systolic}/{diastolic} mmHg. One or both values are outside the expected range.",
+            {
+              systolic: systolic?.latest
+                ? formatValue(systolic.vital, systolic.latest.value)
+                : "--",
+              diastolic: diastolic?.latest
+                ? formatValue(diastolic.vital, diastolic.latest.value)
+                : "--",
+            },
+          ),
+          why: t(
+            "The top number is pressure when the heart pumps and the bottom number is pressure between beats. One result can be affected by posture, movement, stress, caffeine, or cuff fit.",
+          ),
+          action: t(
+            "Rest quietly, check the cuff and posture, and record a new pair from the same reading. Contact the onboard medical officer if the pattern persists or you feel unwell.",
+          ),
+          time: Math.max(systolic?.latest?.time ?? 0, diastolic?.latest?.time ?? 0),
+        }),
+      );
+    } else {
+      const item = group.items.find((entry) => entry.latest);
+      if (item?.latest) {
+        recommendations.push(
         recommendation({
           id: "isolated-indicator-reading",
           priority: item.status === "alert" ? "medium" : "low",
@@ -495,8 +576,10 @@ function buildRecommendations({
             : t("This is one unusual result. One reading alone cannot show whether a lasting change is present."),
           action: t(item.vital.guidance),
           time: item.latest.time,
+          education: item.vital.education,
         }),
-      );
+        );
+      }
     }
   }
 
