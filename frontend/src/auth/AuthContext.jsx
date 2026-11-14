@@ -5,7 +5,6 @@ import { friendlyAuthError } from '../lib/authErrors'
 export const AuthContext = createContext(null)
 
 const DUPLICATE_ACCOUNT = 'An account with this email already exists. Try signing in instead.'
-
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)

@@ -70,7 +70,7 @@ export default function ImmersiveLandingPage() {
         <p className="cosmos-description">
           {t("AstroCare brings astronauts’ health measurements, changes, and body-system views together in one space-health platform.")}
         </p>
-        <Link to="/dashboard" className="cosmos-primary-action">{t("Explore AstroCare")} <ArrowRight size={16} /></Link>
+        <Link to="/login" className="cosmos-primary-action">{t("Explore AstroCare")} <ArrowRight size={16} /></Link>
         <p className="cosmos-project-line">{t("Developed by")} <strong>AstroByteX</strong><span /> NASA Space Apps Challenge 2026</p>
       </section>
 
