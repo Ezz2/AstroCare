@@ -503,6 +503,8 @@ const translations = {
     "Record the total duration of physical activity for the day in minutes.": "سجل إجمالي مدة النشاط البدني لليوم بالدقائق.",
     "This records duration, not calories burned or exercise intensity.": "يسجل هذا المدة، وليس السعرات الحرارية المحروقة أو شدة التمرين.",
     "Do not estimate calories from this value. Follow the approved activity-tracking procedure when available.": "لا تقدّر السعرات الحرارية اعتمادًا على هذه القيمة. اتبع إجراء تتبع النشاط المعتمد عند توفره.",
+    "Estimated radiation exposure": "تقدير التعرض للإشعاع",
+    "0.5–1 mSv per mission day · 600 mSv lifetime maximum": "0.5–1 ملي سيفرت لكل يوم مهمة · الحد الأقصى مدى الحياة 600 ملي سيفرت",
   },
   de: {
     "Select language": "Sprache auswählen",
@@ -1004,6 +1006,8 @@ const translations = {
     "Record the total duration of physical activity for the day in minutes.": "Erfasse die gesamte Dauer der körperlichen Aktivität des Tages in Minuten.",
     "This records duration, not calories burned or exercise intensity.": "Erfasst wird die Dauer, nicht der Kalorienverbrauch oder die Trainingsintensität.",
     "Do not estimate calories from this value. Follow the approved activity-tracking procedure when available.": "Leite aus diesem Wert keinen Kalorienverbrauch ab. Befolge, falls verfügbar, das zugelassene Verfahren zur Aktivitätserfassung.",
+    "Estimated radiation exposure": "Geschätzte Strahlenbelastung",
+    "0.5–1 mSv per mission day · 600 mSv lifetime maximum": "0,5–1 mSv pro Missionstag · Lebenszeitmaximum 600 mSv",
   },
 };
 
