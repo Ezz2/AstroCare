@@ -117,10 +117,7 @@ const translations = {
     "Main areas to review": "المجالات الرئيسية للمراجعة",
     "Add Health Record": "إضافة سجل صحي",
     "Health record saved successfully!": "تم حفظ السجل الصحي بنجاح!",
-    "Enter your health measurements manually.": "أدخل قياساتك الصحية يدويًا.",
     "Your measurements": "قياساتك",
-    "Enter only the measurements you have available.":
-      "أدخل القياسات المتاحة لديك فقط.",
     "Enter value": "أدخل القيمة",
     "Measurement guide": "دليل القياس",
     "How to measure: {title}": "كيفية قياس: {title}",
@@ -820,8 +817,6 @@ const translations = {
     "Enter your health measurements manually.":
       "Gib deine Gesundheitsmesswerte manuell ein.",
     "Your measurements": "Deine Messwerte",
-    "Enter only the measurements you have available.":
-      "Gib nur die Messwerte ein, die dir vorliegen.",
     "Enter value": "Wert eingeben",
     "How to Measure?": "Wie wird gemessen?",
     "Measurement guide": "Messanleitung",

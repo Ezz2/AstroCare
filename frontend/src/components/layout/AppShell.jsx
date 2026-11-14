@@ -38,7 +38,8 @@ export default function AppShell() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const isArabic = language === "ar";
 
   const { profile, readings, dailyCheckIns, status } = useHealthData();
   const { user, signOut } = useAuth();
@@ -198,12 +199,13 @@ export default function AppShell() {
           alertCount={alertCount}
           onNavigate={() => setNavOpen(false)}
           onOpenUserSettings={() => setUserSettingsOpen(true)}
+          showLanguageSwitcher
         />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Navbar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-space-800 bg-space-950/90 px-4 backdrop-blur sm:px-6 lg:px-8">
+        <header dir={isArabic ? "rtl" : "ltr"} className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-space-800 bg-space-950/90 px-4 backdrop-blur sm:px-6 lg:px-8">
           {/* Mobile Menu Button */}
           <button
             type="button"
@@ -218,8 +220,10 @@ export default function AppShell() {
           </h1>
 
           {/* Navbar Actions */}
-          <div className="ml-auto flex items-center gap-3">
-            <LanguageSwitcher />
+          <div className="ms-auto flex items-center gap-3">
+            <div className="hidden lg:block">
+              <LanguageSwitcher menuPosition="bottom" />
+            </div>
             <button
               type="button"
               onClick={() => navigate("/daily-check-in")}
@@ -267,7 +271,7 @@ export default function AppShell() {
               </button>
 
               <div
-                className={` fixed right-4 top-20 z-50 w-[calc(100vw-32px)] max-w-[340px] origin-top-right overflow-hidden rounded-2xl border border-space-700 bg-space-900 shadow-2xl transition-all duration-200 ease-out sm:absolute sm:right-0 sm:top-full sm:mt-3 sm:w-[340px] ${alertsOpen ? "visible translate-y-0 scale-100 opacity-100" : "invisible -translate-y-2 scale-[0.98] opacity-0 pointer-events-none"} `}>
+  className={`fixed ${isArabic ? "left-4 origin-top-left" : "right-4 origin-top-right"} top-20 z-50 w-[calc(100vw-32px)] max-w-[340px] overflow-hidden rounded-2xl border border-space-700 bg-space-900 shadow-2xl transition-all duration-200 ease-out sm:absolute sm:top-full sm:mt-3 sm:w-[340px] ${isArabic ? "sm:left-0" : "sm:right-0"} ${alertsOpen ? "visible translate-y-0 scale-100 opacity-100" : "invisible -translate-y-2 scale-[0.98] opacity-0 pointer-events-none"}`}>
                 <div className="flex items-center justify-between border-b border-space-700 px-4 py-3">
                   <div>
                     <p className="text-sm font-semibold text-ink-100">
