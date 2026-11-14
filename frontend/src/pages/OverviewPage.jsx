@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useHealthData } from "../health/useHealthData";
 import { useHealthInsights } from "../health/useHealthInsights";
@@ -15,6 +15,7 @@ import LoadingScreen from "../components/ui/LoadingScreen";
 import { PRIMARY_BUTTON_CLASS } from "../components/ui/fieldStyles";
 import AddHealthRecordModal from "../components/health/AddHealthRecordModal";
 import HealthStatusPanel from "../components/health/HealthStatusPanel";
+import RadiationExposure from "../components/overview/RadiationExposure";
 import useLanguage from "../i18n/useLanguage";
 
 const TREND_DAYS = 14;
@@ -63,6 +64,26 @@ export default function OverviewPage() {
   );
   const hasReadings = latestReading !== undefined;
   const firstName = profile?.full_name?.split(" ")[0] || t("Astronaut");
+  const overviewStatuses = [
+    ...statuses.filter(
+      ({ vital }) => vital.id !== "sleep" && vital.id !== "glucose",
+    ),
+    statuses.find(({ vital }) => vital.id === "glucose"),
+    statuses.find(({ vital }) => vital.id === "sleep"),
+  ].filter(Boolean);
+  const renderVitalTile = ({ vital, latest, status: vitalStatus }) => (
+    <VitalTile
+      key={vital.id}
+      vital={vital}
+      latest={latest}
+      status={vitalStatus}
+      values={groups[vital.id]
+        .slice(-TILE_SPARK_POINTS)
+        .map((r) => r.value)}
+      selected={vital.id === selectedVitalId}
+      onSelect={setSelectedVitalId}
+    />
+  );
 
   const handleSave = async (rows) => {
     const saved = await addReadings(rows);
@@ -112,8 +133,6 @@ export default function OverviewPage() {
         </div>
       </section>
 
-      <HealthStatusPanel assessment={assessment} />
-
       <div className="grid gap-5 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <BodyPanel
@@ -125,19 +144,20 @@ export default function OverviewPage() {
         </div>
 
         <div className="grid content-start gap-3 sm:grid-cols-2 lg:col-span-7 xl:grid-cols-3">
-          {statuses.map(({ vital, latest, status: vitalStatus }) => (
-            <VitalTile
-              key={vital.id}
-              vital={vital}
-              latest={latest}
-              status={vitalStatus}
-              values={groups[vital.id]
-                .slice(-TILE_SPARK_POINTS)
-                .map((r) => r.value)}
-              selected={vital.id === selectedVitalId}
-              onSelect={setSelectedVitalId}
-            />
+          {overviewStatuses.map(({ vital, latest, status: vitalStatus }) => (
+            <Fragment key={vital.id}>
+              {renderVitalTile({ vital, latest, status: vitalStatus })}
+              {vital.id === "sleep" && (
+                <RadiationExposure
+                  missionStartDate={profile?.mission_start_date}
+                  className="sm:col-span-2"
+                />
+              )}
+            </Fragment>
           ))}
+          <div className="sm:col-span-2 xl:col-span-3">
+            <HealthStatusPanel assessment={assessment} />
+          </div>
         </div>
       </div>
 
