@@ -25,7 +25,7 @@ const RISK_STYLES = {
 };
 
 export default function RadiationExposure({ missionStartDate, className = "" }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const missionDays = missionDayFor(missionStartDate);
   const hasMissionDuration = Number.isFinite(missionDays);
   const estimatedDose = hasMissionDuration
@@ -50,7 +50,7 @@ export default function RadiationExposure({ missionStartDate, className = "" }) 
           </h2>
         </div>
         <p className={`font-display text-xl font-semibold ${styles.text}`}>
-          {percent === null ? "--%" : formatPercent(percent)}
+          {percent === null ? "--%" : formatPercent(percent, language)}
         </p>
       </div>
 

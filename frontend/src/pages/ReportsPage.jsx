@@ -22,7 +22,7 @@ const SOURCE_LABELS = {
 };
 
 export default function ReportsPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { readings, dailyCheckIns, status, reload } = useHealthData();
   const { assessment } = useHealthInsights();
   const [periodId, setPeriodId] = useState("7");
@@ -112,7 +112,7 @@ export default function ReportsPage() {
                     : "--"}
                 </td>
                 <td className="py-3 text-ink-300">
-                  {change !== null ? formatPercent(change) : "--"}
+                  {change !== null ? formatPercent(change, language) : "--"}
                 </td>
                 <td className="py-3">
                   {rowStatus ? (

@@ -18,7 +18,7 @@ import SegmentedControl from "../components/ui/SegmentedControl";
 import useLanguage from "../i18n/useLanguage";
 
 export default function AnalyticsPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { groups } = useHealthInsights();
   const [vitalId, setVitalId] = useState("heartRate");
   const [periodId, setPeriodId] = useState("14");
@@ -90,7 +90,7 @@ export default function AnalyticsPage() {
           />
           <Stat
             label={t("Vs. previous period")}
-            value={change !== null ? formatPercent(change) : "--"}
+            value={change !== null ? formatPercent(change, language) : "--"}
           />
           <Stat label={t("Readings")} value={stats ? String(stats.count) : "0"} />
         </div>
@@ -98,7 +98,7 @@ export default function AnalyticsPage() {
           <VitalTrendChart
             key={`${vitalId}-${periodId}`}
             vital={vital}
-            points={trendPoints(current)}
+            points={trendPoints(current, language)}
             height="h-80"
           />
         ) : (
@@ -138,7 +138,7 @@ export default function AnalyticsPage() {
                   key={item.id}
                   className="rounded-xl border border-space-700 p-3 text-sm">
                   <p className="text-xs text-ink-500">
-                    {formatDateTime(item.time)}
+                    {formatDateTime(item.time, language)}
                   </p>
                   <p className="mt-1 text-ink-100">{item.text}</p>
                 </li>

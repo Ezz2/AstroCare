@@ -1,13 +1,16 @@
+
 const DAY_MS = 86400000
 
-function currentLocale() {
-  const language =
-    typeof document === "undefined" ? "en" : document.documentElement.lang;
-  return { en: "en-US", ar: "ar", de: "de-DE" }[language] ?? "en-US";
+function currentLocale(language) {
+  const currentLanguage =
+    language ??
+    (typeof document === "undefined" ? "en" : document.documentElement.lang);
+
+  return { en: "en-US", ar: "ar", de: "de-DE" }[currentLanguage] ?? "en-US";
 }
 
-export function formatDateTime(ms) {
-  return new Date(ms).toLocaleString(currentLocale(), {
+export function formatDateTime(ms, language) {
+  return new Date(ms).toLocaleString(currentLocale(language), {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
@@ -15,12 +18,16 @@ export function formatDateTime(ms) {
   })
 }
 
-export function formatDate(ms) {
-  return new Date(ms).toLocaleDateString(currentLocale(), { month: 'short', day: 'numeric', year: 'numeric' })
+export function formatDate(ms, language) {
+  return new Date(ms).toLocaleDateString(currentLocale(language), {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 }
 
-export function formatPercent(value) {
-  return new Intl.NumberFormat(currentLocale(), {
+export function formatPercent(value, language) {
+  return new Intl.NumberFormat(currentLocale(language), {
     style: "percent",
     maximumFractionDigits: 0,
     signDisplay: "exceptZero",

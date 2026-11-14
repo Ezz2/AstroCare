@@ -29,7 +29,7 @@ function greeting() {
 }
 
 export default function OverviewPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { profile, status, reload, addReadings } = useHealthData();
   const { groups, statuses, alerts, overall, statusBySystem, assessment } =
     useHealthInsights();
@@ -61,6 +61,7 @@ export default function OverviewPage() {
   const selectedVital = VITAL_BY_ID[selectedVitalId];
   const points = trendPoints(
     filterByPeriod(groups[selectedVitalId], TREND_DAYS),
+    language,
   );
   const hasReadings = latestReading !== undefined;
   const firstName = profile?.full_name?.split(" ")[0] || t("Astronaut");
@@ -120,7 +121,7 @@ export default function OverviewPage() {
           {hasReadings && (
             <>
               <StatusBadge status={overall} className="px-3 py-1 text-xs" />
-              <span>{t("Latest {date}", { date: formatDateTime(latestReading.time) })}</span>
+              <span>{t("Latest {date}", { date: formatDateTime(latestReading.time, language) })}</span>
               {/* <SourceBadge source={latestReading.source} /> */}
             </>
           )}

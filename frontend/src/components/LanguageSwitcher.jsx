@@ -94,7 +94,7 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
         aria-label={t("Select language")}
         aria-expanded={open}
         aria-haspopup="true"
-        className="flex h-11 w-full items-center justify-between gap-3 rounded-xl border border-space-700 bg-space-850 px-3 text-ink-300 transition-all duration-200 hover:border-cyan-400/40 hover:bg-space-800 hover:text-cyan-300"
+        className="flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-space-700/80 bg-space-900 px-3 text-ink-200 outline-none transition-all duration-200 hover:border-cyan-400/40 hover:bg-space-800 hover:text-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-400/30"
       >
         <span className="flex min-w-0 items-center gap-2">
           <Languages size={17} className="shrink-0 text-cyan-300" />
@@ -110,51 +110,43 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
           }`}
         />
       </button>
+      
+      {open && (
+        <div
+          dir="ltr"
+          className="absolute left-0 top-full z-[70] mt-3 w-full min-w-[170px] overflow-hidden rounded-xl border border-space-700 bg-space-900 p-1.5 shadow-2xl shadow-black/30 animate-in fade-in slide-in-from-top-2 duration-200"
+        >
+          <div className="flex flex-col gap-1">
+            {LANGUAGE_OPTIONS.map(({ value, labels }) => {
+              const selected = language === value;
 
-      <div
-        dir="ltr"
-        className={`absolute left-0 z-[70] w-full min-w-[170px] overflow-hidden rounded-xl border border-space-700 bg-space-900 p-1.5 shadow-2xl shadow-black/30 transition-all duration-200 ease-out ${
-          menuPosition === "bottom"
-            ? "top-full mt-2 origin-top"
-            : "bottom-full mb-2 origin-bottom"
-        } ${
-          open
-            ? "visible translate-y-0 scale-100 opacity-100"
-            : menuPosition === "bottom"
-              ? "invisible -translate-y-2 scale-[0.97] opacity-0 pointer-events-none"
-              : "invisible translate-y-2 scale-[0.97] opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="flex flex-col gap-1">
-          {LANGUAGE_OPTIONS.map(({ value, labels }) => {
-            const selected = language === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => handleLanguageChange(value)}
+                  lang={value}
+                  dir="ltr"
+                  className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150 ${
+                    selected
+                      ? "bg-cyan-400/10 font-medium text-cyan-300"
+                      : "text-ink-300 hover:bg-space-800 hover:text-ink-100"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <LanguageFlag language={value} />
+                    <span>{labels[language] ?? labels.en}</span>
+                  </span>
 
-            return (
-              <button
-                key={value}
-                type="button"
-                onClick={() => handleLanguageChange(value)}
-                lang={value}
-                dir="ltr"
-                className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150 ${
-                  selected
-                    ? "bg-cyan-400/10 font-medium text-cyan-300"
-                    : "text-ink-300 hover:bg-space-800 hover:text-ink-100"
-                }`}
-              >
-                <span className="flex items-center gap-2">
-                  <LanguageFlag language={value} />
-                  <span>{labels[language] ?? labels.en}</span>
-                </span>
-
-                {selected && (
-                  <Check size={15} className="shrink-0 text-cyan-300" />
-                )}
-              </button>
-            );
-          })}
+                  {selected && (
+                    <Check size={15} className="shrink-0 text-cyan-300" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

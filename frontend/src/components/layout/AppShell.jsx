@@ -221,8 +221,11 @@ export default function AppShell() {
 
           {/* Navbar Actions */}
           <div className="ms-auto flex items-center gap-3">
-            <div className="hidden lg:block">
-              <LanguageSwitcher menuPosition="bottom" />
+            <div className="hidden w-[150px] lg:block">
+              <LanguageSwitcher
+                className="w-full"
+                menuPosition="bottom"
+              />
             </div>
             <button
               type="button"
