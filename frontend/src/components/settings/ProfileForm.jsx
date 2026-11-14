@@ -41,7 +41,7 @@ export default function ProfileForm({ onClose }) {
 }
 
   return (
-    <SettingsSection title={t("Account")} description={t("Your name, mission details, and sign-in email.")}>
+    <SettingsSection >
       <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor="settings-email" className={LABEL_CLASS}>{t("Email")}</label>

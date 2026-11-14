@@ -40,11 +40,8 @@ export default function UserSettingsModal({ onClose }) {
 
             <div>
               <h2 id="user-settings-title" className="text-lg font-semibold text-ink-100">
-                {t("User Settings")}
+                {t("Astronant Settings")}
               </h2>
-              <p className="mt-1 text-xs text-ink-400">
-                {t("Manage your personal information")}
-              </p>
             </div>
           </div>
 
