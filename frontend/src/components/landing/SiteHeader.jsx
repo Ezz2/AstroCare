@@ -39,10 +39,6 @@ export default function SiteHeader({ staticPosition = false }) {
 
       <div className="cosmos-header-actions">
         <LanguageSwitcher className="cosmos-language-switcher" />
-
-        <Link to="/login" className="cosmos-dashboard-link">
-          {t('Dashboard')} <ArrowRight size={14} />
-        </Link>
       </div>
 
       <button
