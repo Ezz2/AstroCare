@@ -219,7 +219,28 @@
 
 .cosmos-dashboard-link:hover { transform: translateY(-1px); border-color: #9ef3ff; background: rgba(24, 116, 145, 0.28); }
 .cosmos-header-actions { display: flex; align-items: center; justify-self: end; gap: 10px; }
-.cosmos-language-switcher { height: 37px; border-color: rgba(117, 219, 239, 0.35); border-radius: 5px; background: rgba(10, 40, 58, 0.43); padding-inline: 9px; color: #d3f7ff; }
+.cosmos-language-switcher {
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: #d3f7ff;
+}
+
+.cosmos-language-switcher > button {
+  height: 37px;
+  border-color: rgba(117, 219, 239, 0.35);
+  border-radius: 7px;
+  background: rgba(10, 40, 58, 0.65);
+  padding-inline: 9px;
+  color: #d3f7ff;
+}
+
+.cosmos-language-switcher > button:hover {
+  border-color: rgba(125, 232, 244, 0.7);
+  background: rgba(24, 97, 128, 0.3);
+}
 .cosmos-language-switcher select { max-width: 76px; font-size: 10px; }
 .cosmos-menu-toggle,
 .cosmos-mobile-nav { display: none; }
@@ -438,33 +459,18 @@
   to { opacity: 0.68; transform: translate3d(calc(var(--pointer-x) * -11px), calc(var(--pointer-y) * -9px), 0) scale(1.035); }
 }
 
-@keyframes cosmos-float {
-  0%, 100% { margin-top: 0; }
-  50% { margin-top: -7px; }
-}
-
-@keyframes cosmos-copy-arrive {
-  from { opacity: 0; translate: 0 12px; }
-  to { opacity: 1; translate: 0 0; }
-}
-
-@keyframes cosmos-signal-arrive {
-  from { opacity: 0; translate: 0 9px; }
-  to { opacity: 1; translate: 0 0; }
-}
-
-@keyframes cosmos-signal-float {
-  0%, 100% { margin-top: 0; }
-  50% { margin-top: -5px; }
-}
+@keyframes cosmos-float { 0%, 100% { margin-top: 0; } 50% { margin-top: -7px; } }
+@keyframes cosmos-copy-arrive { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+@keyframes cosmos-signal-arrive { from { opacity: 0; translate: 0 9px; } to { opacity: 1; translate: 0 0; } }
+@keyframes cosmos-signal-float { 0%, 100% { margin-top: 0; } 50% { margin-top: -5px; } }
 
 @media (max-width: 900px) {
   .cosmos-header { grid-template-columns: 1fr auto; height: 70px; padding-inline: 24px; }
   .cosmos-nav { display: none; }
   .cosmos-header-actions { grid-column: 2; grid-row: 1; margin-right: 48px; }
-  .cosmos-menu-toggle { position: absolute; right: 24px; display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(175, 206, 231, 0.22); border-radius: 7px; background: rgba(8, 20, 36, 0.75); color: #e3f3ff; }
-  .cosmos-mobile-nav { position: absolute; top: calc(100% + 1px); right: 16px; display: grid; width: min(270px, calc(100vw - 32px)); gap: 2px; border: 1px solid rgba(155, 194, 221, 0.18); padding: 9px; background: rgba(5, 12, 24, 0.97); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.42); }
-  .cosmos-mobile-nav a { display: flex; align-items: center; justify-content: space-between; padding: 12px 10px; color: #c8d7e8; font-size: 11px; text-decoration: none; }
+  .cosmos-menu-toggle { position: absolute; right: 24px; display: flex; z-index: 2; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(175, 206, 231, 0.22); border-radius: 7px; background: rgba(8, 20, 36, 0.75); color: #e3f3ff; }
+  .cosmos-mobile-nav { position: absolute; top: calc(100% + 1px); right: 16px; display: grid; width: min(270px, calc(100vw - 32px)); gap: 2px; border: 1px solid rgba(155, 194, 221, 0.18); border-radius: 12px; padding: 9px; background: rgba(5, 12, 24, 0.97); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.42); transform-origin: top right; animation: cosmos-menu-arrive 280ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .cosmos-mobile-nav a { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 10px; padding: 0 12px; border-radius: 7px; color: #c8d7e8; font-size: 11px; line-height: 1; text-decoration: none; box-sizing: border-box; } .cosmos-mobile-nav a svg { width: 14px; height: 14px; flex: 0 0 14px; }
   .cosmos-mobile-nav a:hover { background: rgba(49, 122, 146, 0.13); color: #e6fbff; }
   .cosmos-intro { left: 6vw; width: min(460px, 53vw); }
   .cosmos-intro h1 { font-size: clamp(42px, 6vw, 58px); }
@@ -481,11 +487,8 @@
   .cosmos-header { height: 62px; padding-inline: 17px; }
   .cosmos-brand { gap: 8px; font-size: 10px; }
   .cosmos-brand-icon { width: 29px; height: 29px; }
-  .cosmos-dashboard-link { min-height: 33px; gap: 6px; padding-inline: 9px; font-size: 9px; }
-  .cosmos-language-switcher { height: 33px; gap: 5px; padding-inline: 7px; }
   .cosmos-language-switcher svg { width: 14px; height: 14px; }
   .cosmos-language-switcher select { max-width: 62px; font-size: 9px; }
-  .cosmos-menu-toggle { right: 16px; width: 33px; height: 33px; }
   .cosmos-intro { top: 19%; left: 6vw; width: 88vw; transform: none; }
   .cosmos-kicker { font-size: 8px; letter-spacing: 0.13em; }
   .cosmos-intro h1 { max-width: 410px; margin-top: 16px; font-size: clamp(38px, 10.2vw, 51px); line-height: 1.04; }
@@ -521,6 +524,12 @@
   .cosmos-context-panel h2 { font-size: 18px; }
   .cosmos-feature-list { grid-template-columns: 1fr; }
   .cosmos-context-panel { margin-top: 31px; }
+  .cosmos-header { height: 62px; padding-inline: 17px; }
+  .cosmos-header-actions { margin-right: 43px; }
+  .cosmos-language-switcher > button { height: 33px; padding-inline: 7px; }
+  .cosmos-language-switcher svg { width: 14px; height: 14px; }
+  .cosmos-menu-toggle { right: 16px; width: 33px; height: 33px; }
+  .cosmos-mobile-nav { right: 16px; width: min(280px, calc(100vw - 32px)); }
 }
 
 @media (max-height: 720px) and (min-width: 601px) {
@@ -553,4 +562,84 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.cosmos-mobile-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateY(-10px) scale(0.97);
+  transform-origin: top right;
+
+  transition:
+    opacity 300ms ease,
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 300ms ease;
+}
+
+.cosmos-mobile-nav.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  transform: translateY(0) scale(1);
+}
+
+.cosmos-menu-toggle {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  width: 38px;
+  height: 38px;
+  padding: 0;
+
+  border: 1px solid rgba(125, 232, 244, 0.22);
+  border-radius: 10px;
+  background: rgba(12, 32, 50, 0.65);
+  backdrop-filter: blur(12px);
+
+  cursor: pointer;
+  transition:
+    background 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+/* Hamburger icon lines */
+.cosmos-menu-toggle span {
+  display: block;
+  width: 17px;
+  height: 2px;
+  flex: 0 0 2px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: #dffaff;
+  transform-origin: center;
+  transition:
+    transform 350ms cubic-bezier(0.68, -0.2, 0.27, 1.2),
+    opacity 200ms ease;
+}
+
+.cosmos-menu-toggle span:nth-child(2) {
+  width: 17px;
+  align-self: center;
+}
+
+/* Hamburger to X animation */
+.cosmos-menu-toggle.is-open span:first-child {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.cosmos-menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.cosmos-menu-toggle.is-open span:last-child {
+  transform: translateY(-7px) rotate(-45deg);
 }
