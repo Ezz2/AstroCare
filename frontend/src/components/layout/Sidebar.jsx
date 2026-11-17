@@ -55,7 +55,7 @@ export default function Sidebar({
         </div>
       </div>
 
-        <nav className={`flex flex-col gap-1 ${isArabic ? "text-right" : "text-left"}`} dir={isArabic ? "rtl" : "ltr"} aria-label={t("Main navigation")}>
+        <nav className={`flex flex-col gap-1 ${ isArabic ? "text-right" : "text-left" }`} dir={isArabic ? "rtl" : "ltr"} aria-label={t("Main navigation")} >
         {NAV_ITEMS.map(({ to, label, icon: Icon, end, showCount }) => (
           <NavLink
             key={to}
@@ -70,7 +70,7 @@ export default function Sidebar({
               }`
             }>
             <Icon size={18} className="shrink-0" />
-            <span className="flex-1">{t(label)}</span>
+            <span className="flex-1 text-start">{t(label)}</span>
 
             {showCount && alertCount > 0 && (
               <span className="rounded-full bg-rose-400/15 px-2 py-0.5 text-[11px] font-semibold text-rose-400">

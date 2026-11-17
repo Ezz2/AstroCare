@@ -132,16 +132,18 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
                   type="button"
                   onClick={() => handleLanguageChange(value)}
                   lang={value}
-                  dir="ltr"
+                  dir={language === "ar" ? "rtl" : "ltr"}
                   className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150 ${
                     selected
                       ? "bg-cyan-400/10 font-medium text-cyan-300"
                       : "text-ink-300 hover:bg-space-800 hover:text-ink-100"
                   }`}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex min-w-0 items-center gap-2">
                     <LanguageFlag language={value} />
-                    <span>{labels[language] ?? labels.en}</span>
+                    <span className="whitespace-nowrap">
+                      {labels[language] ?? labels.en}
+                    </span>
                   </span>
 
                   {selected && (

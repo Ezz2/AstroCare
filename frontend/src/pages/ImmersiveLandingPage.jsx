@@ -104,7 +104,7 @@ export default function ImmersiveLandingPage() {
         <span>{t("ASTRONAUT IN LOW EARTH ORBIT")}</span>
         <span className="cosmos-photo-credit">NASA / Mike Fossum</span>
       </div>
-      <div className="cosmos-coordinate" aria-hidden="true">28° 32′ N&nbsp; / &nbsp;LOW EARTH ORBIT</div>
+      <div className="cosmos-coordinate" aria-hidden="true">28° 32′ N&nbsp; / &nbsp;{t("LOW EARTH ORBIT")}</div>
     </main>
   )
 }

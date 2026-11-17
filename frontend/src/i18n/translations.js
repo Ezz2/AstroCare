@@ -699,6 +699,201 @@ const translations = {
       "يسجل هذا المدة، وليس السعرات الحرارية المحروقة أو شدة التمرين.",
     "Do not estimate calories from this value. Follow the approved activity-tracking procedure when available.":
       "لا تقدّر السعرات الحرارية اعتمادًا على هذه القيمة. اتبع إجراء تتبع النشاط المعتمد عند توفره.",
+    Recovery: "التعافي",
+    "Mood and context": "الحالة المزاجية والسياق",
+    "Acknowledge urgent health alert": "الإقرار بالتنبيه الصحي العاجل",
+    "Radiation effect": "تأثير الإشعاع",
+    "0.5–1 mSv per mission day · 600 mSv lifetime maximum":
+      "0.5–1 ملي سيفرت لكل يوم من أيام المهمة · 600 ملي سيفرت كحد أقصى مدى الحياة",
+    "{count} stored. These are simulated values, not medical records.":
+      "تم حفظ {count}. هذه قيم محاكاة وليست سجلات طبية.",
+    "Astronaut Settings": "إعدادات رائد الفضاء",
+    "Invalid {measurement} measurement": "قياس {measurement} غير صالح",
+    "{measurement} was recorded as {value} {unit}. This value cannot be interpreted reliably as a health measurement.":
+      "سُجل {measurement} بقيمة {value} {unit}. لا يمكن تفسير هذه القيمة على نحو موثوق كقياس صحي.",
+    "This is most likely a sensor, unit, technique, or entry problem—not a health finding.":
+      "يرجح أن تكون المشكلة في المستشعر أو الوحدة أو طريقة القياس أو الإدخال، لا أن تكون مؤشرًا صحيًا.",
+    "Check the sensor, measurement method, unit, and entered value. Take a new valid measurement before using this result for health decisions.":
+      "تحقق من المستشعر وطريقة القياس والوحدة والقيمة المُدخلة. أجرِ قياسًا جديدًا وصحيحًا قبل الاستناد إلى هذه النتيجة في القرارات الصحية.",
+    "Latest reading: {value} {unit}. Typical range: {min} to {max} {unit}{baseline}.":
+      "أحدث قراءة: {value} {unit}. النطاق المعتاد: من {min} إلى {max} {unit}{baseline}.",
+    "; your recent average was {average} {unit}":
+      "؛ وكان متوسطك الأخير {average} {unit}",
+    "Incomplete blood pressure measurement": "قياس ضغط الدم غير مكتمل",
+    "Only one blood-pressure number was recorded. A blood-pressure result needs both systolic and diastolic values from the same reading.":
+      "سُجل رقم واحد فقط لضغط الدم. تتطلب نتيجة ضغط الدم تسجيل قيمتي الضغط الانقباضي والانبساطي من القراءة نفسها.",
+    "The top and bottom numbers describe different parts of the same pressure measurement and should be interpreted together.":
+      "يمثل الرقمان العلوي والسفلي جزأين مختلفين من قياس ضغط الدم نفسه، وينبغي تفسيرهما معًا.",
+    "Without both numbers, AstroCare cannot assess the blood-pressure result reliably.":
+      "من دون الرقمين، لا يستطيع AstroCare تقييم نتيجة ضغط الدم على نحو موثوق.",
+    "Check the cuff and measurement technique, then record a new systolic and diastolic pair from the same reading.":
+      "تحقق من الكُفّة وطريقة القياس، ثم سجل قيمتين جديدتين للضغط الانقباضي والانبساطي من القراءة نفسها.",
+    "Invalid blood pressure measurement": "قياس ضغط الدم غير صالح",
+    "Blood pressure needs both numbers from the same reading. One or both recorded values cannot be interpreted reliably.":
+      "يتطلب ضغط الدم تسجيل الرقمين من القراءة نفسها. لا يمكن تفسير إحدى القيمتين المسجلتين أو كلتيهما على نحو موثوق.",
+    "Systolic is the top number and diastolic is the bottom number. Check both values before using this result.":
+      "الضغط الانقباضي هو الرقم العلوي والانبساطي هو الرقم السفلي. تحقق من القيمتين قبل استخدام هذه النتيجة.",
+    "A cuff, posture, movement, or entry error can affect either number.":
+      "قد تؤثر الكُفّة أو وضعية الجسم أو الحركة أو خطأ الإدخال في أي من الرقمين.",
+    "Blood pressure is outside its typical range": "ضغط الدم خارج نطاقه المعتاد",
+    "Latest pair: {systolic}/{diastolic} mmHg. Typical systolic range: {systolicMin} to {systolicMax}; typical diastolic range: {diastolicMin} to {diastolicMax}.":
+      "أحدث قراءتين: {systolic}/{diastolic} mmHg. النطاق المعتاد للضغط الانقباضي: من {systolicMin} إلى {systolicMax}؛ وللانبساطي: من {diastolicMin} إلى {diastolicMax}.",
+    "The top number shows pressure when the heart pumps; the bottom number shows pressure between beats. This result is outside one or both expected ranges.":
+      "يوضح الرقم العلوي الضغط عند ضخ القلب للدم، بينما يوضح السفلي الضغط بين النبضات. هذه النتيجة خارج أحد النطاقين المتوقعين أو كليهما.",
+    "Blood pressure describes pressure in your blood vessels. One result can be affected by posture, movement, stress, caffeine, or cuff fit.":
+      "يعبر ضغط الدم عن الضغط داخل الأوعية الدموية. وقد تتأثر قراءة واحدة بوضعية الجسم أو الحركة أو التوتر أو الكافيين أو ملاءمة الكُفّة.",
+    "Rest quietly, check the cuff and posture, and record a new pair from the same reading. Contact the onboard medical officer if the pattern persists or you feel unwell.":
+      "استرح بهدوء، وتحقق من الكُفّة ووضعية الجسم، ثم سجل زوجًا جديدًا من القيم في القراءة نفسها. تواصل مع المسؤول الطبي على متن المركبة إذا استمر هذا النمط أو شعرت بتوعك.",
+    "Check an invalid {measurement} result": "تحقق من نتيجة {measurement} غير الصالحة",
+    "The latest {measurement} entry was {value} {unit}, which cannot be interpreted reliably.":
+      "كانت أحدث قيمة مُدخلة لـ{measurement} هي {value} {unit}، ولا يمكن تفسيرها على نحو موثوق.",
+    "This looks like a sensor, unit, technique, or entry problem—not a health finding. AstroCare will not use it to judge your health pattern.":
+      "يبدو أن المشكلة في المستشعر أو الوحدة أو طريقة القياس أو الإدخال، وليست مؤشرًا صحيًا. لن يستخدم AstroCare هذه القيمة لتقييم نمطك الصحي.",
+    "More health data is needed": "نحتاج إلى مزيد من البيانات الصحية",
+    "AstroCare has too little recent data to assess {measurements}.":
+      "لا تتوفر لدى AstroCare بيانات حديثة كافية لتقييم {measurements}.",
+    "AstroCare does not have enough recent health readings to assess a pattern.":
+      "لا تتوفر لدى AstroCare قراءات صحية حديثة كافية لتقييم أي نمط.",
+    "A missing measurement is not the same as a normal result, so a reliable trend or comparison cannot be made yet.":
+      "عدم توفر قياس لا يعني أن النتيجة طبيعية؛ لذلك لا يمكن حتى الآن تحديد اتجاه أو إجراء مقارنة موثوقة.",
+    "Record the missing measurements and complete your next daily check-in. Until then, treat this assessment as incomplete rather than as an all-clear.":
+      "سجل القياسات الناقصة وأكمل متابعتك اليومية التالية. وحتى ذلك الحين، اعتبر هذا التقييم غير مكتمل لا تأكيدًا على سلامة النتائج.",
+    "and {count} difficult self-reported moods": "و{count} حالات مزاجية صعبة أبلغت عنها بنفسك",
+    "The short-sleep entries and self-reported check-ins identify a repeated recovery concern, but they do not establish that one caused the other.":
+      "تشير سجلات النوم القصير والمتابعات الذاتية إلى مشكلة متكررة في التعافي، لكنها لا تثبت أن أحدهما سبب الآخر.",
+    "Protect your next sleep window, reduce avoidable light or task interruptions before bed, and record the next sleep duration. Contact the onboard medical officer if the pattern continues or you feel unable to carry out mission tasks safely.":
+      "حافظ على فترة نومك التالية، وقلل التعرض غير الضروري للضوء أو مقاطعات المهام قبل النوم، وسجل مدة نومك التالية. تواصل مع المسؤول الطبي على متن المركبة إذا استمر هذا النمط أو شعرت بأنك غير قادر على أداء مهام المهمة بأمان.",
+    "{measurement} was outside its expected range on {count} recent readings; the latest was {value} {unit}.":
+      "كانت قراءة {measurement} خارج نطاقها المتوقع في {count} من القراءات الأخيرة؛ وبلغت أحدث قراءة {value} {unit}.",
+    "This repeated pattern differs from your recent personal average of {average} {unit}. It is more informative than a single result, but it does not establish a cause or diagnosis.":
+      "يختلف هذا النمط المتكرر عن متوسطك الشخصي الأخير البالغ {average} {unit}. وهو أكثر دلالة من نتيجة واحدة، لكنه لا يحدد سببًا أو تشخيصًا.",
+    "A repeated pattern is more informative than a single result, but it does not establish a cause or diagnosis.":
+      "النمط المتكرر أكثر دلالة من نتيجة واحدة، لكنه لا يحدد سببًا أو تشخيصًا.",
+    "Verify an unusual blood pressure reading": "تحقق من قراءة ضغط الدم غير المعتادة",
+    "Your latest blood pressure pair was {systolic}/{diastolic} mmHg. One or both values are outside the expected range.":
+      "كانت أحدث قراءتين لضغط الدم {systolic}/{diastolic} mmHg. تقع إحدى القيمتين أو كلتاهما خارج النطاق المتوقع.",
+    "The top number is pressure when the heart pumps and the bottom number is pressure between beats. One result can be affected by posture, movement, stress, caffeine, or cuff fit.":
+      "يمثل الرقم العلوي الضغط عند ضخ القلب للدم، والسفلي الضغط بين النبضات. وقد تتأثر قراءة واحدة بوضعية الجسم أو الحركة أو التوتر أو الكافيين أو ملاءمة الكُفّة.",
+    "Verify an unusual {measurement} reading": "تحقق من قراءة {measurement} غير المعتادة",
+    "Your latest {measurement} was {value} {unit}, outside the expected range of {min} to {max} {unit}.":
+      "بلغت أحدث قراءة لـ{measurement} قيمة {value} {unit}، وهي خارج النطاق المتوقع من {min} إلى {max} {unit}.",
+    "This is one unusual result, and it differs from your recent personal average of {average} {unit}. One reading alone cannot show whether a lasting change is present.":
+      "هذه نتيجة واحدة غير معتادة، وتختلف عن متوسطك الشخصي الأخير البالغ {average} {unit}. لا تكفي قراءة واحدة لمعرفة ما إذا كان هناك تغير مستمر.",
+    "This is one unusual result. One reading alone cannot show whether a lasting change is present.":
+      "هذه نتيجة واحدة غير معتادة. لا تكفي قراءة واحدة لمعرفة ما إذا كان هناك تغير مستمر.",
+    "Recent readings for {measurements} are moving closer to their expected ranges compared with the previous period.":
+      "تقترب القراءات الأخيرة لـ{measurements} من نطاقاتها المتوقعة مقارنة بالفترة السابقة.",
+    "The recent averages are closer to the expected ranges than the preceding period. This is a positive change, not proof of a medical cause.":
+      "أصبحت المتوسطات الأخيرة أقرب إلى النطاقات المتوقعة مقارنة بالفترة السابقة. وهذا تغير إيجابي، لكنه لا يثبت سببًا طبيًا.",
+    "Keep the routines and monitoring schedule that were in place during the improvement, and continue recording readings so the pattern can be confirmed.":
+      "حافظ على الروتين وجدول المراقبة اللذين اتبعتهما خلال فترة التحسن، وواصل تسجيل القراءات لتأكيد هذا النمط.",
+    "Continue your regular measurements and daily check-in. If a reading changes or a new symptom appears, record it with the time and context and contact the onboard medical officer when appropriate.":
+      "واصل قياساتك المعتادة ومتابعتك اليومية. إذا تغيرت قراءة أو ظهر عرض جديد، فسجله مع الوقت والسياق وتواصل مع المسؤول الطبي على متن المركبة عند الحاجة.",
+    "{count} active alerts, sorted by severity. Alerts are guidance to review, not a diagnosis.":
+      "{count} من التنبيهات النشطة مرتبة حسب درجة الخطورة. التنبيهات إرشادات للمراجعة وليست تشخيصًا.",
+    "What it means": "ما الذي تعنيه",
+    "Why it matters": "لماذا يهم ذلك",
+    "What to do": "ما ينبغي فعله",
+    "Learn about this measurement": "تعرّف على هذا القياس",
+    "Demo Account": "حساب تجريبي",
+    "You can use the following credentials to explore AstroCare:":
+      "يمكنك استخدام بيانات الدخول التالية لاستكشاف AstroCare:",
+    "Demo email": "البريد الإلكتروني التجريبي",
+    "Demo password": "كلمة المرور التجريبية",
+    "Your next daily check-in will be available after the countdown.":
+      "ستتاح لك المتابعة اليومية التالية بعد انتهاء العد التنازلي.",
+    "Today's check-in is complete.": "اكتملت متابعة اليوم.",
+    "Your next Daily Check-in will be available in {time}.":
+      "ستتاح لك المتابعة اليومية التالية خلال {time}.",
+    "LOW EARTH ORBIT": "مدار أرضي منخفض",
+    "AstroCare | Astronaut Health Monitoring Prototype":
+      "AstroCare | نموذج أولي لمراقبة صحة رواد الفضاء",
+    "AstroCare is an astronaut health monitoring prototype by AstroByteX for the NASA Space Apps Challenge. Explore health measurements, trends, alerts, reports, and a 3D body-system map.":
+      "AstroCare نموذج أولي لمراقبة صحة رواد الفضاء، طوره AstroByteX لتحدي NASA Space Apps. استكشف القياسات الصحية والاتجاهات والتنبيهات والتقارير وخريطة ثلاثية الأبعاد لأجهزة الجسم.",
+    "Heart rate is how many times your heart beats in one minute.":
+      "معدل ضربات القلب هو عدد مرات نبض قلبك في الدقيقة الواحدة.",
+    "bpm means beats per minute.": "bpm تعني عدد النبضات في الدقيقة.",
+    "It is measured by a heart monitor or by counting your pulse.":
+      "يُقاس باستخدام جهاز مراقبة القلب أو بعدّ نبضك.",
+    "Recent activity, stress, caffeine, illness, and movement can change it.":
+      "قد يؤثر النشاط البدني مؤخرًا والتوتر والكافيين والمرض والحركة في معدل ضربات القلب.",
+    "It helps show how your body is responding at rest or during activity.":
+      "يساعد على توضيح استجابة جسمك أثناء الراحة أو النشاط.",
+    "A change can have many causes. A single reading does not identify a diagnosis.":
+      "قد ينتج التغير عن أسباب عديدة. ولا تكفي قراءة واحدة لتحديد تشخيص.",
+    "Blood oxygen shows the percentage of oxygen carried in your blood.":
+      "يوضح أكسجين الدم نسبة الأكسجين المحمول في دمك.",
+    "% means the share of blood oxygen-carrying sites that are filled.":
+      "% تعني نسبة مواقع حمل الأكسجين في الدم المشغولة به.",
+    "A pulse oximeter usually estimates it with light through a fingertip.":
+      "يقدّر مقياس التأكسج النبضي هذه النسبة عادةً باستخدام الضوء عبر طرف الإصبع.",
+    "Movement, cold fingers, poor contact, circulation, nail coverings, and skin factors can affect it.":
+      "قد تؤثر الحركة وبرودة الأصابع وضعف تلامس المستشعر والدورة الدموية وطلاء الأظافر وعوامل الجلد في القراءة.",
+    "Your organs need oxygen to work normally.":
+      "تحتاج أعضاؤك إلى الأكسجين لتعمل بصورة طبيعية.",
+    "An unexpected result may be a sensor problem or a real change, so it should be checked.":
+      "قد تنتج القراءة غير المتوقعة عن مشكلة في المستشعر أو عن تغير فعلي، لذا ينبغي التحقق منها.",
+    "Systolic pressure is the top blood-pressure number, when the heart pumps.":
+      "الضغط الانقباضي هو الرقم العلوي في قياس ضغط الدم، ويُسجل عندما يضخ القلب الدم.",
+    "mmHg means millimetres of mercury, the pressure unit used by the monitor.":
+      "mmHg تعني مليمترًا من الزئبق، وهي وحدة الضغط التي يستخدمها الجهاز.",
+    "An arm cuff measures pressure while it briefly squeezes the arm.":
+      "تقيس كُفّة الذراع الضغط عبر إحكامها على الذراع لفترة وجيزة.",
+    "Posture, talking, movement, recent activity, stress, caffeine, and cuff fit can affect it.":
+      "قد تؤثر وضعية الجسم والتحدث والحركة والنشاط البدني مؤخرًا والتوتر والكافيين وملاءمة الكُفّة في القراءة.",
+    "Together with diastolic pressure, it shows the pressure in your blood vessels.":
+      "يوضح الضغط الانقباضي، مع الضغط الانبساطي، الضغط داخل الأوعية الدموية.",
+    "One unusual result may be affected by how the measurement was taken; repeated changes need review.":
+      "قد تتأثر النتيجة غير المعتادة بطريقة إجراء القياس؛ أما التغيرات المتكررة فتحتاج إلى مراجعة.",
+    "Diastolic pressure is the bottom blood-pressure number, when the heart relaxes between beats.":
+      "الضغط الانبساطي هو الرقم السفلي في قياس ضغط الدم، ويُسجل عندما يسترخي القلب بين النبضات.",
+    "Together with systolic pressure, it shows the pressure in your blood vessels.":
+      "يوضح الضغط الانبساطي، مع الضغط الانقباضي، الضغط داخل الأوعية الدموية.",
+    "Body temperature is a measure of how warm your body is.":
+      "درجة حرارة الجسم مقياس لمدى دفء جسمك.",
+    "°C means degrees Celsius.": "°C تعني درجات مئوية.",
+    "An approved thermometer measures temperature at a chosen body site.":
+      "يقيس مقياس الحرارة المعتمد درجة الحرارة في موضع محدد من الجسم.",
+    "Time of day, exercise, food or drink, environment, measurement site, and device technique can affect it.":
+      "قد يؤثر وقت اليوم والتمرين والطعام أو الشراب والبيئة وموضع القياس وطريقة استخدام الجهاز في القراءة.",
+    "It can help show that your body is changing, but it does not identify the cause by itself.":
+      "قد تساعد درجة الحرارة على رصد تغير في جسمك، لكنها لا تحدد السبب بمفردها.",
+    "An unusual result should be checked with the approved method and reviewed with the medical officer if it persists.":
+      "ينبغي التحقق من النتيجة غير المعتادة بالطريقة المعتمدة ومراجعتها مع المسؤول الطبي إذا استمرت.",
+    "Blood glucose is the amount of sugar in a blood sample.":
+      "جلوكوز الدم هو مقدار السكر الموجود في عينة الدم.",
+    "An approved meter or sensor measures a blood sample or fluid near the skin.":
+      "يقيس جهاز أو مستشعر معتمد عينة الدم أو السائل القريب من سطح الجلد.",
+    "Meal timing, activity, illness, stress, and medicines can affect it.":
+      "قد يؤثر توقيت الوجبات والنشاط والمرض والتوتر والأدوية في مستوى الجلوكوز.",
+    "Glucose is a main source of energy for your cells.":
+      "الجلوكوز مصدر رئيسي للطاقة لخلاياك.",
+    "The meaning depends on when it was measured, especially whether it was before or after a meal.":
+      "يعتمد تفسير النتيجة على وقت القياس، ولا سيما ما إذا كان قبل الوجبة أو بعدها.",
+    "Record whether the reading was before or after a meal, review recent activity or stress, and follow the approved monitoring plan. Do not treat this result as a fasting reading unless it was taken after the required fast.":
+      "سجل ما إذا كانت القراءة قبل الوجبة أو بعدها، وراجع النشاط البدني أو التوتر مؤخرًا، واتبع خطة المراقبة المعتمدة. لا تعتبرها قراءة صيام إلا إذا أُخذت بعد مدة الصيام المطلوبة.",
+    "Sleep duration is the total time you were actually asleep.":
+      "مدة النوم هي إجمالي الوقت الذي قضيته نائمًا بالفعل.",
+    "h means hours.": "h تعني ساعات.",
+    "It is estimated by an approved tracker or recorded from sleep and wake times.":
+      "تُقدّر باستخدام متتبع معتمد أو تُسجل استنادًا إلى وقتي النوم والاستيقاظ.",
+    "Interruptions, schedule changes, light, noise, and the difference between time in bed and time asleep can affect it.":
+      "قد تؤثر الانقطاعات وتغييرات الجدول والضوء والضوضاء والفرق بين وقت الاستلقاء ووقت النوم الفعلي في المدة.",
+    "Sleep supports attention, recovery, and safe mission work.":
+      "يدعم النوم الانتباه والتعافي وأداء مهام المهمة بأمان.",
+    "One unusual night is different from a repeated sleep pattern and does not show the cause by itself.":
+      "تختلف ليلة واحدة غير معتادة عن نمط نوم متكرر، ولا تكشف بمفردها عن السبب.",
+    "mg/dL means milligrams of glucose per decilitre of blood.":
+      "mg/dL تعني ملليغرامات الجلوكوز لكل ديسيلتر من الدم.",
+    "Sit quietly and relax for at least 5 minutes.":
+      "اجلس بهدوء واسترخِ لمدة لا تقل عن 5 دقائق.",
+    "Avoid measuring immediately after exercise, climbing, or another activity that can raise your heart rate.":
+      "تجنب القياس مباشرة بعد التمرين أو التسلق أو أي نشاط آخر قد يرفع معدل ضربات قلبك.",
+    "Use the approved heart-rate monitor or follow the mission medical protocol for a manual check.":
+      "استخدم جهاز مراقبة معدل ضربات القلب المعتمد أو اتبع البروتوكول الطبي للمهمة لإجراء قياس يدوي.",
+    "Blood oxygen (SpO₂)": "أكسجين الدم (SpO₂)",
+    "Stress level": "مستوى التوتر",
+    "Physical activity duration": "مدة النشاط البدني",
   },
   de: {
     "Select language": "Sprache auswählen",
@@ -1423,6 +1618,201 @@ const translations = {
       "Erfasst wird die Dauer, nicht der Kalorienverbrauch oder die Trainingsintensität.",
     "Do not estimate calories from this value. Follow the approved activity-tracking procedure when available.":
       "Leite aus diesem Wert keinen Kalorienverbrauch ab. Befolge, falls verfügbar, das zugelassene Verfahren zur Aktivitätserfassung.",
+    Recovery: "Erholung",
+    "Mood and context": "Stimmung und Kontext",
+    "Acknowledge urgent health alert": "Dringende Gesundheitswarnung bestätigen",
+    "Radiation effect": "Auswirkung der Strahlung",
+    "0.5–1 mSv per mission day · 600 mSv lifetime maximum":
+      "0,5–1 mSv pro Missionstag · 600 mSv lebenslanges Maximum",
+    "{count} stored. These are simulated values, not medical records.":
+      "{count} gespeichert. Dies sind simulierte Werte, keine medizinischen Aufzeichnungen.",
+    "Astronaut Settings": "Astronauteneinstellungen",
+    "Invalid {measurement} measurement": "Ungültige {measurement}-Messung",
+    "{measurement} was recorded as {value} {unit}. This value cannot be interpreted reliably as a health measurement.":
+      "{measurement} wurde mit {value} {unit} erfasst. Dieser Wert lässt sich nicht zuverlässig als Gesundheitsmesswert interpretieren.",
+    "This is most likely a sensor, unit, technique, or entry problem—not a health finding.":
+      "Wahrscheinlich liegt ein Problem mit dem Sensor, der Einheit, der Messtechnik oder der Eingabe vor – kein gesundheitlicher Befund.",
+    "Check the sensor, measurement method, unit, and entered value. Take a new valid measurement before using this result for health decisions.":
+      "Prüfe Sensor, Messmethode, Einheit und Eingabewert. Nimm eine neue, gültige Messung vor, bevor du diese Ergebnisse für Gesundheitsentscheidungen verwendest.",
+    "Latest reading: {value} {unit}. Typical range: {min} to {max} {unit}{baseline}.":
+      "Letzter Messwert: {value} {unit}. Üblicher Bereich: {min} bis {max} {unit}{baseline}.",
+    "; your recent average was {average} {unit}":
+      "; dein jüngster Durchschnitt lag bei {average} {unit}",
+    "Incomplete blood pressure measurement": "Unvollständige Blutdruckmessung",
+    "Only one blood-pressure number was recorded. A blood-pressure result needs both systolic and diastolic values from the same reading.":
+      "Es wurde nur ein Blutdruckwert erfasst. Für ein Blutdruckergebnis sind systolischer und diastolischer Wert derselben Messung erforderlich.",
+    "The top and bottom numbers describe different parts of the same pressure measurement and should be interpreted together.":
+      "Der obere und der untere Wert beschreiben unterschiedliche Teile derselben Blutdruckmessung und sollten gemeinsam ausgewertet werden.",
+    "Without both numbers, AstroCare cannot assess the blood-pressure result reliably.":
+      "Ohne beide Werte kann AstroCare das Blutdruckergebnis nicht zuverlässig beurteilen.",
+    "Check the cuff and measurement technique, then record a new systolic and diastolic pair from the same reading.":
+      "Prüfe die Manschette und die Messtechnik und erfasse anschließend ein neues systolisch-diastolisches Wertepaar aus derselben Messung.",
+    "Invalid blood pressure measurement": "Ungültige Blutdruckmessung",
+    "Blood pressure needs both numbers from the same reading. One or both recorded values cannot be interpreted reliably.":
+      "Für den Blutdruck werden beide Werte derselben Messung benötigt. Einer oder beide erfassten Werte lassen sich nicht zuverlässig interpretieren.",
+    "Systolic is the top number and diastolic is the bottom number. Check both values before using this result.":
+      "Der obere Wert ist der systolische, der untere der diastolische Wert. Prüfe beide Werte, bevor du dieses Ergebnis verwendest.",
+    "A cuff, posture, movement, or entry error can affect either number.":
+      "Manschette, Körperhaltung, Bewegung oder ein Eingabefehler können beide Werte beeinflussen.",
+    "Blood pressure is outside its typical range": "Blutdruck außerhalb des üblichen Bereichs",
+    "Latest pair: {systolic}/{diastolic} mmHg. Typical systolic range: {systolicMin} to {systolicMax}; typical diastolic range: {diastolicMin} to {diastolicMax}.":
+      "Letztes Wertepaar: {systolic}/{diastolic} mmHg. Üblicher systolischer Bereich: {systolicMin} bis {systolicMax}; üblicher diastolischer Bereich: {diastolicMin} bis {diastolicMax}.",
+    "The top number shows pressure when the heart pumps; the bottom number shows pressure between beats. This result is outside one or both expected ranges.":
+      "Der obere Wert zeigt den Druck beim Pumpen des Herzens, der untere den Druck zwischen den Herzschlägen. Dieses Ergebnis liegt außerhalb eines oder beider erwarteter Bereiche.",
+    "Blood pressure describes pressure in your blood vessels. One result can be affected by posture, movement, stress, caffeine, or cuff fit.":
+      "Der Blutdruck beschreibt den Druck in deinen Blutgefäßen. Ein einzelner Wert kann durch Körperhaltung, Bewegung, Stress, Koffein oder den Sitz der Manschette beeinflusst werden.",
+    "Rest quietly, check the cuff and posture, and record a new pair from the same reading. Contact the onboard medical officer if the pattern persists or you feel unwell.":
+      "Ruhe dich entspannt aus, prüfe Manschette und Körperhaltung und erfasse ein neues Wertepaar derselben Messung. Wende dich an die medizinische Einsatzleitung an Bord, wenn das Muster anhält oder du dich unwohl fühlst.",
+    "Check an invalid {measurement} result": "Ungültiges Ergebnis für {measurement} prüfen",
+    "The latest {measurement} entry was {value} {unit}, which cannot be interpreted reliably.":
+      "Der letzte Eintrag für {measurement} betrug {value} {unit} und lässt sich nicht zuverlässig interpretieren.",
+    "This looks like a sensor, unit, technique, or entry problem—not a health finding. AstroCare will not use it to judge your health pattern.":
+      "Dies deutet auf ein Problem mit Sensor, Einheit, Messtechnik oder Eingabe hin – nicht auf einen gesundheitlichen Befund. AstroCare verwendet den Wert nicht zur Beurteilung deines Gesundheitsverlaufs.",
+    "More health data is needed": "Weitere Gesundheitsdaten erforderlich",
+    "AstroCare has too little recent data to assess {measurements}.":
+      "AstroCare liegen zu wenige aktuelle Daten vor, um {measurements} zu beurteilen.",
+    "AstroCare does not have enough recent health readings to assess a pattern.":
+      "AstroCare liegen nicht genügend aktuelle Gesundheitsmesswerte vor, um einen Verlauf zu beurteilen.",
+    "A missing measurement is not the same as a normal result, so a reliable trend or comparison cannot be made yet.":
+      "Ein fehlender Messwert ist nicht gleichbedeutend mit einem normalen Ergebnis. Daher ist derzeit kein zuverlässiger Verlauf und kein Vergleich möglich.",
+    "Record the missing measurements and complete your next daily check-in. Until then, treat this assessment as incomplete rather than as an all-clear.":
+      "Erfasse die fehlenden Messwerte und schließe deinen nächsten täglichen Check-in ab. Betrachte diese Einschätzung bis dahin als unvollständig und nicht als Entwarnung.",
+    "and {count} difficult self-reported moods": "und {count} selbstberichtete schwierige Stimmungen",
+    "The short-sleep entries and self-reported check-ins identify a repeated recovery concern, but they do not establish that one caused the other.":
+      "Die Einträge zu kurzem Schlaf und die selbstberichteten Check-ins weisen auf wiederkehrenden Erholungsbedarf hin, belegen jedoch nicht, dass eines das andere verursacht hat.",
+    "Protect your next sleep window, reduce avoidable light or task interruptions before bed, and record the next sleep duration. Contact the onboard medical officer if the pattern continues or you feel unable to carry out mission tasks safely.":
+      "Schütze dein nächstes Schlaffenster, reduziere vermeidbares Licht und Aufgabenunterbrechungen vor dem Schlafengehen und erfasse die nächste Schlafdauer. Wende dich an die medizinische Einsatzleitung an Bord, wenn das Muster anhält oder du dich nicht in der Lage fühlst, Missionsaufgaben sicher auszuführen.",
+    "{measurement} was outside its expected range on {count} recent readings; the latest was {value} {unit}.":
+      "{measurement} lag bei {count} der letzten Messungen außerhalb des erwarteten Bereichs; der letzte Wert betrug {value} {unit}.",
+    "This repeated pattern differs from your recent personal average of {average} {unit}. It is more informative than a single result, but it does not establish a cause or diagnosis.":
+      "Dieses wiederkehrende Muster weicht von deinem jüngsten persönlichen Durchschnitt von {average} {unit} ab. Es ist aussagekräftiger als ein Einzelwert, belegt aber weder eine Ursache noch eine Diagnose.",
+    "A repeated pattern is more informative than a single result, but it does not establish a cause or diagnosis.":
+      "Ein wiederkehrendes Muster ist aussagekräftiger als ein Einzelwert, belegt aber weder eine Ursache noch eine Diagnose.",
+    "Verify an unusual blood pressure reading": "Ungewöhnlichen Blutdruckmesswert überprüfen",
+    "Your latest blood pressure pair was {systolic}/{diastolic} mmHg. One or both values are outside the expected range.":
+      "Dein letztes Blutdruckwertepaar betrug {systolic}/{diastolic} mmHg. Einer oder beide Werte liegen außerhalb des erwarteten Bereichs.",
+    "The top number is pressure when the heart pumps and the bottom number is pressure between beats. One result can be affected by posture, movement, stress, caffeine, or cuff fit.":
+      "Der obere Wert bezeichnet den Druck beim Pumpen des Herzens, der untere den Druck zwischen den Herzschlägen. Ein einzelner Wert kann durch Körperhaltung, Bewegung, Stress, Koffein oder den Sitz der Manschette beeinflusst werden.",
+    "Verify an unusual {measurement} reading": "Ungewöhnlichen {measurement}-Messwert überprüfen",
+    "Your latest {measurement} was {value} {unit}, outside the expected range of {min} to {max} {unit}.":
+      "Dein letzter {measurement}-Messwert betrug {value} {unit} und lag außerhalb des erwarteten Bereichs von {min} bis {max} {unit}.",
+    "This is one unusual result, and it differs from your recent personal average of {average} {unit}. One reading alone cannot show whether a lasting change is present.":
+      "Dies ist ein ungewöhnlicher Einzelwert und weicht von deinem jüngsten persönlichen Durchschnitt von {average} {unit} ab. Ein einzelner Messwert zeigt nicht, ob eine anhaltende Veränderung vorliegt.",
+    "This is one unusual result. One reading alone cannot show whether a lasting change is present.":
+      "Dies ist ein ungewöhnlicher Einzelwert. Ein einzelner Messwert zeigt nicht, ob eine anhaltende Veränderung vorliegt.",
+    "Recent readings for {measurements} are moving closer to their expected ranges compared with the previous period.":
+      "Die letzten Messwerte für {measurements} nähern sich im Vergleich zum vorherigen Zeitraum ihren erwarteten Bereichen.",
+    "The recent averages are closer to the expected ranges than the preceding period. This is a positive change, not proof of a medical cause.":
+      "Die jüngsten Durchschnittswerte liegen näher an den erwarteten Bereichen als im vorherigen Zeitraum. Dies ist eine positive Veränderung, aber kein Beleg für eine medizinische Ursache.",
+    "Keep the routines and monitoring schedule that were in place during the improvement, and continue recording readings so the pattern can be confirmed.":
+      "Behalte die Routinen und den Überwachungsplan bei, die während der Verbesserung galten, und erfasse weiterhin Messwerte, damit sich der Verlauf bestätigen lässt.",
+    "Continue your regular measurements and daily check-in. If a reading changes or a new symptom appears, record it with the time and context and contact the onboard medical officer when appropriate.":
+      "Führe deine regelmäßigen Messungen und täglichen Check-ins fort. Wenn sich ein Messwert ändert oder ein neues Symptom auftritt, erfasse es mit Zeit und Kontext und wende dich bei Bedarf an die medizinische Einsatzleitung an Bord.",
+    "{count} active alerts, sorted by severity. Alerts are guidance to review, not a diagnosis.":
+      "{count} aktive Warnungen, nach Schweregrad sortiert. Warnungen sind Hinweise zur Überprüfung und keine Diagnose.",
+    "What it means": "Bedeutung",
+    "Why it matters": "Warum es wichtig ist",
+    "What to do": "Was zu tun ist",
+    "Learn about this measurement": "Mehr über diese Messung erfahren",
+    "Demo Account": "Demokonto",
+    "You can use the following credentials to explore AstroCare:":
+      "Mit den folgenden Zugangsdaten kannst du AstroCare erkunden:",
+    "Demo email": "Demo-E-Mail",
+    "Demo password": "Demo-Passwort",
+    "Your next daily check-in will be available after the countdown.":
+      "Dein nächster täglicher Check-in ist nach Ablauf des Countdowns verfügbar.",
+    "Today's check-in is complete.": "Der heutige Check-in ist abgeschlossen.",
+    "Your next Daily Check-in will be available in {time}.":
+      "Dein nächster täglicher Check-in ist in {time} verfügbar.",
+    "LOW EARTH ORBIT": "NIEDRIGER ERDUMLAUF",
+    "AstroCare | Astronaut Health Monitoring Prototype":
+      "AstroCare | Prototyp zur Gesundheitsüberwachung von Astronaut:innen",
+    "AstroCare is an astronaut health monitoring prototype by AstroByteX for the NASA Space Apps Challenge. Explore health measurements, trends, alerts, reports, and a 3D body-system map.":
+      "AstroCare ist ein von AstroByteX entwickelter Prototyp zur Gesundheitsüberwachung von Astronaut:innen für die NASA Space Apps Challenge. Entdecke Gesundheitsmesswerte, Verläufe, Warnungen, Berichte und eine 3D-Karte der Körpersysteme.",
+    "Heart rate is how many times your heart beats in one minute.":
+      "Die Herzfrequenz gibt an, wie oft dein Herz pro Minute schlägt.",
+    "bpm means beats per minute.": "bpm bedeutet Schläge pro Minute.",
+    "It is measured by a heart monitor or by counting your pulse.":
+      "Sie wird mit einem Herzmonitor oder durch Zählen deines Pulses gemessen.",
+    "Recent activity, stress, caffeine, illness, and movement can change it.":
+      "Aktuelle körperliche Aktivität, Stress, Koffein, Krankheit und Bewegung können sie verändern.",
+    "It helps show how your body is responding at rest or during activity.":
+      "Sie zeigt, wie dein Körper in Ruhe oder bei Aktivität reagiert.",
+    "A change can have many causes. A single reading does not identify a diagnosis.":
+      "Eine Veränderung kann viele Ursachen haben. Ein einzelner Messwert ermöglicht keine Diagnose.",
+    "Blood oxygen shows the percentage of oxygen carried in your blood.":
+      "Der Blutsauerstoffwert zeigt den prozentualen Anteil des Sauerstoffs in deinem Blut.",
+    "% means the share of blood oxygen-carrying sites that are filled.":
+      "% bezeichnet den Anteil der Sauerstoffbindungsstellen im Blut, die besetzt sind.",
+    "A pulse oximeter usually estimates it with light through a fingertip.":
+      "Ein Pulsoximeter schätzt den Wert meist mithilfe von Licht, das durch eine Fingerspitze geleitet wird.",
+    "Movement, cold fingers, poor contact, circulation, nail coverings, and skin factors can affect it.":
+      "Bewegung, kalte Finger, schlechter Sensorkontakt, Durchblutung, Nagellack und Hautfaktoren können den Wert beeinflussen.",
+    "Your organs need oxygen to work normally.":
+      "Deine Organe benötigen Sauerstoff, um normal zu funktionieren.",
+    "An unexpected result may be a sensor problem or a real change, so it should be checked.":
+      "Ein unerwarteter Wert kann auf ein Sensorproblem oder eine tatsächliche Veränderung zurückgehen und sollte deshalb überprüft werden.",
+    "Systolic pressure is the top blood-pressure number, when the heart pumps.":
+      "Der systolische Blutdruck ist der obere Blutdruckwert und wird gemessen, wenn das Herz Blut pumpt.",
+    "mmHg means millimetres of mercury, the pressure unit used by the monitor.":
+      "mmHg bedeutet Millimeter Quecksilbersäule, die vom Messgerät verwendete Druckeinheit.",
+    "An arm cuff measures pressure while it briefly squeezes the arm.":
+      "Eine Oberarmmanschette misst den Druck, während sie den Arm kurz zusammendrückt.",
+    "Posture, talking, movement, recent activity, stress, caffeine, and cuff fit can affect it.":
+      "Körperhaltung, Sprechen, Bewegung, aktuelle Aktivität, Stress, Koffein und der Sitz der Manschette können den Wert beeinflussen.",
+    "Together with diastolic pressure, it shows the pressure in your blood vessels.":
+      "Zusammen mit dem diastolischen Wert zeigt er den Druck in deinen Blutgefäßen.",
+    "One unusual result may be affected by how the measurement was taken; repeated changes need review.":
+      "Ein ungewöhnlicher Einzelwert kann durch die Messmethode beeinflusst sein; wiederholte Veränderungen sollten überprüft werden.",
+    "Diastolic pressure is the bottom blood-pressure number, when the heart relaxes between beats.":
+      "Der diastolische Blutdruck ist der untere Blutdruckwert und wird gemessen, wenn sich das Herz zwischen den Schlägen entspannt.",
+    "Together with systolic pressure, it shows the pressure in your blood vessels.":
+      "Zusammen mit dem systolischen Wert zeigt er den Druck in deinen Blutgefäßen.",
+    "Body temperature is a measure of how warm your body is.":
+      "Die Körpertemperatur gibt an, wie warm dein Körper ist.",
+    "°C means degrees Celsius.": "°C bedeutet Grad Celsius.",
+    "An approved thermometer measures temperature at a chosen body site.":
+      "Ein zugelassenes Thermometer misst die Temperatur an einer festgelegten Körperstelle.",
+    "Time of day, exercise, food or drink, environment, measurement site, and device technique can affect it.":
+      "Tageszeit, Bewegung, Essen oder Trinken, Umgebung, Messstelle und Anwendung des Geräts können sie beeinflussen.",
+    "It can help show that your body is changing, but it does not identify the cause by itself.":
+      "Sie kann auf eine Veränderung deines Körpers hinweisen, bestimmt aber nicht selbst deren Ursache.",
+    "An unusual result should be checked with the approved method and reviewed with the medical officer if it persists.":
+      "Ein ungewöhnlicher Wert sollte mit der zugelassenen Methode überprüft und bei anhaltender Abweichung mit der medizinischen Einsatzleitung besprochen werden.",
+    "Blood glucose is the amount of sugar in a blood sample.":
+      "Der Blutzuckerwert gibt die Zuckermenge in einer Blutprobe an.",
+    "An approved meter or sensor measures a blood sample or fluid near the skin.":
+      "Ein zugelassenes Messgerät oder ein Sensor misst eine Blutprobe oder Flüssigkeit nahe der Haut.",
+    "Meal timing, activity, illness, stress, and medicines can affect it.":
+      "Mahlzeiten, Aktivität, Krankheit, Stress und Medikamente können den Wert beeinflussen.",
+    "Glucose is a main source of energy for your cells.":
+      "Glukose ist eine wichtige Energiequelle für deine Zellen.",
+    "The meaning depends on when it was measured, especially whether it was before or after a meal.":
+      "Die Bedeutung hängt vom Messzeitpunkt ab, insbesondere davon, ob vor oder nach einer Mahlzeit gemessen wurde.",
+    "Record whether the reading was before or after a meal, review recent activity or stress, and follow the approved monitoring plan. Do not treat this result as a fasting reading unless it was taken after the required fast.":
+      "Notiere, ob die Messung vor oder nach einer Mahlzeit erfolgte, berücksichtige aktuelle Aktivität oder Stress und befolge den zugelassenen Überwachungsplan. Werte sie nur dann als Nüchternmessung, wenn sie nach der vorgeschriebenen Fastenzeit durchgeführt wurde.",
+    "Sleep duration is the total time you were actually asleep.":
+      "Die Schlafdauer bezeichnet die gesamte Zeit, in der du tatsächlich geschlafen hast.",
+    "h means hours.": "h bedeutet Stunden.",
+    "It is estimated by an approved tracker or recorded from sleep and wake times.":
+      "Sie wird mit einem zugelassenen Tracker geschätzt oder anhand der Ein- und Aufwachzeiten erfasst.",
+    "Interruptions, schedule changes, light, noise, and the difference between time in bed and time asleep can affect it.":
+      "Unterbrechungen, Änderungen des Zeitplans, Licht, Lärm und der Unterschied zwischen Bettzeit und tatsächlicher Schlafzeit können sie beeinflussen.",
+    "Sleep supports attention, recovery, and safe mission work.":
+      "Schlaf unterstützt Aufmerksamkeit, Erholung und die sichere Ausführung von Missionsaufgaben.",
+    "One unusual night is different from a repeated sleep pattern and does not show the cause by itself.":
+      "Eine ungewöhnliche Nacht ist nicht mit einem wiederkehrenden Schlafmuster gleichzusetzen und zeigt für sich genommen keine Ursache auf.",
+    "mg/dL means milligrams of glucose per decilitre of blood.":
+      "mg/dL bedeutet Milligramm Glukose pro Deziliter Blut.",
+    "Sit quietly and relax for at least 5 minutes.":
+      "Setz dich ruhig hin und entspanne dich mindestens 5 Minuten.",
+    "Avoid measuring immediately after exercise, climbing, or another activity that can raise your heart rate.":
+      "Miss nicht direkt nach dem Training, Klettern oder einer anderen Aktivität, die deine Herzfrequenz erhöhen kann.",
+    "Use the approved heart-rate monitor or follow the mission medical protocol for a manual check.":
+      "Verwende den zugelassenen Herzfrequenzmonitor oder befolge für eine manuelle Messung das medizinische Missionsprotokoll.",
+    "Blood oxygen (SpO₂)": "Blutsauerstoff (SpO₂)",
+    "Stress level": "Stressniveau",
+    "Physical activity duration": "Dauer der körperlichen Aktivität",
   },
 };
 

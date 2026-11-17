@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
+import useLanguage from "../i18n/useLanguage";
 
 export default function VoiceFormModal({ onClose }) {
+  const { t } = useLanguage();
   // The state of the visual form
   const [formData, setFormData] = useState({
     heart_rate: "",
@@ -58,29 +60,29 @@ export default function VoiceFormModal({ onClose }) {
 
   return (
     <div className="modal-popup">
-      <h2>Medical Voice Assistant</h2>
+      <h2>{t("Medical Voice Assistant")}</h2>
 
       {/* The Visual Form */}
       <div>
-        <label>Heart Rate: </label>
+        <label>{t("Heart Rate: ")}</label>
         <input type="text" value={formData.heart_rate} readOnly />
       </div>
       <div>
-        <label>Blood Pressure: </label>
+        <label>{t("Blood Pressure: ")}</label>
         <input type="text" value={formData.blood_pressure} readOnly />
       </div>
       <div>
-        <label>Blood Sugar: </label>
+        <label>{t("Blood Sugar: ")}</label>
         <input type="text" value={formData.blood_sugar} readOnly />
       </div>
 
       {/* Controls */}
       <button onClick={() => setIsListening(true)}>
-        {isListening ? "Listening..." : "Start Talking"}
+        {t(isListening ? "Listening..." : "Start Talking")}
       </button>
 
-      <button onClick={handleConfirm}>Confirm & Save</button>
-      <button onClick={onClose}>Cancel</button>
+      <button onClick={handleConfirm}>{t("Confirm & Save")}</button>
+      <button onClick={onClose}>{t("Cancel")}</button>
     </div>
   );
 }

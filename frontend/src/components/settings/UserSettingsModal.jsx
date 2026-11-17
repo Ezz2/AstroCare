@@ -40,7 +40,7 @@ export default function UserSettingsModal({ onClose }) {
 
             <div>
               <h2 id="user-settings-title" className="text-lg font-semibold text-ink-100">
-                {t("Astronant Settings")}
+                {t("Astronaut Settings")}
               </h2>
             </div>
           </div>

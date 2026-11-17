@@ -22,6 +22,17 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.title = translate(
+      language,
+      "AstroCare | Astronaut Health Monitoring Prototype",
+    );
+    const description = document.querySelector('meta[name="description"]');
+    if (description) {
+      description.content = translate(
+        language,
+        "AstroCare is an astronaut health monitoring prototype by AstroByteX for the NASA Space Apps Challenge. Explore health measurements, trends, alerts, reports, and a 3D body-system map.",
+      );
+    }
 
     try {
       window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
