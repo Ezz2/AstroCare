@@ -175,23 +175,23 @@
   display: inline-flex;
   width: max-content;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #e9f4ff;
   font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-decoration: none;
 }
 
 .cosmos-brand-icon {
   display: grid;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   place-items: center;
-  border: 1px solid rgba(108, 222, 243, 0.35);
-  border-radius: 10px;
-  background: rgba(24, 97, 128, 0.18);
+  border: none;
+  border-radius: 0;
+  background: transparent;
   color: #8ae8f3;
 }
 
@@ -489,8 +489,8 @@
 @media (max-width: 600px) {
   .cosmos-home { min-height: 0; }
   .cosmos-header { height: 62px; padding-inline: 17px; }
-  .cosmos-brand { gap: 8px; font-size: 10px; }
-  .cosmos-brand-icon { width: 29px; height: 29px; }
+  .cosmos-brand { gap: 8px; font-size: 13px; letter-spacing: 0.12em; }
+  .cosmos-brand-icon { width: 42px; height: 42px; }
   .cosmos-language-switcher svg { width: 14px; height: 14px; }
   .cosmos-language-switcher select { max-width: 62px; font-size: 9px; }
   .cosmos-intro { top: 19%; left: 6vw; width: 88vw; transform: none; }

@@ -47,13 +47,9 @@ export default function SiteHeader({ staticPosition = false }) {
     <header ref={headerRef} className={`cosmos-header${staticPosition ? ' cosmos-header-static' : ''}`} >
       <Link to="/" className="cosmos-brand" aria-label={t('ASTROCARE home')}>
         <span className="cosmos-brand-icon">
-          <img
-            src="/favicon.png"
-            alt="AstroCare"
-            className="h-full w-full rounded-lg object-contain"
-          />
+          <img src="/favicon.png" alt="AstroCare" className="h-full w-full object-contain" />
         </span>
-        <span>ASTROCARE</span>
+        <span className="cosmos-brand-name">ASTROCARE</span>
       </Link>
 
       <nav className="cosmos-nav" aria-label={t('Main navigation')}>
