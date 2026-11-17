@@ -4,13 +4,13 @@ import LanguageSwitcher from '../LanguageSwitcher'
 export default function AuthLayout({ title, subtitle, children, footer }) {
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="absolute right-4 top-4">
-        <LanguageSwitcher />
+      <div className="absolute end-4 top-4 z-50 max-w-[calc(100vw-2rem)]">
+        <LanguageSwitcher menuPosition="bottom" />
       </div>
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 text-space-950 shadow-lg shadow-cyan-400/20">
-            <Activity size={22} strokeWidth={2.5} />
+          <div className="mb-4 flex h-12 w-12 items-center justify-center">
+            <img src="/favicon.png" alt="AstroCare" className="h-full w-full object-contain drop-shadow-[0_0_12px_rgba(34,211,238,0.65)]" />
           </div>
           <p className="font-display text-sm uppercase tracking-[0.25em] text-cyan-300">AstroCare</p>
         </div>

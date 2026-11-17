@@ -44,8 +44,12 @@ export default function Sidebar({
   return (
     <div className="flex h-full flex-col gap-6 bg-space-900 px-4 py-6">
       <div className="flex items-center gap-3 px-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 text-space-950">
-          <Activity size={18} strokeWidth={2.5} />
+        <div className="h-9 w-9 shrink-0 overflow-hidden rounded-xl">
+          <img
+            src="/favicon.png"
+            alt="AstroCare"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div>
