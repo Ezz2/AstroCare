@@ -51,6 +51,15 @@ function LanguageFlag({ language }) {
 export default function LanguageSwitcher({ className = "", menuPosition = "top" }) {
   const { language, setLanguage, t } = useLanguage();
   const [open, setOpen] = useState(false);
+  const isBottom = menuPosition === "bottom";
+
+  const menuPositionClass = isBottom
+    ? "top-full mt-3 origin-top"
+    : "bottom-full mb-3 origin-bottom";
+
+  const closedTransform = isBottom
+    ? "-translate-y-2"
+    : "translate-y-2";
   const menuRef = useRef(null);
 
   const currentLanguage = LANGUAGE_OPTIONS.find(
@@ -59,7 +68,10 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
         setOpen(false);
       }
     }
@@ -70,13 +82,11 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside, true);
     document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("pointerdown", handleClickOutside, true);
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
@@ -110,12 +120,8 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
           }`}
         />
       </button>
-      
-      {open && (
-        <div
-          dir="ltr"
-          className="absolute left-0 top-full z-[70] mt-3 w-full min-w-[170px] overflow-hidden rounded-xl border border-space-700 bg-space-900 p-1.5 shadow-2xl shadow-black/30 animate-in fade-in slide-in-from-top-2 duration-200"
-        >
+
+        <div aria-hidden={!open} inert={!open} className={`absolute end-0 ${menuPositionClass} z-[70] w-[170px] overflow-hidden rounded-xl border border-space-700 bg-space-900 p-1.5 shadow-2xl shadow-black/30 transition-all duration-300 ease-out ${ open ? "visible translate-y-0 scale-100 opacity-100 pointer-events-auto" : `invisible ${closedTransform} scale-95 opacity-0 pointer-events-none` }`} >      
           <div className="flex flex-col gap-1">
             {LANGUAGE_OPTIONS.map(({ value, labels }) => {
               const selected = language === value;
@@ -146,7 +152,7 @@ export default function LanguageSwitcher({ className = "", menuPosition = "top" 
             })}
           </div>
         </div>
-      )}
+  
     </div>
   );
 }

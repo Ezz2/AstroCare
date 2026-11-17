@@ -1,6 +1,6 @@
 
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Activity, ArrowRight } from 'lucide-react'
 import LanguageSwitcher from '../LanguageSwitcher'
@@ -8,14 +8,43 @@ import useLanguage from '../../i18n/useLanguage'
 
 export default function SiteHeader({ staticPosition = false }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const headerRef = useRef(null)
+  const mobileNavRef = useRef(null)  
   const { pathname } = useLocation()
   const { t } = useLanguage()
 
   const aboutCurrent = pathname === '/about'
   const teamCurrent = pathname === '/team'
 
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      const clickedInsideMenu =
+        mobileNavRef.current?.contains(event.target)
+
+      const clickedToggle = event.target.closest('.cosmos-menu-toggle')
+
+      if (!clickedInsideMenu && !clickedToggle) {
+        setMenuOpen(false)
+      }
+    }
+
+    function handleEscape(event) {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', handleOutsideClick, true)
+    document.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.removeEventListener('pointerdown', handleOutsideClick, true)
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [])
+
   return (
-    <header className={`cosmos-header${staticPosition ? ' cosmos-header-static' : ''}`}>
+    <header ref={headerRef} className={`cosmos-header${staticPosition ? ' cosmos-header-static' : ''}`} >
       <Link to="/" className="cosmos-brand" aria-label={t('ASTROCARE home')}>
         <span className="cosmos-brand-icon">
           <Activity size={18} strokeWidth={2.2} />
@@ -38,7 +67,7 @@ export default function SiteHeader({ staticPosition = false }) {
       </nav>
 
       <div className="cosmos-header-actions">
-        <LanguageSwitcher className="cosmos-language-switcher" />
+        <LanguageSwitcher className="cosmos-language-switcher" menuPosition="bottom" />
       </div>
 
       <button
@@ -54,6 +83,7 @@ export default function SiteHeader({ staticPosition = false }) {
       </button>
 
       <nav
+        ref={mobileNavRef}
         className={`cosmos-mobile-nav ${menuOpen ? 'is-open' : ''}`}
         aria-label={t('Main navigation')}
         aria-hidden={!menuOpen}

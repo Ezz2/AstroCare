@@ -226,6 +226,8 @@
   background: transparent;
   padding: 0;
   color: #d3f7ff;
+  width: fit-content;
+  flex: 0 0 auto; 
 }
 
 .cosmos-language-switcher > button {
@@ -235,6 +237,7 @@
   background: rgba(10, 40, 58, 0.65);
   padding-inline: 9px;
   color: #d3f7ff;
+  width: auto;
 }
 
 .cosmos-language-switcher > button:hover {
@@ -468,8 +471,8 @@
   .cosmos-header { grid-template-columns: 1fr auto; height: 70px; padding-inline: 24px; }
   .cosmos-nav { display: none; }
   .cosmos-header-actions { grid-column: 2; grid-row: 1; margin-right: 48px; }
-  .cosmos-menu-toggle { position: absolute; right: 24px; display: flex; z-index: 2; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(175, 206, 231, 0.22); border-radius: 7px; background: rgba(8, 20, 36, 0.75); color: #e3f3ff; }
-  .cosmos-mobile-nav { position: absolute; top: calc(100% + 1px); right: 16px; display: grid; width: min(270px, calc(100vw - 32px)); gap: 2px; border: 1px solid rgba(155, 194, 221, 0.18); border-radius: 12px; padding: 9px; background: rgba(5, 12, 24, 0.97); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.42); transform-origin: top right; animation: cosmos-menu-arrive 280ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .cosmos-menu-toggle { position: absolute; inset-inline-end: 24px; display: flex; z-index: 2; width: 36px; height: 36px; place-items: center; border: 1px solid rgba(175, 206, 231, 0.22); border-radius: 7px; background: rgba(8, 20, 36, 0.75); color: #e3f3ff; }
+  .cosmos-mobile-nav { position: absolute; top: calc(100% + 1px); inset-inline-end: 16px; display: grid; width: min(270px, calc(100vw - 32px)); gap: 2px; border: 1px solid rgba(155, 194, 221, 0.18); border-radius: 12px; padding: 9px; background: rgba(5, 12, 24, 0.97); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.42); transform-origin: top right; animation: cosmos-menu-arrive 280ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
   .cosmos-mobile-nav a { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 10px; padding: 0 12px; border-radius: 7px; color: #c8d7e8; font-size: 11px; line-height: 1; text-decoration: none; box-sizing: border-box; } .cosmos-mobile-nav a svg { width: 14px; height: 14px; flex: 0 0 14px; }
   .cosmos-mobile-nav a:hover { background: rgba(49, 122, 146, 0.13); color: #e6fbff; }
   .cosmos-intro { left: 6vw; width: min(460px, 53vw); }
@@ -480,6 +483,7 @@
   .cosmos-measurement-note { right: 5%; font-size: 7px; }
   .cosmos-astronaut-photo { object-position: 59% 48%; }
   .cosmos-photo-shade { background: linear-gradient(90deg, rgba(5, 9, 20, 0.95), rgba(5, 9, 20, 0.65) 40%, rgba(5, 9, 20, 0.08) 78%), linear-gradient(0deg, rgba(5, 9, 20, 0.76), transparent 25%, transparent 85%, rgba(5, 9, 20, 0.32)); }
+  [dir="rtl"] .cosmos-header-actions { position: absolute; left: 72px; right: auto; margin: 0; }
 }
 
 @media (max-width: 600px) {
@@ -528,8 +532,9 @@
   .cosmos-header-actions { margin-right: 43px; }
   .cosmos-language-switcher > button { height: 33px; padding-inline: 7px; }
   .cosmos-language-switcher svg { width: 14px; height: 14px; }
-  .cosmos-menu-toggle { right: 16px; width: 33px; height: 33px; }
-  .cosmos-mobile-nav { right: 16px; width: min(280px, calc(100vw - 32px)); }
+  .cosmos-menu-toggle { inset-inline-end: 16px; width: 33px; height: 33px; }
+  .cosmos-mobile-nav { inset-inline-end: 16px; width: min(280px, calc(100vw - 32px)); }
+  [dir="rtl"] .cosmos-header-actions { left: 59px; }
 }
 
 @media (max-height: 720px) and (min-width: 601px) {
@@ -562,6 +567,10 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+[dir="rtl"] .cosmos-mobile-nav {
+  transform-origin: top left;
 }
 
 .cosmos-mobile-nav {
