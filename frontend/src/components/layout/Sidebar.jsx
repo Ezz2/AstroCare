@@ -7,6 +7,7 @@ import { NAV_ITEMS } from "./navItems";
 import { missionDayFor } from "../../lib/format";
 import useLanguage from "../../i18n/useLanguage";
 import LanguageSwitcher from "../LanguageSwitcher";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 export default function Sidebar({
   alertCount,
@@ -90,6 +91,7 @@ export default function Sidebar({
         {showLanguageSwitcher && (
           <div className="border-t border-space-800 pt-3">
             <LanguageSwitcher className="w-full" />
+            <ThemeSwitcher className="mt-2 w-full" />
           </div>
         )}
 

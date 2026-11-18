@@ -63,7 +63,7 @@ export default function BodyPanel({
         })}
       </div>
 
-      <div className="relative min-h-[380px] flex-1 overflow-hidden rounded-xl border border-space-800 bg-space-950/60">
+      <div className="body-map-scene relative min-h-[380px] flex-1 overflow-hidden rounded-xl border border-space-800 bg-space-950/60">
         <BodyScene
           heartRate={heartRate}
           selectedSystemId={selectedSystemId}

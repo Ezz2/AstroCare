@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Activity, ArrowRight } from 'lucide-react'
 import LanguageSwitcher from '../LanguageSwitcher'
+import ThemeSwitcher from '../ThemeSwitcher'
 import useLanguage from '../../i18n/useLanguage'
 
 export default function SiteHeader({ staticPosition = false }) {
@@ -68,6 +69,7 @@ export default function SiteHeader({ staticPosition = false }) {
 
       <div className="cosmos-header-actions">
         <LanguageSwitcher className="cosmos-language-switcher" menuPosition="bottom" />
+        <ThemeSwitcher className="cosmos-theme-switcher" menuPosition="bottom" />
       </div>
 
       <button

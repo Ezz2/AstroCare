@@ -1,6 +1,9 @@
 const translations = {
   ar: {
     "Select language": "اختر اللغة",
+    "Select appearance": "اختيار المظهر",
+    "Light mode": "الوضع الفاتح",
+    "Dark mode": "الوضع الداكن",
     Home: "الرئيسية",
     "About AstroCare": "عن أستروكير",
     AstroByteX: "أستروبايت إكس",
@@ -897,6 +900,9 @@ const translations = {
   },
   de: {
     "Select language": "Sprache auswählen",
+    "Select appearance": "Erscheinungsbild auswählen",
+    "Light mode": "Heller Modus",
+    "Dark mode": "Dunkler Modus",
     Home: "Startseite",
     "About AstroCare": "Über AstroCare",
     AstroByteX: "AstroByteX",

@@ -652,3 +652,522 @@
 .cosmos-menu-toggle.is-open span:last-child {
   transform: translateY(-7px) rotate(-45deg);
 }
+
+[data-theme="light"] .cosmos-home,
+[data-theme="light"] .cosmos-info-page {
+  --cosmos-bg: #edf5fb;
+  --cosmos-ink: #17324b;
+  --cosmos-muted: #526b80;
+  --cosmos-cyan: #087e9d;
+  color: var(--cosmos-ink);
+}
+
+[data-theme="light"] .cosmos-home {
+  background:
+    radial-gradient(ellipse at 75% 45%, rgba(108, 187, 214, 0.09), transparent 49%),
+    radial-gradient(ellipse at 45% 100%, rgba(115, 172, 219, 0.08), transparent 42%),
+    #edf5fb;
+}
+
+[data-theme="light"] .cosmos-home .cosmos-stars,
+[data-theme="light"] .cosmos-info-stars {
+  opacity: 0.08;
+}
+
+[data-theme="light"] .cosmos-home .cosmos-planet-glow {
+  border-color: rgba(57, 134, 172, 0.2);
+  background:
+    radial-gradient(ellipse at 38% 25%, rgba(59, 155, 194, 0.15), transparent 42%),
+    radial-gradient(ellipse at 44% 17%, rgba(77, 157, 213, 0.1), transparent 61%),
+    linear-gradient(160deg, rgba(226, 242, 250, 0.7), rgba(235, 245, 251, 0.1) 49%, rgba(223, 237, 247, 0.78) 74%);
+  box-shadow: inset 0 24px 70px rgba(89, 190, 245, 0.08), 0 -7px 42px rgba(69, 160, 224, 0.08);
+}
+
+[data-theme="light"] .cosmos-home .cosmos-wordmark-background {
+  color: rgba(30, 78, 111, 0.07);
+  -webkit-text-stroke-color: rgba(30, 78, 111, 0.18);
+}
+
+[data-theme="light"] .cosmos-home .cosmos-astronaut-photo {
+  opacity: 0.42;
+  filter: brightness(1.12) contrast(0.94) saturate(0.72);
+}
+
+[data-theme="light"] .cosmos-home .cosmos-photo-shade {
+  background:
+    linear-gradient(90deg, rgba(237, 245, 251, 0.78) 0%, rgba(237, 245, 251, 0.65) 24%, rgba(237, 245, 251, 0.42) 47%, rgba(237, 245, 251, 0.05) 76%, rgba(237, 245, 251, 0.08) 100%),
+    linear-gradient(0deg, rgba(237, 245, 251, 0.4) 0%, transparent 25%, transparent 82%, rgba(237, 245, 251, 0.18) 100%);
+}
+
+[data-theme="light"] .cosmos-header {
+  border-bottom-color: rgba(40, 77, 105, 0.12);
+  background: linear-gradient(180deg, rgba(250, 253, 255, 0.2), transparent);
+  backdrop-filter: none;
+}
+
+[data-theme="light"] .cosmos-brand,
+[data-theme="light"] .cosmos-nav a[aria-current="page"],
+[data-theme="light"] .cosmos-intro h1 {
+  color: #17324b;
+}
+
+[data-theme="light"] .cosmos-brand-icon,
+[data-theme="light"] .cosmos-nav a:hover,
+[data-theme="light"] .cosmos-intro h1 span,
+[data-theme="light"] .cosmos-info-content h1 span {
+  color: #087e9d;
+}
+
+[data-theme="light"] .cosmos-intro h1 span {
+  background-image: linear-gradient(95deg, #087e9d 0%, #386da9 94%);
+}
+
+[data-theme="light"] .cosmos-nav a {
+  color: rgba(35, 64, 87, 0.72);
+}
+
+[data-theme="light"] .cosmos-kicker,
+[data-theme="light"] .cosmos-info-kicker {
+  color: #087e9d;
+}
+
+[data-theme="light"] .cosmos-description,
+[data-theme="light"] .cosmos-project-line,
+[data-theme="light"] .cosmos-project-line strong,
+[data-theme="light"] .cosmos-measurement-note,
+[data-theme="light"] .cosmos-scene-caption,
+[data-theme="light"] .cosmos-photo-credit,
+[data-theme="light"] .cosmos-coordinate {
+  color: #526b80;
+}
+
+[data-theme="light"] .cosmos-primary-action {
+  border-color: rgba(8, 126, 157, 0.4);
+  background: linear-gradient(110deg, #d9f1f5, #e1ecfb);
+  box-shadow: 0 7px 28px rgba(35, 104, 139, 0.12);
+  color: #075b74;
+}
+
+[data-theme="light"] .cosmos-primary-action:hover {
+  border-color: #0782a1;
+  background: linear-gradient(110deg, #ccebf1, #d5e5f8);
+}
+
+[data-theme="light"] .cosmos-signal {
+  border-left-color: rgba(8, 126, 157, 0.55);
+  background: linear-gradient(90deg, rgba(248, 252, 255, 0.88), rgba(248, 252, 255, 0.64));
+  box-shadow: 0 8px 30px rgba(30, 69, 96, 0.1);
+}
+
+[data-theme="light"] .cosmos-signal-top,
+[data-theme="light"] .cosmos-signal-reading {
+  color: #17324b;
+}
+
+[data-theme="light"] .cosmos-signal-top svg,
+[data-theme="light"] .cosmos-signal-reading small,
+[data-theme="light"] .cosmos-signal-detail {
+  color: #526b80;
+}
+
+[data-theme="light"] .cosmos-signal:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(245, 251, 255, 0.82));
+}
+
+[data-theme="light"] .cosmos-signal-oxygen .cosmos-signal-top svg {
+  color: #6d5bd0;
+}
+
+[data-theme="light"] .cosmos-signal-sleep .cosmos-signal-top svg {
+  color: #0f766e;
+}
+
+[data-theme="light"] .cosmos-info-page {
+  background:
+    radial-gradient(ellipse at 82% 17%, rgba(90, 151, 204, 0.12), transparent 39%),
+    radial-gradient(ellipse at 18% 63%, rgba(56, 156, 169, 0.08), transparent 36%),
+    #f3f8fc;
+}
+
+[data-theme="light"] .cosmos-back-link,
+[data-theme="light"] .cosmos-info-lead,
+[data-theme="light"] .cosmos-info-section > p,
+[data-theme="light"] .cosmos-context-panel p,
+[data-theme="light"] .cosmos-feature p,
+[data-theme="light"] .cosmos-info-disclaimer {
+  color: #526b80;
+}
+
+[data-theme="light"] .cosmos-back-link:hover,
+[data-theme="light"] .cosmos-context-index {
+  color: #087e9d;
+}
+
+[data-theme="light"] .cosmos-info-section,
+[data-theme="light"] .cosmos-feature,
+[data-theme="light"] .cosmos-context-panel {
+  border-color: rgba(52, 94, 122, 0.17);
+}
+
+[data-theme="light"] .cosmos-feature h3 {
+  color: #213d55;
+}
+
+[data-theme="light"] .cosmos-feature > span {
+  border-color: rgba(8, 126, 157, 0.24);
+  color: #087e9d;
+}
+
+[data-theme="light"] .cosmos-info-disclaimer {
+  border-left-color: rgba(8, 126, 157, 0.42);
+}
+
+[data-theme="light"] .cosmos-language-switcher > button,
+[data-theme="light"] .cosmos-theme-switcher > button {
+  border-color: rgba(49, 91, 119, 0.2);
+  background: rgba(255, 255, 255, 0.78);
+  color: #29455d;
+}
+
+[data-theme="light"] .cosmos-language-switcher > button:hover,
+[data-theme="light"] .cosmos-theme-switcher > button:hover {
+  border-color: rgba(8, 126, 157, 0.42);
+  background: #f0f9fc;
+  color: #087e9d;
+}
+
+[data-theme="light"] .cosmos-menu-toggle {
+  border-color: rgba(49, 91, 119, 0.2);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+[data-theme="light"] .cosmos-menu-toggle span {
+  background: #29455d;
+}
+
+[data-theme="light"] .cosmos-mobile-nav {
+  border-color: rgba(49, 91, 119, 0.18);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 20px 50px rgba(37, 72, 96, 0.16);
+}
+
+[data-theme="light"] .cosmos-mobile-nav a {
+  color: #29455d;
+}
+
+[data-theme="light"] .cosmos-mobile-nav a:hover {
+  background: rgba(8, 126, 157, 0.08);
+  color: #17324b;
+}
+
+.cosmos-theme-switcher {
+  width: fit-content;
+  flex: 0 0 auto;
+}
+
+.cosmos-theme-switcher > button {
+  width: auto;
+  height: 37px;
+  border-color: rgba(117, 219, 239, 0.35);
+  border-radius: 7px;
+  background: rgba(10, 40, 58, 0.65);
+  padding-inline: 9px;
+  color: #d3f7ff;
+}
+
+.cosmos-theme-switcher > button:hover {
+  border-color: rgba(125, 232, 244, 0.7);
+  background: rgba(24, 97, 128, 0.3);
+}
+
+@media (max-width: 900px) {
+  .cosmos-theme-switcher > button {
+    width: 37px;
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .cosmos-theme-switcher > button > span > span,
+  .cosmos-theme-switcher > button > svg:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .cosmos-theme-switcher > button {
+    width: 33px;
+    height: 33px;
+  }
+}
+
+html[dir="rtl"] .cosmos-home,
+html[dir="rtl"] .cosmos-info-page {
+  direction: rtl;
+}
+
+html[dir="rtl"] .cosmos-home {
+  background:
+    radial-gradient(ellipse at 32% 47%, rgba(12, 72, 111, 0.26), transparent 49%),
+    radial-gradient(ellipse at 52% 103%, rgba(25, 82, 133, 0.16), transparent 40%),
+    #050914;
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-home {
+  background:
+    radial-gradient(ellipse at 25% 45%, rgba(108, 187, 214, 0.09), transparent 49%),
+    radial-gradient(ellipse at 55% 100%, rgba(115, 172, 219, 0.08), transparent 42%),
+    #edf5fb;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-aurora {
+  background:
+    radial-gradient(ellipse 32% 26% at 25% 22%, rgba(67, 82, 151, 0.13), transparent 75%),
+    radial-gradient(ellipse 34% 30% at 42% 67%, rgba(15, 118, 148, 0.16), transparent 74%),
+    radial-gradient(ellipse 20% 44% at 6% 74%, rgba(45, 93, 171, 0.13), transparent 76%);
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-planet-glow {
+  right: auto;
+  left: -15vw;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-astronaut-photo {
+  object-position: 64% 48%;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-intro {
+  right: clamp(28px, 8.2vw, 126px);
+  left: auto;
+  text-align: right;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-photo-shade {
+  background:
+    linear-gradient(270deg, rgba(5, 9, 20, 0.97) 0%, rgba(5, 9, 20, 0.86) 24%, rgba(5, 9, 20, 0.42) 47%, rgba(5, 9, 20, 0.05) 72%, rgba(5, 9, 20, 0.18) 100%),
+    linear-gradient(0deg, rgba(5, 9, 20, 0.78) 0%, transparent 23%, transparent 82%, rgba(5, 9, 20, 0.3) 100%);
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-home .cosmos-photo-shade {
+  background:
+    linear-gradient(270deg, rgba(237, 245, 251, 0.78) 0%, rgba(237, 245, 251, 0.65) 24%, rgba(237, 245, 251, 0.42) 47%, rgba(237, 245, 251, 0.05) 76%, rgba(237, 245, 251, 0.08) 100%),
+    linear-gradient(0deg, rgba(237, 245, 251, 0.4) 0%, transparent 25%, transparent 82%, rgba(237, 245, 251, 0.18) 100%);
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-header {
+  direction: rtl;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-measurement-note {
+  right: auto;
+  left: clamp(26px, 6vw, 90px);
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-signal {
+  border-left: 0;
+  border-right: 1px solid rgba(124, 219, 237, 0.66);
+  background: linear-gradient(270deg, rgba(7, 18, 32, 0.76), rgba(7, 18, 32, 0.32));
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-signal:hover {
+  background: linear-gradient(270deg, rgba(12, 35, 54, 0.85), rgba(7, 18, 32, 0.42));
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-signal-heart {
+  right: auto;
+  left: clamp(36px, 10vw, 154px);
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-signal-oxygen {
+  right: auto;
+  left: clamp(22px, 4.3vw, 66px);
+  border-right-color: rgba(155, 155, 248, 0.67);
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-signal-sleep {
+  right: auto;
+  left: clamp(170px, 23vw, 352px);
+  border-right-color: rgba(111, 224, 204, 0.67);
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-scene-caption {
+  right: clamp(24px, 5.2vw, 78px);
+  left: auto;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-photo-credit {
+  border-right: 1px solid rgba(169, 197, 219, 0.3);
+  border-left: 0;
+  padding-right: 12px;
+  padding-left: 0;
+}
+
+html[dir="rtl"] .cosmos-home .cosmos-coordinate {
+  right: auto;
+  left: 32px;
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-home .cosmos-signal {
+  border-right-color: rgba(8, 126, 157, 0.55);
+  background: linear-gradient(270deg, rgba(248, 252, 255, 0.88), rgba(248, 252, 255, 0.64));
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-home .cosmos-signal:hover {
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.96), rgba(245, 251, 255, 0.82));
+}
+
+html[dir="rtl"] .cosmos-primary-action svg,
+html[dir="rtl"] .cosmos-back-link svg,
+html[dir="rtl"] .cosmos-mobile-nav a svg {
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .cosmos-intro h1 span {
+  background-image: linear-gradient(265deg, #a2f3f5 0%, #72bbf3 94%);
+}
+
+html[dir="rtl"] .cosmos-primary-action {
+  background-image: linear-gradient(250deg, rgba(22, 111, 146, 0.52), rgba(24, 73, 132, 0.49));
+}
+
+html[dir="rtl"] .cosmos-primary-action:hover {
+  background-image: linear-gradient(250deg, rgba(27, 139, 173, 0.68), rgba(36, 90, 158, 0.62));
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-intro h1 span {
+  background-image: linear-gradient(265deg, #087e9d 0%, #386da9 94%);
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-primary-action {
+  background-image: linear-gradient(250deg, #d9f1f5, #e1ecfb);
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-primary-action:hover {
+  background-image: linear-gradient(250deg, #ccebf1, #d5e5f8);
+}
+
+html[dir="rtl"] .cosmos-info-page {
+  background:
+    radial-gradient(ellipse at 18% 17%, rgba(36, 83, 143, 0.2), transparent 39%),
+    radial-gradient(ellipse at 82% 63%, rgba(20, 99, 122, 0.11), transparent 36%),
+    #050914;
+}
+
+html[data-theme="light"][dir="rtl"] .cosmos-info-page {
+  background:
+    radial-gradient(ellipse at 18% 17%, rgba(90, 151, 204, 0.12), transparent 39%),
+    radial-gradient(ellipse at 82% 63%, rgba(56, 156, 169, 0.08), transparent 36%),
+    #f3f8fc;
+}
+
+@media (min-width: 901px) {
+  html[dir="rtl"] .cosmos-header .cosmos-brand {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  html[dir="rtl"] .cosmos-header .cosmos-nav {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  html[dir="rtl"] .cosmos-header .cosmos-header-actions {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 900px) {
+  html[dir="rtl"] .cosmos-header .cosmos-brand {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-intro {
+    right: 6vw;
+    left: auto;
+    width: min(460px, 53vw);
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-signal-heart {
+    right: auto;
+    left: 5%;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-signal-oxygen {
+    right: auto;
+    left: 3%;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-signal-sleep {
+    right: auto;
+    left: 17%;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-measurement-note {
+    right: auto;
+    left: 5%;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-planet-glow {
+    right: auto;
+    left: -15vw;
+  }
+}
+
+@media (max-width: 600px) {
+  html[dir="rtl"] .cosmos-home .cosmos-intro {
+    right: 6vw;
+    left: auto;
+    width: 88vw;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-astronaut-photo {
+    object-position: 64% 47%;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-photo-shade {
+    background:
+      linear-gradient(180deg, rgba(5, 9, 20, 0.53) 0%, rgba(5, 9, 20, 0.35) 22%, rgba(5, 9, 20, 0.27) 50%, rgba(5, 9, 20, 0.65) 100%),
+      linear-gradient(270deg, rgba(5, 9, 20, 0.55), transparent 90%);
+  }
+
+  html[data-theme="light"][dir="rtl"] .cosmos-home .cosmos-photo-shade {
+    background:
+      linear-gradient(180deg, rgba(237, 245, 251, 0.4) 0%, transparent 25%, transparent 82%, rgba(237, 245, 251, 0.18) 100%),
+      linear-gradient(270deg, rgba(237, 245, 251, 0.78) 0%, rgba(237, 245, 251, 0.65) 24%, rgba(237, 245, 251, 0.42) 47%, rgba(237, 245, 251, 0.05) 76%, rgba(237, 245, 251, 0.08) 100%);
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-planet-glow {
+    right: auto;
+    left: -33vw;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-signal-heart {
+    right: 4%;
+    left: auto;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-signal-oxygen {
+    right: auto;
+    left: 35%;
+    border-left: 0;
+    border-right-color: rgba(155, 155, 248, 0.67);
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-signal-sleep {
+    right: auto;
+    left: 4%;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-scene-caption {
+    right: 15px;
+    left: auto;
+  }
+
+  html[dir="rtl"] .cosmos-home .cosmos-photo-credit {
+    padding-right: 7px;
+  }
+}

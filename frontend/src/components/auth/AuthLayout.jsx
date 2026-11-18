@@ -1,11 +1,13 @@
 import { Activity } from 'lucide-react'
 import LanguageSwitcher from '../LanguageSwitcher'
+import ThemeSwitcher from '../ThemeSwitcher'
 
 export default function AuthLayout({ title, subtitle, children, footer }) {
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="absolute end-4 top-4 z-50 max-w-[calc(100vw-2rem)]">
+      <div className="absolute end-4 top-4 z-50 flex max-w-[calc(100vw-2rem)] gap-2">
         <LanguageSwitcher menuPosition="bottom" />
+        <ThemeSwitcher menuPosition="bottom" />
       </div>
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">

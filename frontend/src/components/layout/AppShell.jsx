@@ -25,6 +25,7 @@ import { useHealthInsights } from "../../health/useHealthInsights";
 import UrgentHealthAlertModal from "../health/UrgentHealthAlertModal";
 import DailyCheckInReminderModal from "./DailyCheckInReminderModal";
 import LanguageSwitcher from "../LanguageSwitcher";
+import ThemeSwitcher from "../ThemeSwitcher";
 import useLanguage from "../../i18n/useLanguage";
 
 export default function AppShell() {
@@ -227,6 +228,9 @@ export default function AppShell() {
                 menuPosition="bottom"
               />
             </div>
+            <div className="hidden w-[140px] lg:block">
+              <ThemeSwitcher className="w-full" menuPosition="bottom" />
+            </div>
             <button
               type="button"
               onClick={() => navigate("/daily-check-in")}
@@ -273,8 +277,7 @@ export default function AppShell() {
                 )}
               </button>
 
-              <div
-  className={`fixed ${isArabic ? "left-4 origin-top-left" : "right-4 origin-top-right"} top-20 z-50 w-[calc(100vw-32px)] max-w-[340px] overflow-hidden rounded-2xl border border-space-700 bg-space-900 shadow-2xl transition-all duration-200 ease-out sm:absolute sm:top-full sm:mt-3 sm:w-[340px] ${isArabic ? "sm:left-0" : "sm:right-0"} ${alertsOpen ? "visible translate-y-0 scale-100 opacity-100" : "invisible -translate-y-2 scale-[0.98] opacity-0 pointer-events-none"}`}>
+              <div className={`fixed ${isArabic ? "left-4 origin-top-left" : "right-4 origin-top-right"} top-20 z-50 w-[calc(100vw-32px)] max-w-[340px] overflow-hidden rounded-2xl border border-space-700 bg-space-900 shadow-2xl transition-all duration-200 ease-out sm:absolute sm:top-full sm:mt-3 sm:w-[340px] ${isArabic ? "sm:left-0" : "sm:right-0"} ${alertsOpen ? "visible translate-y-0 scale-100 opacity-100" : "invisible -translate-y-2 scale-[0.98] opacity-0 pointer-events-none"}`}>
                 <div className="flex items-center justify-between border-b border-space-700 px-4 py-3">
                   <div>
                     <p className="text-sm font-semibold text-ink-100">
