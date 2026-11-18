@@ -30,6 +30,10 @@ export default function LoginPage() {
     <AuthLayout
       title={t("Welcome back")}
       subtitle={t("Sign in to reach your personal health overview.")}
+      className="pt-24"
+      separateControls
+      themeIconOnly
+      logoClassName="-translate-y-4"
       footer={
         <>
           {t("New astronaut?")}{" "}

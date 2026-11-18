@@ -12,6 +12,7 @@ const THEME_OPTIONS = [
 export default function ThemeSwitcher({
   className = "",
   menuPosition = "top",
+  iconOnly = false,
 }) {
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
@@ -21,6 +22,7 @@ export default function ThemeSwitcher({
   const menuPositionClass = isBottom
     ? "top-full mt-3 origin-top"
     : "bottom-full mb-3 origin-bottom";
+  const menuHorizontalPosition = iconOnly ? "start-0" : "end-0";
   const closedTransform = isBottom ? "-translate-y-2" : "translate-y-2";
   const currentTheme = THEME_OPTIONS.find((option) => option.value === theme);
   const CurrentIcon = currentTheme.icon;
@@ -58,23 +60,31 @@ export default function ThemeSwitcher({
         aria-label={t("Select appearance")}
         aria-expanded={open}
         aria-haspopup="true"
-        className="flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-space-700/80 bg-space-900 px-3 text-ink-200 outline-none transition-all duration-200 hover:border-cyan-400/40 hover:bg-space-800 hover:text-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-400/30"
+        className={`flex h-10 items-center gap-2 rounded-xl border border-space-700/80 bg-space-900 text-ink-200 outline-none transition-all duration-200 hover:border-cyan-400/40 hover:bg-space-800 hover:text-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-400/30 ${
+          iconOnly ? "w-10 justify-center px-0" : "w-full justify-between px-3"
+        }`}
       >
         <span className="flex min-w-0 items-center gap-2">
           <CurrentIcon size={17} className="shrink-0 text-cyan-300" />
-          <span className="truncate text-sm font-medium">{t(currentTheme.label)}</span>
+          {!iconOnly && (
+            <span className="truncate text-sm font-medium">
+              {t(currentTheme.label)}
+            </span>
+          )}
         </span>
-        <ChevronDown
-          size={15}
-          className={`shrink-0 text-ink-500 transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-        />
+        {!iconOnly && (
+          <ChevronDown
+            size={15}
+            className={`shrink-0 text-ink-500 transition-transform duration-200 ${
+              open ? "rotate-180" : ""
+            }`}
+          />
+        )}
       </button>
 
       <div
         aria-hidden={!open}
-        className={`absolute end-0 ${menuPositionClass} z-[70] w-[170px] overflow-hidden rounded-xl border border-space-700 bg-space-900 p-1.5 shadow-2xl shadow-black/30 transition-all duration-300 ease-out ${
+        className={`absolute ${menuHorizontalPosition} ${menuPositionClass} z-[70] w-[170px] overflow-hidden rounded-xl border border-space-700 bg-space-900 p-1.5 shadow-2xl shadow-black/30 transition-all duration-300 ease-out ${
           open
             ? "visible translate-y-0 scale-100 opacity-100 pointer-events-auto"
             : `invisible ${closedTransform} scale-95 opacity-0 pointer-events-none`
